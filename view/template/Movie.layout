@@ -1,5 +1,5 @@
 {{define "Movie.layout"}}
 {{template "header"}}
-{{template "Movie.content"}}
+{{template "Movie.content" .}}
 {{template "footer"}}
 {{end}}

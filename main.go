@@ -1,11 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
+
+	"github.com/hannasamuel20/Movie-and-events/controller"
 )
 
 var tmpl = template.Must(template.ParseGlob("view/template/*"))
+
+
 
 func index(w http.ResponseWriter, r *http.Request) {
 
@@ -13,7 +18,11 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 func display(w http.ResponseWriter, r *http.Request) {
 
-	tmpl.ExecuteTemplate(w, "Movie.layout", nil)
+	upcomingmovies, _, _ := controller.GetUpcomingMovies()
+	fmt.Println(upcomingmovies)
+	fmt.Println(tmpl.ExecuteTemplate(w, "Movie.layout", upcomingmovies))
+
+
 }
 func main() {
 	fs := http.FileServer(http.Dir("view/assets"))
