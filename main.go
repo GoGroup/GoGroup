@@ -20,5 +20,5 @@ func main() {
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 	http.HandleFunc("/", index)
 	http.HandleFunc("/Movie", display)
-	http.ListenAndServe(":8181", nil)
+	http.ListenAndServe(":8080", nil)
 }
