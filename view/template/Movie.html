@@ -22,17 +22,21 @@
             <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 ">
                 {{with .MovieList}}
                 {{range .}}
-            
-                <div class="col mb-4 ">
-                    <div class="card h-100">
-                        <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img-top" alt="...">
-
-                        <div class="card-body">
-                            <p class="text-center font-weight-bold">{{.Title}}</p>
-                            <p class="font-weight-bold text-center ">opens {{.ReleaseDate}}</p>
+                <a href="/eachmovie?id={{.Id}}">
+                    <div class="col mb-4 ">
+                        <div class="card h-100">
+                            <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img-top" alt="...">
+    
+                            <div class="card-body">
+                                <p class="text-center font-weight-bold">{{.Title}}</p>
+                                <p class="font-weight-bold text-center ">opens {{.ReleaseDate}}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                </a>
+            
+                
                 {{end}}
                 {{end}}
          
