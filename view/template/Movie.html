@@ -1,0 +1,250 @@
+{{ define "Movie.content"}}
+
+
+
+<ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="upcoming-tab" data-toggle="tab" href="#upcoming" role="tab"
+            aria-controls="upcoming" aria-selected="true">Upcoming Movies</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="now-tab" data-toggle="tab" href="#now" role="tab" aria-controls="now"
+            aria-selected="false">Now Showing</a>
+    </li>
+
+</ul>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="upcoming" role="tabpanel" aria-labelledby="upcoming-tab">
+        <div class="container">
+
+
+
+            <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 ">
+                {{with .MovieList}}
+                {{range .}}
+                <a href="/eachmovie?id={{.Id}}">
+                    <div class="col mb-4 ">
+                        <div class="card h-100">
+                            <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img-top" alt="...">
+    
+                            <div class="card-body">
+                                <p class="text-center font-weight-bold">{{.Title}}</p>
+                                <p class="font-weight-bold text-center ">opens {{.ReleaseDate}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </a>
+            
+                
+                {{end}}
+                {{end}}
+         
+
+      
+
+
+   
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+    <div class="tab-pane fade" id="now" role="tabpanel" aria-labelledby="now-tab">
+
+
+        <div class="container">
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 ">
+                <div class="col mb-4 ">
+                    <div class="card h-100">
+                        <img src="../assets/images/joker2.jpg" class="card-img-top" alt="...">
+
+                        <div class="card-body container">
+
+                            <div class="d-inline-block ">
+                                <p class="text-left"><i class="fa fa-thumbs-up" style="font-size:24px;color:gold"></i> 34</p>
+                            </div>
+                            <div class="d-inline-block ">
+                                <p class="text-right"><i class="fa fa-thumbs-down" style=" font-size:23px;color:gold;margin-left: 70px;"></i> 1</p>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="col mb-4 ">
+                    <div class="card h-100 ">
+                        <img src="../assets/images/joker2.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <div class="card-body container">
+
+                                <div class="d-inline-block ">
+                                    <p class="text-left"><i class="fa fa-thumbs-up" style="font-size:24px;color:gold"></i> 34</p>
+                                </div>
+                                <div class="d-inline-block ">
+                                    <p class="text-right"><i class="fa fa-thumbs-down" style=" font-size:23px;color:gold;margin-left: 70px;"></i> 1</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mb-4">
+                    <div class="card h-100">
+                        <img src="../assets/images/joker2.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <div class="card-body container">
+
+                                <div class="d-inline-block ">
+                                    <p class="text-left"><i class="fa fa-thumbs-up" style="font-size:24px;color:gold"></i> 34</p>
+                                </div>
+                                <div class="d-inline-block ">
+                                    <p class="text-right"><i class="fa fa-thumbs-down" style=" font-size:23px;color:gold;margin-left: 70px;"></i> 1</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mb-4">
+                    <div class="card h-100">
+                        <img src="../assets/images/joker2.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <div class="card-body container">
+
+                                <div class="d-inline-block ">
+                                    <p class="text-left"><i class="fa fa-thumbs-up" style="font-size:24px;color:gold"></i> 34</p>
+                                </div>
+                                <div class="d-inline-block ">
+                                    <p class="text-right"><i class="fa fa-thumbs-down" style=" font-size:23px;color:gold;margin-left: 70px;"></i> 1</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mb-4">
+                    <div class="card h-100">
+                        <img src="../assets/images/joker2.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <div class="card-body container">
+
+                                <div class="d-inline-block ">
+                                    <p class="text-left"><i class="fa fa-thumbs-up" style="font-size:24px;color:gold"></i> 34</p>
+                                </div>
+                                <div class="d-inline-block ">
+                                    <p class="text-right"><i class="fa fa-thumbs-down" style=" font-size:23px;color:gold;margin-left: 70px;"></i> 1</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mb-4">
+                    <div class="card h-100">
+                        <img src="../assets/images/joker2.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <div class="card-body container">
+
+                                <div class="d-inline-block ">
+                                    <p class="text-left"><i class="fa fa-thumbs-up" style="font-size:24px;color:gold"></i> 34</p>
+                                </div>
+                                <div class="d-inline-block ">
+                                    <p class="text-right"><i class="fa fa-thumbs-down" style=" font-size:23px;color:gold;margin-left: 70px;"></i> 1</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col mb-4">
+                    <div class="card h-100">
+                        <img src="../assets/images/joker2.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <div class="card-body container">
+
+                                <div class="d-inline-block ">
+                                    <p class="text-left"><i class="fa fa-thumbs-up" style="font-size:24px;color:gold"></i> 34</p>
+                                </div>
+                                <div class="d-inline-block ">
+                                    <p class="text-right"><i class="fa fa-thumbs-down" style=" font-size:23px;color:gold;margin-left: 70px;"></i> 1</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mb-4">
+                    <div class="card h-200">
+                        <img src="../assets/images/joker2.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <div class="card-body container">
+
+                                <div class="d-inline-block ">
+                                    <p class="text-left"><i class="fa fa-thumbs-up" style="font-size:24px;color:gold"></i> 34</p>
+                                </div>
+                                <div class="d-inline-block ">
+                                    <p class="text-right"><i class="fa fa-thumbs-down" style=" font-size:23px;color:gold;margin-left: 70px;"></i> 1</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col mb-4">
+                    <div class="card h-100">
+                        <img src="../assets/images/joker2.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <div class="card-body container">
+
+                                <div class="d-inline-block ">
+                                    <p class="text-left"><i class="fa fa-thumbs-up" style="font-size:24px;color:gold"></i> 34</p>
+                                </div>
+                                <div class="d-inline-block ">
+                                    <p class="text-right"><i class="fa fa-thumbs-down" style=" font-size:23px;color:gold;margin-left: 70px;"></i> 1</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mb-4">
+                    <div class="card h-100">
+                        <img src="../assets/images/joker2.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                           
+                            <div class="d-inline-block ">
+                                <p class="text-left"><i class="fa fa-thumbs-up" style="font-size:24px;color:gold"></i> 34</p>
+                            </div>
+                            <div class="d-inline-block ">
+                                <p class="text-right"><i class="fa fa-thumbs-down" style=" font-size:23px;color:gold;margin-left: 70px;"></i> 1</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+    </div>
+
+
+</div>
+</div>
+
+</div>
+
+
+
+{{end}}

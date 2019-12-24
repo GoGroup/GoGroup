@@ -1,0 +1,5 @@
+{{define "EachMovie.layout"}}
+{{template "header"}}
+{{template "EachMovie.content" .}}
+{{template "footer"}}
+{{end}}
