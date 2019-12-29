@@ -1,11 +1,5 @@
-/***
-Bootstrap Line Tabs by @keenthemes
-A component of Metronic Theme - #1 Selling Bootstrap 3 Admin Theme in Themeforest: http://j.mp/metronictheme
-Licensed under MIT
-***/
-.card{
-  margin:10px !important;
-  
+.card {
+  margin: 10px !important;
 }
 
 .pb-cmnt-container {
@@ -18,54 +12,41 @@ Licensed under MIT
   padding: 20px;
   height: 130px;
   width: 100%;
-  border: 1px solid #F2F2F2;
+  border: 1px solid #f2f2f2;
 }
-.container{
+.container {
   margin-top: 20px !important;
 }
-.contain{
+.contain {
   margin-top: 20px !important;
-  padding:30px;
-padding-top: 10px;
-
+  padding: 30px;
+  padding-top: 10px;
 }
 /* Tabs panel */
- .nav-tabs {
+.nav-tabs {
   border: none;
   margin: 0px;
 }
 .nav-tabs > li > a {
-text-transform: uppercase;
-  color:   rgba(243, 86, 93,0.4) !important;
-  background: none ;
+  text-transform: uppercase;
+  color: rgba(243, 86, 93, 0.4) !important;
+  background: none;
 }
 .nav-tabs > li:hover {
-  background:2px solid rgba(243, 86, 93) !important;
+  background: 2px solid rgba(243, 86, 93) !important;
 }
 .nav-tabs > li:hover > a {
-  color:   rgba(243, 86, 93) !important;
-
-  
+  color: rgba(243, 86, 93) !important;
 }
 
-
-.nav-tabs .nav-item .nav-link{
-  border:none ;
-
-
-
+.nav-tabs .nav-item .nav-link {
+  border: none;
 }
 
 .nav-tabs .nav-link.active {
-  
-  border-bottom: 2px solid rgba(243, 86, 93,0.4) !important;
-
-
-
+  border-bottom: 2px solid rgba(243, 86, 93, 0.4) !important;
 }
 
-.nav-tabs .nav-item >a{
-  border:none ;
-
-
+.nav-tabs .nav-item > a {
+  border: none;
 }

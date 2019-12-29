@@ -1,0 +1,7 @@
+#schedule .nav-item .nav-link {
+  color: #edc2d8 !important;
+  text-transform: uppercase !important;
+}
+#schedule .card-img {
+  width: 100%;
+}

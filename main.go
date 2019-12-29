@@ -22,6 +22,12 @@ func display(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(tmpl.ExecuteTemplate(w, "Movie.layout", upcomingmovies))
 
 }
+func displayTheater(w http.ResponseWriter, r *http.Request) {
+
+
+	fmt.Println(tmpl.ExecuteTemplate(w, "scheduleDisplay.layout", nil))
+
+}
 func eachmovieHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.FormValue("id")
 	fmt.Println(id)
@@ -39,6 +45,7 @@ func main() {
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 	http.HandleFunc("/", index)
 	http.HandleFunc("/Movie", display)
+	http.HandleFunc("/theater", displayTheater)
 	http.HandleFunc("/eachmovie/", eachmovieHandler)
 	http.ListenAndServe(":8080", nil)
 }
