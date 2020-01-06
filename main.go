@@ -37,6 +37,11 @@ func adminCinemas(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(tmpl.ExecuteTemplate(w, "adminCinemaList.layout", nil))
 
 }
+func adminSchedule(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println(tmpl.ExecuteTemplate(w, "adminScheduleList.layout", nil))
+
+}
 func eachmovieHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.FormValue("id")
 	fmt.Println(id)
@@ -56,6 +61,7 @@ func main() {
 	http.HandleFunc("/Movie", display)
 	http.HandleFunc("/admin", admin)
 	http.HandleFunc("/adminCinemas", adminCinemas)
+	http.HandleFunc("/adminCinemas/adminSchedule", adminSchedule)
 	http.HandleFunc("/theater", displayTheater)
 	http.HandleFunc("/eachmovie/", eachmovieHandler)
 	http.ListenAndServe(":8080", nil)
