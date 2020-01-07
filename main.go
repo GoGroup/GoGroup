@@ -24,8 +24,12 @@ func display(w http.ResponseWriter, r *http.Request) {
 }
 func displayTheater(w http.ResponseWriter, r *http.Request) {
 
-
 	fmt.Println(tmpl.ExecuteTemplate(w, "scheduleDisplay.layout", nil))
+
+}
+func admin(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println(tmpl.ExecuteTemplate(w, "check.layout", nil))
 
 }
 func eachmovieHandler(w http.ResponseWriter, r *http.Request) {
@@ -45,6 +49,7 @@ func main() {
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 	http.HandleFunc("/", index)
 	http.HandleFunc("/Movie", display)
+	http.HandleFunc("/admin", admin)
 	http.HandleFunc("/theater", displayTheater)
 	http.HandleFunc("/eachmovie/", eachmovieHandler)
 	http.ListenAndServe(":8080", nil)
