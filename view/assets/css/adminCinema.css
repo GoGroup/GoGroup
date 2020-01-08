@@ -1,12 +1,12 @@
-.btn-primary.colorless {
+#admin-cinemas .btn-primary.colorless {
   background-color: white !important;
   border: none;
   color: #8d8d8d !important;
 }
-.btn.colorless {
+#admin-cinemas .btn.colorless {
   text-align: left;
 }
-.btn.colorless:hover {
+#admin-cinemas .btn.colorless:hover {
   background-color: #eeeeee !important;
   border-radius: 0 !important;
 }
