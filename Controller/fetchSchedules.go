@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/hannasamuel20/Movie-and-events/model"
+	"github.com/GoGroup/Movie-and-events/model"
 )
 
 const allschedulesurl = "http://localhost:8181/admin/schedules"

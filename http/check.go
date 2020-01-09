@@ -4,15 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"gitlab.com/username/excercise/Project-GO/Movie-and-events/hall/service"
-
-	"gitlab.com/username/excercise/Project-GO/Movie-and-events/hall/repository"
-
+	"github.com/GoGroup/Movie-and-events/hall/repository"
+	"github.com/GoGroup/Movie-and-events/hall/service"
+	"github.com/GoGroup/Movie-and-events/http/handler"
+	"github.com/GoGroup/Movie-and-events/model"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/julienschmidt/httprouter"
-	"gitlab.com/username/excercise/Project-GO/Movie-and-events/http/handler"
-	"gitlab.com/username/excercise/Project-GO/Movie-and-events/model"
 )
 
 const (
@@ -20,7 +18,7 @@ const (
 	port     = 5432
 	user     = "postgres"
 	password = "Bangtan123"
-	dbname   = "movieevent"
+	dbname   = "MovieEvent"
 )
 
 func main() {

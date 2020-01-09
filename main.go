@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	controller "gitlab.com/username/excercise/Project-GO/Movie-and-events/Controller"
+	"github.com/GoGroup/Movie-and-events/controller"
 )
 
 var tmpl = template.Must(template.ParseGlob("view/template/*"))
@@ -29,7 +29,7 @@ func displayTheater(w http.ResponseWriter, r *http.Request) {
 }
 func admin(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("in 8080")
-	fmt.Println(controller.GetSchedules())
+	//fmt.Println(controller.GetSchedules())
 
 	fmt.Println(tmpl.ExecuteTemplate(w, "check.layout", nil))
 

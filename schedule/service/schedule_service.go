@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/hannasamuel20/Movie-and-events/model"
-	"github.com/hannasamuel20/Movie-and-events/schedule"
+	"github.com/GoGroup/Movie-and-events/model"
+	"github.com/GoGroup/Movie-and-events/schedule"
 )
 
 type ScheduleService struct {

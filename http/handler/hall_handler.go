@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/GoGroup/Movie-and-events/hall"
+	"github.com/GoGroup/Movie-and-events/model"
 	"github.com/julienschmidt/httprouter"
-	"gitlab.com/username/excercise/Project-GO/Movie-and-events/hall"
-	"gitlab.com/username/excercise/Project-GO/Movie-and-events/model"
 )
 
 type HallHandler struct {

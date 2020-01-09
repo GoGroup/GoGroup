@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/hannasamuel20/Movie-and-events/http/handler"
-	"github.com/hannasamuel20/Movie-and-events/model"
-	"github.com/hannasamuel20/Movie-and-events/schedule/repository"
-	"github.com/hannasamuel20/Movie-and-events/schedule/service"
-
+	"github.com/GoGroup/Movie-and-events/http/handler"
+	"github.com/GoGroup/Movie-and-events/model"
+	"github.com/GoGroup/Movie-and-events/schedule/repository"
+	"github.com/GoGroup/Movie-and-events/schedule/service"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/julienschmidt/httprouter"
