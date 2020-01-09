@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/hannasamuel20/Movie-and-events/controller"
+	controller "gitlab.com/username/excercise/Project-GO/Movie-and-events/Controller"
 )
 
 var tmpl = template.Must(template.ParseGlob("view/template/*"))
@@ -33,6 +33,11 @@ func admin(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(tmpl.ExecuteTemplate(w, "check.layout", nil))
 
+}
+
+func halls(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println(tmpl.ExecuteTemplate(w, "halls.layout", nil))
 }
 func adminCinemas(w http.ResponseWriter, r *http.Request) {
 
@@ -65,6 +70,7 @@ func main() {
 	http.HandleFunc("/adminCinemas", adminCinemas)
 	http.HandleFunc("/adminCinemas/adminSchedule", adminSchedule)
 	http.HandleFunc("/theater", displayTheater)
+	http.HandleFunc("/hall", halls)
 	http.HandleFunc("/eachmovie/", eachmovieHandler)
 	http.ListenAndServe(":8080", nil)
 
