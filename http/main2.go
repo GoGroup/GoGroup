@@ -6,8 +6,8 @@ import (
 
 	"github.com/GoGroup/Movie-and-events/http/handler"
 	"github.com/GoGroup/Movie-and-events/model"
-	"github.com/GoGroup/Movie-and-events/schedule/repository"
-	"github.com/GoGroup/Movie-and-events/schedule/service"
+	schrep "github.com/GoGroup/Movie-and-events/schedule/repository"
+	schser "github.com/GoGroup/Movie-and-events/schedule/service"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/julienschmidt/httprouter"
@@ -28,8 +28,8 @@ func main() {
 	// roleRepo := urepim.NewRoleGormRepo(dbconn)
 	// roleSrv := usrvim.NewRoleService(roleRepo)
 	// adminRoleHandler := handler.NewAdminRoleHandler(roleSrv)
-	scheduleRepo := repository.NewScheduleGormRepo(dbconn)
-	scheduleService := service.NewScheduleService(scheduleRepo)
+	scheduleRepo := schrep.NewScheduleGormRepo(dbconn)
+	scheduleService := schser.NewScheduleService(scheduleRepo)
 	adminScheduleHandler := handler.NewAdminScheduleHandler(scheduleService)
 	router := httprouter.New()
 	router.GET("/admin/schedules", adminScheduleHandler.GetSchedules)
