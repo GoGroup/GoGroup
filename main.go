@@ -28,6 +28,8 @@ func displayTheater(w http.ResponseWriter, r *http.Request) {
 
 }
 func admin(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("in 8080")
+	fmt.Println(controller.GetSchedules())
 
 	fmt.Println(tmpl.ExecuteTemplate(w, "check.layout", nil))
 
@@ -65,4 +67,5 @@ func main() {
 	http.HandleFunc("/theater", displayTheater)
 	http.HandleFunc("/eachmovie/", eachmovieHandler)
 	http.ListenAndServe(":8080", nil)
+
 }
