@@ -22,13 +22,14 @@ func (hs *HallService) Halls() ([]model.Hall, []error) {
 	return hll, errs
 }
 
-// func (hs *HallService) Hall(id uint) ([]*model.Hall, []error) {
-// 	cmnts, errs := hs.hallRepo.Hall()
-// 	if len(errs) > 0 {
-// 		return nil, errs
-// 	}
-// 	return cmnts, errs
-// }
+func (hs *HallService) Hall(id uint) (*model.Hall, []error) {
+	cmnts, errs := hs.hallRepo.Hall(id)
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return cmnts, errs
+}
+
 // func (hs *HallService) DeleteHall(id uint) (*model.Hall, []error) {
 // 	cmnts, errs := hs.hallRepo.Hall()
 // 	if len(errs) > 0 {
@@ -42,6 +43,14 @@ func (hs *HallService) StoreHall(hall *model.Hall) (*model.Hall, []error) {
 		return nil, errs
 	}
 	return cmnts, errs
+}
+
+func (hs *HallService) CinemaHalls(id uint) ([]model.Hall, []error) {
+	hll, errs := hs.hallRepo.CinemaHalls(id)
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return hll, errs
 }
 
 // func (hs *HallService) UpdateHall(hall *model.Hall) (*model.Hall, []error) {
