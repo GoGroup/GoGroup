@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+    <head>
+            <title>Free Steam Website Template | Home :: w3layouts</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <link href="../asset/css/style.css" rel="stylesheet" type="text/css" media="all" />
+            <link href="../asset/css/style2.css" rel="stylesheet" type="text/css" media="all"/>
+            <link href='../asset/http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+            <link href='../asset/http://fonts.googleapis.com/css?family=Dosis' rel='stylesheet' type='text/css'>
+            <link href="../asset/css/calendar-eightysix-default.css" rel="stylesheet" type="text/css" media="all" />
+            <link href="../asset/css/calendar-eightysix-osx-dashboard.css" rel="stylesheet" type="text/css" media="all" />
+            <link href="../asset/css/calendar-eightysix-vista.css" rel="stylesheet" type="text/css" media="all" />
+            <script type="text/javascript" src="../asset/js/mootools-1.2.4-core.js"></script>
+            <script type="text/javascript" src="../asset/js/mootools-1.2.4.2-more.js"></script>
+            <script type="text/javascript" src="../asset/js/calendar-eightysix-v1.0.1.js"></script>
+            
+            <script type="text/javascript">
+                    window.addEvent('domready', function() {
+                        new CalendarEightysix('exampleI', 	 { 'offsetY': -4 });
+                        new CalendarEightysix('exampleII', 	 { 'startMonday': true, 'format': '%m.%d.%Y', 'slideTransition': Fx.Transitions.Back.easeOut, 'draggable': true, 'offsetY': -4 });
+                });	
+            </script>
+            
+            
+            </head>
+    <body>
+   
+        {{template "header"}}
+        <div class="map">
+                <img src="../asset/images/map.jpg" alt=""/>
+            </div>
+            <div class="content-box">
+                <div class="wrap">
+                    <ul class="events">
+                        <li class="active"><a href="index.html">Hot Events</a></li> 
+                        <span><li><a href="">Trending Events</a></li> </span>
+                    </ul>
+                
+                    <div class="clear"></div>
+                </div>
+            </div>
+                    <!-- ------------------------------------------------------------------ -->
+                    <div class="main">
+                            
+                            <div class="wrap">
+                                    
+                                <div class="section group">
+                                        {{range .Contacts}}
+                                   <div class="col_1_of_3 span_1_of_3">
+                                        
+                                       <img src="../asset/images/w11.jpg" alt=""/>
+                                       <ul class="m_fb">
+                                           <li>
+                                               <span class="m_22"><a href="#"><img src="images/fb.png" alt=""/></a></span><span class="middle">Aug 17, 2013 02:00pm-08-00pm IST</span>
+                                               <span class="m_23"><a href="#"><img src="images/heart.png" alt=""/></a></span>
+                                                <div class="clear"></div>
+                                           </li>
+                                       </ul>
+                                         <div class="desc">
+                                           <h3><a href="#">{{.Name}}</a></h3>
+                                           <h4 >{{.Type}}</h4>
+                                           <h5 class="m_3">sed do eiusmod tempor incididunt ut labore</h5>
+                                           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                          </div>
+                                          <div class="section group example">
+                                           
+                                            <div class="button_cont" align="center"><a class="example_b" href="add-website-here" target="_blank" rel="nofollow noopener">Click For More Details</a></div>
+                                           
+                                                <div class="clear"></div>
+                                         </div>
+                                         
+                                   </div>
+                                   {{end}}
+             
+                                   
+                                   <div class="clear"></div>
+                                  
+                               </div>
+                               <div class="section group">
+                                    {{range .Contacts}}
+                               <div class="col_1_of_3 span_1_of_3">
+                                    
+                                   <img src="../asset/images/w11.jpg" alt=""/>
+                                   <ul class="m_fb">
+                                       <li>
+                                           <span class="m_22"><a href="#"><img src="images/fb.png" alt=""/></a></span><span class="middle">Aug 17, 2013 02:00pm-08-00pm IST</span>
+                                           <span class="m_23"><a href="#"><img src="images/heart.png" alt=""/></a></span>
+                                            <div class="clear"></div>
+                                       </li>
+                                   </ul>
+                                     <div class="desc">
+                                       <h3><a href="#">{{.Name}}</a></h3>
+                                       <h4>{{.Type}}</h4>
+                                       <h5 class="m_3">sed do eiusmod tempor incididunt ut labore</h5>
+                                       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                      </div>
+                                      <div class="section group example">
+                                           
+                                            <div class="button_cont" align="center"><a class="example_b" href="add-website-here" target="_blank" rel="nofollow noopener">Click For More Details</a></div>
+                                       
+                                            <div class="clear"></div>
+                                     </div>
+                                     
+                               </div>
+                               {{end}}
+         
+                               
+                               <div class="clear"></div>
+                              
+                           </div>
+                               
+                               
+                           </div>
+                           
+                        </div>
+                        {{template "footer"}}
+                 
+    </body>
+</html>
