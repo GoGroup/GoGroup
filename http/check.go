@@ -56,9 +56,17 @@ func main() {
 	Cinemasr := service.NewCinemaService(CinemaRepo)
 	CinemaHandler := handler.NewCinemaHandler(Cinemasr)
 
-	mh := handler.NewMenuHandler(tmpl, Cinemasr)
+	mh := handler.NewMenuHandler(tmpl, Cinemasr, Hallsr, scheduleService)
+
+	//myRouter.ServeFiles("/assets/css/*filepath", http.Dir("../view/assets"))
+	myRouter.ServeFiles("/assets/*filepath", http.Dir("../view/assetts"))
+
+	// fs := http.FileServer(http.Dir("../view/assetts"))
+	// http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
 	myRouter.GET("/adminCinemas", mh.AdminCinema)
+	myRouter.GET("/adminCinemas/adminSchedule", mh.AdminSchedule)
+	myRouter.GET("/adminCinemas/adminSchedule/new", mh.NewAdminSchedule)
 
 	myRouter.GET("/admin/schedules", adminScheduleHandler.GetSchedules)
 	myRouter.POST("/admin/schedule", adminScheduleHandler.PostSchedule)

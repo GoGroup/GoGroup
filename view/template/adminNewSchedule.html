@@ -1,0 +1,74 @@
+{{define "adminNewSchedule.content"}}
+<main class="col">
+  <h4>Simple Sidebar</h4>
+ <div id="adminNewSchedule">
+
+
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+        
+          <div class="md-form form-sm mb-1">
+
+            <input type="text" id="MovieName" class="form-control form-control-sm">
+            <label data-error="wrong" data-success="right" for="MovieName">Movie</label>
+          </div>
+
+          <div style="margin:10px;float:left;">
+
+            <input id="timepkr" style="width:100px;float:left;" class="form-control" placeholder="HH:MM" />
+            <button class="btn btn-primary" onclick="showpickers('timepkr',24)" style="width:40px;float:left;"><i class="fa fa-clock-o"></i>
+        
+          </div>
+        <div class="timepicker"></div> 
+        
+
+
+        <select class="browser-default custom-select">
+          <option selected>Day</option>
+          <option value="Monday">Monday</option>
+          <option value="Tuesday">Tuesday</option>
+          <option value="Wednsday">Wednsday</option>
+          <option value="Thursday">Thursday</option>
+          <option value="Friday">Friday</option>
+          <option value="Saturday">Saturday</option>
+          <option value="Sunday">Sunday</option>
+
+        </select>
+
+
+   
+<div class="form-check">
+<input type="radio" class="form-check-input" id="for3d" name="dimension">
+<label class="form-check-label" for="for3D">3D</label>
+</div>
+
+
+<div class="form-check">
+<input type="radio" class="form-check-input" id="for2D" name="dimension" checked>
+<label class="form-check-label" for="for2D">2D</label>
+</div>        
+
+          <div class="text-center form-sm mt-2">
+            <input type="submit" class="btn btn-info" value="Save changes">
+          </div>
+
+
+
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  
+ </div> 
+</main>
+{{end}}

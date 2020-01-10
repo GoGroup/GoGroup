@@ -20,7 +20,7 @@
             class="collapsed"
             data-toggle="collapse"
             data-parent="#accordionEx1"
-            href="#collapseTwo1"
+            href="#collapseTwo{{.ID}}"
             aria-expanded="false"
             aria-controls="collapseTwo1"
           >
@@ -32,36 +32,26 @@
         </div>
 
         <div
-          id="collapseTwo1"
+          id="collapseTwo{{.ID}}"
           class="collapse"
           role="tabpanel"
           aria-labelledby="headingTwo1"
           data-parent="#accordionEx1"
         >
           <div class="card-body">
+            {{with .Halls}}
+            {{range .}}
             <a
               href="#"
               class="btn colorless btn-primary btn-lg active btn-block"
               role="button"
               aria-pressed="true"
-              >Hall 1</a
+              >{{.HallName}}</a
             >
+            {{end}}
+            {{end}}
          
-            <a
-              href="#"
-              class="btn colorless btn-primary btn-lg active btn-block"
-              role="button"
-              aria-pressed="true"
-              >Hall 2</a
-            >
-         
-            <a
-              href="#"
-              class="btn colorless btn-primary btn-lg active btn-block"
-              role="button"
-              aria-pressed="true"
-              >Hall 3</a
-            >
+          
           </div>
         </div>
       </div>
