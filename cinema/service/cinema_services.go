@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/Adona12/GoGroup/Movie-and-events/cinema"
-	"github.com/Adona12/GoGroup/Movie-and-events/model"
+	"github.com/GoGroup/Movie-and-events/cinema"
+	"github.com/GoGroup/Movie-and-events/model"
 )
 
 type CinemaService struct {

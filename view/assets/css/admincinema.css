@@ -22,64 +22,56 @@
   outline: none !important;
   box-shadow: none;
 }
-.button{
+.button {
   align-items: center;
-padding-top: 15px;
- 
+  padding-top: 15px;
 }
-.hall{
-   width:130px;
-   margin-top: 15px;;
+.hall {
+  width: 130px;
+  margin-top: 15px;
 }
 .vl {
-   border-left: 2px solid gray;
-   height:100%;
- }
-.mybutton{
-   padding:0px;
-   margin: 0px;
-  
+  border-left: 2px solid gray;
+  height: 100%;
 }
-.rowbottom{
-   padding-top: 40px;
+.mybutton {
+  padding: 0px;
+  margin: 0px;
 }
-.colgroup{
-  
-   margin: 0px;
-   padding: 0px;
+.rowbottom {
+  padding-top: 40px;
 }
-.mycol{
- /* margin-right: 15px; */
- padding: 10px;
+.colgroup {
+  margin: 0px;
+  padding: 0px;
+}
+.mycol {
+  /* margin-right: 15px; */
+  padding: 10px;
 }
 @media only screen and (max-width: 1000px) {
-   .vl {
-       border-left: 0px solid white;
-       height:0%;
-     }
- 
- }
+  .vl {
+    border-left: 0px solid white;
+    height: 0%;
+  }
+}
 
-
-
- .btn-group-fab div {
-   position: relative;
-   width: 100%;
-   height: auto;
- }
- .btn-group-fab .btn {
-   
-   bottom: 0;
-   border-radius: 50%;
-   display: block;
-   margin-bottom: 4px;
-   width: 40px;
-   height: 40px;
-   margin: 4px auto;
- }
- .btn-group-fab .btn-main {
-   width: 50px;
-   height: 50px;
-   right: 50%;
- 
- }
+.btn-group-fab div {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+.btn-group-fab .btn {
+  bottom: 0;
+  border-radius: 50%;
+  display: block;
+  margin-bottom: 4px;
+  width: 40px;
+  height: 40px;
+  margin: 4px auto;
+}
+.btn-group-fab .btn-main {
+  width: 50px;
+  height: 50px;
+  right: 50%;
+}

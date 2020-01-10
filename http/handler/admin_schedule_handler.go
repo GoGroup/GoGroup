@@ -3,26 +3,27 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+
 	"net/http"
 
-	"github.com/GoGroup/Movie-and-events/cinema"
-
 	"github.com/GoGroup/Movie-and-events/model"
+	"github.com/GoGroup/Movie-and-events/schedule"
 	"github.com/julienschmidt/httprouter"
 )
 
-type CinemaHandler struct {
-	cinemaService cinema.CinemaService
+type AdminScheduleHandler struct {
+	scheduleService schedule.ScheduleService
 }
 
-func NewCinemaHandler(CllService cinema.CinemaService) *CinemaHandler {
-	return &CinemaHandler{cinemaService: CllService}
-
+func NewAdminScheduleHandler(schdlService schedule.ScheduleService) *AdminScheduleHandler {
+	fmt.Println("admin schedule handler created")
+	return &AdminScheduleHandler{scheduleService: schdlService}
 }
-func (cc *CinemaHandler) GetCinemas(w http.ResponseWriter,
+
+func (as *AdminScheduleHandler) GetSchedules(w http.ResponseWriter,
 	r *http.Request, _ httprouter.Params) {
 
-	cinemas, errs := cc.cinemaService.Cinemas()
+	schedules, errs := as.scheduleService.Schedules()
 
 	if len(errs) > 0 {
 		w.Header().Set("Content-Type", "application/json")
@@ -30,7 +31,7 @@ func (cc *CinemaHandler) GetCinemas(w http.ResponseWriter,
 		return
 	}
 
-	output, err := json.MarshalIndent(cinemas, "", "\t\t")
+	output, err := json.MarshalIndent(schedules, "", "\t\t")
 
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
@@ -43,14 +44,18 @@ func (cc *CinemaHandler) GetCinemas(w http.ResponseWriter,
 	return
 
 }
-func (ach *CinemaHandler) PostCinema(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+
+func (as *AdminScheduleHandler) PostSchedule(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	fmt.Println("in post schedule 1")
 
 	l := r.ContentLength
 	body := make([]byte, l)
 	r.Body.Read(body)
-	cinema := &model.Cinema{}
+	schedule := &model.Schedule{}
+	fmt.Println("in post schedule 2")
 
-	err := json.Unmarshal(body, cinema)
+	err := json.Unmarshal(body, schedule)
+	fmt.Println(schedule)
 
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
@@ -58,7 +63,7 @@ func (ach *CinemaHandler) PostCinema(w http.ResponseWriter, r *http.Request, ps 
 		return
 	}
 
-	cinema, errs := ach.cinemaService.StoreCinema(cinema)
+	schedule, errs := as.scheduleService.StoreSchedule(schedule)
 
 	if len(errs) > 0 {
 		w.Header().Set("Content-Type", "application/json")
@@ -66,8 +71,8 @@ func (ach *CinemaHandler) PostCinema(w http.ResponseWriter, r *http.Request, ps 
 		return
 	}
 
-	p := fmt.Sprintf("/cinemas/%d", cinema.ID)
-	w.Header().Set("Location", p)
+	//p := fmt.Sprintf("/v1/admin/comments/%d", comment.ID)
+	//w.Header().Set("Location", p)
 	w.WriteHeader(http.StatusCreated)
 	return
 }

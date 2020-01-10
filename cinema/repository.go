@@ -1,6 +1,6 @@
 package cinema
 
-import "github.com/Adona12/GoGroup/Movie-and-events/model"
+import "github.com/GoGroup/Movie-and-events/model"
 
 // CinemaService specifies cinema  related service
 type CinemaRepository interface {

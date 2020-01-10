@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/Adona12/GoGroup/Movie-and-events/hall"
-	"github.com/Adona12/GoGroup/Movie-and-events/model"
+	"github.com/GoGroup/Movie-and-events/hall"
+	"github.com/GoGroup/Movie-and-events/model"
 )
 
 type HallService struct {

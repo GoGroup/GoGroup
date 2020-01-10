@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Adona12/GoGroup/Movie-and-events/cinema/repository"
-	"github.com/Adona12/GoGroup/Movie-and-events/model"
+	"github.com/GoGroup/Movie-and-events/cinema/repository"
+	"github.com/GoGroup/Movie-and-events/model"
 
-	"github.com/Adona12/GoGroup/Movie-and-events/cinema/service"
-	usrvim "github.com/Adona12/GoGroup/Movie-and-events/hall/repository"
-	urepim "github.com/Adona12/GoGroup/Movie-and-events/hall/service"
-	"github.com/Adona12/GoGroup/Movie-and-events/http/handler"
+	"github.com/GoGroup/Movie-and-events/cinema/service"
+	usrvim "github.com/GoGroup/Movie-and-events/hall/repository"
+	urepim "github.com/GoGroup/Movie-and-events/hall/service"
+	"github.com/GoGroup/Movie-and-events/http/handler"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/julienschmidt/httprouter"
@@ -21,7 +21,7 @@ const (
 	port     = 5432
 	user     = "postgres"
 	password = "Bangtan123"
-	dbname   = "movieevent"
+	dbname   = "MovieEvent"
 )
 
 func main() {
