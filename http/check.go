@@ -23,7 +23,7 @@ const (
 	host     = "localhost"
 	port     = 5432
 	user     = "postgres"
-	password = "Bangtan123"
+	password = "admin"
 	dbname   = "MovieEvent"
 )
 
@@ -40,7 +40,7 @@ func main() {
 	db.AutoMigrate(&model.Cinema{})
 	db.AutoMigrate(&model.Schedule{})
 
-	tmpl := template.Must(template.ParseGlob("./view/template/*"))
+	tmpl := template.Must(template.ParseGlob("../view/template/*"))
 
 	myRouter := httprouter.New()
 
@@ -65,8 +65,9 @@ func main() {
 	// http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
 	myRouter.GET("/adminCinemas", mh.AdminCinema)
-	myRouter.GET("/adminCinemas/adminSchedule", mh.AdminSchedule)
-	myRouter.GET("/adminCinemas/adminSchedule/new", mh.NewAdminSchedule)
+	myRouter.GET("/adminCinemas/adminSchedule/:hId", mh.AdminSchedule)
+	myRouter.GET("/adminCinemas/adminSchedule/:hId/new/", mh.NewAdminSchedule)
+	myRouter.POST("/adminCinemas/adminSchedule/:hId/new/", mh.NewAdminSchedulePost)
 
 	myRouter.GET("/admin/schedules", adminScheduleHandler.GetSchedules)
 	myRouter.GET("/admin/schedules/:id/:day", adminScheduleHandler.GetHallSchedules)

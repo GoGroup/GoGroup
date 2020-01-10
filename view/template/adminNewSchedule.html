@@ -2,8 +2,8 @@
 <main class="col">
   <h4>Simple Sidebar</h4>
  <div id="adminNewSchedule">
-
-
+{{$temp:= .HallID}}
+<h1>{{$temp}}</h1>
 
   <div class="row">
     <div class="col-sm-6">
@@ -11,14 +11,37 @@
         <div class="card-body">
         
           <div class="md-form form-sm mb-1">
-
-            <input type="text" id="MovieName" class="form-control form-control-sm">
+<form action="/adminCinemas/adminSchedule/{{$temp}}/new" method="get">
+            <input  name="movie" type="text" id="MovieName" class="form-control form-control-sm">
             <label data-error="wrong" data-success="right" for="MovieName">Movie</label>
+            <input type="submit" value="search">
+          </form>
           </div>
+         
+
+
+
+          {{if .M}}
+          
+          {{with .M}}
+           {{with .MovieList}}
+          {{range .}}
+          <a href="/adminCinemas/adminSchedule/{{$temp}}/new/?moviename={{.Title}}&id={{.Id}}">{{.Title}}</a> <br>
+          {{end}}
+          {{end}} 
+
+          {{end}} 
+          {{end}} 
+
+
+<form action="/adminCinemas/adminSchedule/{{$temp}}/new" method="post">     
+          <input value="{{.MovieN}}"  name="chosen" type="text" id="chosen" class="form-control form-control-sm" disabled>
+          <input value="{{.MovieID}}"  name="mid" type="text" id="mid" class="form-control form-control-sm" >
+
 
           <div style="margin:10px;float:left;">
 
-            <input id="timepkr" style="width:100px;float:left;" class="form-control" placeholder="HH:MM" />
+            <input id="timepkr" name="time" style="width:100px;float:left;" class="form-control" placeholder="HH:MM" />
             <button class="btn btn-primary" onclick="showpickers('timepkr',24)" style="width:40px;float:left;"><i class="fa fa-clock-o"></i>
         
           </div>
@@ -26,7 +49,7 @@
         
 
 
-        <select class="browser-default custom-select">
+        <select id="day" name="day" class="browser-default mt-5 custom-select">
           <option selected>Day</option>
           <option value="Monday">Monday</option>
           <option value="Tuesday">Tuesday</option>
@@ -42,18 +65,20 @@
    
 <div class="form-check">
 <input type="radio" class="form-check-input" id="for3d" name="dimension">
-<label class="form-check-label" for="for3D">3D</label>
+<label class="form-check-label" value="3D" for="for3D">3D</label>
 </div>
 
 
 <div class="form-check">
-<input type="radio" class="form-check-input" id="for2D" name="dimension" checked>
+<input type="radio" value="2D" class="form-check-input" id="for2D" name="dimension" checked>
 <label class="form-check-label" for="for2D">2D</label>
 </div>        
 
           <div class="text-center form-sm mt-2">
-            <input type="submit" class="btn btn-info" value="Save changes">
+            <input type="submit" class="btn btn-info" value="Add schedule">
           </div>
+
+        </form>
 
 
 
