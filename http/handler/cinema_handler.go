@@ -5,23 +5,24 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Adona12/GoGroup/Movie-and-events/hall"
+	"github.com/Adona12/GoGroup/Movie-and-events/cinema"
+
 	"github.com/Adona12/GoGroup/Movie-and-events/model"
 	"github.com/julienschmidt/httprouter"
 )
 
-type HallHandler struct {
-	hallService hall.HallService
+type CinemaHandler struct {
+	cinemaService cinema.CinemaService
 }
 
-func NewHallHandler(HllService hall.HallService) *HallHandler {
-	return &HallHandler{hallService: HllService}
+func NewCinemaHandler(CllService cinema.CinemaService) *CinemaHandler {
+	return &CinemaHandler{cinemaService: CllService}
 
 }
-func (hh *HallHandler) GetHalls(w http.ResponseWriter,
+func (cc *CinemaHandler) GetCinemas(w http.ResponseWriter,
 	r *http.Request, _ httprouter.Params) {
 
-	Halls, errs := hh.hallService.Halls()
+	cinemas, errs := cc.cinemaService.Cinemas()
 
 	if len(errs) > 0 {
 		w.Header().Set("Content-Type", "application/json")
@@ -29,7 +30,7 @@ func (hh *HallHandler) GetHalls(w http.ResponseWriter,
 		return
 	}
 
-	output, err := json.MarshalIndent(Halls, "", "\t\t")
+	output, err := json.MarshalIndent(cinemas, "", "\t\t")
 
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
@@ -42,14 +43,14 @@ func (hh *HallHandler) GetHalls(w http.ResponseWriter,
 	return
 
 }
-func (ach *HallHandler) PostHall(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (ach *CinemaHandler) PostCinema(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	l := r.ContentLength
 	body := make([]byte, l)
 	r.Body.Read(body)
-	hall := &model.Hall{}
+	cinema := &model.Cinema{}
 
-	err := json.Unmarshal(body, hall)
+	err := json.Unmarshal(body, cinema)
 
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
@@ -57,7 +58,7 @@ func (ach *HallHandler) PostHall(w http.ResponseWriter, r *http.Request, ps http
 		return
 	}
 
-	hall, errs := ach.hallService.StoreHall(hall)
+	cinema, errs := ach.cinemaService.StoreCinema(cinema)
 
 	if len(errs) > 0 {
 		w.Header().Set("Content-Type", "application/json")
@@ -65,7 +66,7 @@ func (ach *HallHandler) PostHall(w http.ResponseWriter, r *http.Request, ps http
 		return
 	}
 
-	p := fmt.Sprintf("/halls/%d", hall.ID)
+	p := fmt.Sprintf("/cinemas/%d", cinema.ID)
 	w.Header().Set("Location", p)
 	w.WriteHeader(http.StatusCreated)
 	return

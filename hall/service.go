@@ -1,6 +1,6 @@
 package hall
 
-import "gitlab.com/username/excercise/Project-GO/Movie-and-events/model"
+import "github.com/Adona12/GoGroup/Movie-and-events/model"
 
 // CommentService specifies cinema hall related service
 type HallService interface {

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	controller "gitlab.com/username/excercise/Project-GO/Movie-and-events/Controller"
+	controller "github.com/Adona12/GoGroup/Movie-and-events/Controller"
 )
 
 var tmpl = template.Must(template.ParseGlob("view/template/*"))

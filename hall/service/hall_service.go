@@ -1,8 +1,8 @@
 package service
 
 import (
-	"gitlab.com/username/excercise/Project-GO/Movie-and-events/hall"
-	"gitlab.com/username/excercise/Project-GO/Movie-and-events/model"
+	"github.com/Adona12/GoGroup/Movie-and-events/hall"
+	"github.com/Adona12/GoGroup/Movie-and-events/model"
 )
 
 type HallService struct {

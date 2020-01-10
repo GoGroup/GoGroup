@@ -11,7 +11,7 @@ type Hall struct {
 	WeekendDiscount uint `json:"discount"`
 }
 type Cinema struct {
-	ID         uint   `gorm:"primary_key;AUTO_INCREMENT"`
-	CinemaName string `gorm:"type:varchar(255);not null"`
+	ID         uint   `json:"id" gorm:"primary_key;AUTO_INCREMENT"`
+	CinemaName string ` json:"cinemaname" gorm:"type:varchar(255);not null"`
 	Halls      []Hall
 }

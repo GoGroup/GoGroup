@@ -1,9 +1,9 @@
 package repository
 
 import (
+	"github.com/Adona12/GoGroup/Movie-and-events/hall"
+	"github.com/Adona12/GoGroup/Movie-and-events/model"
 	"github.com/jinzhu/gorm"
-	"gitlab.com/username/excercise/Project-GO/Movie-and-events/hall"
-	"gitlab.com/username/excercise/Project-GO/Movie-and-events/model"
 )
 
 // CommentGormRepo implements menu.CommentRepository interface

@@ -4,15 +4,16 @@ import (
 	"fmt"
 	"net/http"
 
-	"gitlab.com/username/excercise/Project-GO/Movie-and-events/hall/service"
+	"github.com/Adona12/GoGroup/Movie-and-events/cinema/repository"
+	"github.com/Adona12/GoGroup/Movie-and-events/model"
 
-	"gitlab.com/username/excercise/Project-GO/Movie-and-events/hall/repository"
-
+	"github.com/Adona12/GoGroup/Movie-and-events/cinema/service"
+	usrvim "github.com/Adona12/GoGroup/Movie-and-events/hall/repository"
+	urepim "github.com/Adona12/GoGroup/Movie-and-events/hall/service"
+	"github.com/Adona12/GoGroup/Movie-and-events/http/handler"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/julienschmidt/httprouter"
-	"gitlab.com/username/excercise/Project-GO/Movie-and-events/http/handler"
-	"gitlab.com/username/excercise/Project-GO/Movie-and-events/model"
 )
 
 const (
@@ -33,10 +34,18 @@ func main() {
 	}
 	defer db.Close()
 	db.AutoMigrate(&model.Hall{})
-	HallRepo := repository.NewHallGormRepo(db)
-	Hallsr := service.NewHallService(HallRepo)
+	db.AutoMigrate(&model.Cinema{})
+
+	HallRepo := usrvim.NewHallGormRepo(db)
+	Hallsr := urepim.NewHallService(HallRepo)
 	HallHandler := handler.NewHallHandler(Hallsr)
+
+	CinemaRepo := repository.NewCinemaGormRepo(db)
+	Cinemasr := service.NewCinemaService(CinemaRepo)
+	CinemaHandler := handler.NewCinemaHandler(Cinemasr)
 	myRouter := httprouter.New()
+	myRouter.GET("/cinema", CinemaHandler.GetCinemas)
+	myRouter.POST("/cinemas", CinemaHandler.PostCinema)
 	myRouter.GET("/hall", HallHandler.GetHalls)
 	myRouter.POST("/halls", HallHandler.PostHall)
 	http.ListenAndServe(":8080", myRouter)
