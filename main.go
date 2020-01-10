@@ -6,9 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	
-	"gitlab.com/username/excercise/Project-GO/Movie-and-events/Controller"
-	"gitlab.com/username/excercise/Project-GO/Movie-and-events/Controller/Database"
+	controller "gitlab.com/username/excercise/Project-GO/Movie-and-events/Controller"
 )
 
 var tmpl = template.Must(template.ParseGlob("view/template/*"))
@@ -34,19 +32,11 @@ func admin(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(tmpl.ExecuteTemplate(w, "check.layout", nil))
 
 }
-<<<<<<< HEAD
 
 func halls(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodPost {
-		name :=r.FormValue("name")
-		cap,_ := strconv.Atoi(r.FormValue("cap"))
-		price,_ := strconv.Atoi(r.FormValue("price"))
-		vip,_:= strconv.Atoi(r.FormValue("vip"))
-		discount,_ := strconv.Atoi(r.FormValue("discount"))
-		Database.Inserthall(name,3,cap,price,vip,discount)
-	}
+
 	fmt.Println(tmpl.ExecuteTemplate(w, "halls.layout", nil))
-=======
+}
 func adminCinemas(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(tmpl.ExecuteTemplate(w, "adminCinemaList.layout", nil))
@@ -55,7 +45,6 @@ func adminCinemas(w http.ResponseWriter, r *http.Request) {
 func adminSchedule(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(tmpl.ExecuteTemplate(w, "adminScheduleList.layout", nil))
->>>>>>> 334895ac9bee4f33ab4aefabc7fd282102d034ee
 
 }
 func eachmovieHandler(w http.ResponseWriter, r *http.Request) {
