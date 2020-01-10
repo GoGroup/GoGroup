@@ -23,7 +23,7 @@ const (
 	host     = "localhost"
 	port     = 5432
 	user     = "postgres"
-	password = "admin"
+	password = "Bangtan123"
 	dbname   = "MovieEvent"
 )
 
@@ -40,7 +40,7 @@ func main() {
 	db.AutoMigrate(&model.Cinema{})
 	db.AutoMigrate(&model.Schedule{})
 
-	tmpl := template.Must(template.ParseGlob("../view/template/*"))
+	tmpl := template.Must(template.ParseGlob("./view/template/*"))
 
 	myRouter := httprouter.New()
 
@@ -69,14 +69,18 @@ func main() {
 	myRouter.GET("/adminCinemas/adminSchedule/new", mh.NewAdminSchedule)
 
 	myRouter.GET("/admin/schedules", adminScheduleHandler.GetSchedules)
+	myRouter.GET("/admin/schedules/:id/:day", adminScheduleHandler.GetHallSchedules)
+	myRouter.GET("/admin/schedule/:id", adminScheduleHandler.GetSingleSchedule)
+	myRouter.DELETE("/admin/schedule/:id", adminScheduleHandler.DeleteSchedule)
+	myRouter.PUT("/admin/schedule/:id", adminScheduleHandler.UpdateSchedule)
 	myRouter.POST("/admin/schedule", adminScheduleHandler.PostSchedule)
 	myRouter.GET("/cinema", CinemaHandler.GetCinemas)
 	myRouter.POST("/cinemas", CinemaHandler.PostCinema)
 	myRouter.GET("/cinema/:id", CinemaHandler.GetSingleCinema)
 	myRouter.GET("/hallcinema/:id", HallHandler.GetCinemaHalls)
-	myRouter.GET("/hall", HallHandler.GetHalls)
+	myRouter.GET("/halls", HallHandler.GetHalls)
 	myRouter.GET("/hall/:id", HallHandler.GetSingleHall)
-	myRouter.POST("/halls", HallHandler.PostHall)
+	myRouter.POST("/hall", HallHandler.PostHall)
 	http.ListenAndServe(":8080", myRouter)
 
 }
