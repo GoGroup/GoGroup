@@ -45,30 +45,30 @@ func (hllRepo *HallGormRepo) Hall(id uint) (*model.Hall, []error) {
 	return &hll, errs
 }
 
-// // UpdateComment updates a given customer comment in the database
-// func (hllRepo *HallGormRepo) UpdateHall(hall *model.Hall) (*model.Hall, []error) {
-// 	hll := hall
-// 	errs := hllRepo.conn.Save(hll).GetErrors()
-// 	if len(errs) > 0 {
-// 		return nil, errs
-// 	}
-// 	return hll, errs
-// }
+// // UpdateHall
+func (hllRepo *HallGormRepo) UpdateHall(hall *model.Hall) (*model.Hall, []error) {
+	hll := hall
+	errs := hllRepo.conn.Save(hll).GetErrors()
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return hll, errs
+}
 
-// // DeleteComment deletes a given customer comment from the database
-// func (hllRepo *HallGormRepo) DeleteHall(id uint) (*model.Hall, []error) {
-// 	hll, errs := hllRepo.Hall(id)
+// DeleteHall
+func (hllRepo *HallGormRepo) DeleteHall(id uint) (*model.Hall, []error) {
+	hll, errs := hllRepo.Hall(id)
 
-// 	if len(errs) > 0 {
-// 		return nil, errs
-// 	}
+	if len(errs) > 0 {
+		return nil, errs
+	}
 
-// 	errs = hllRepo.conn.Delete(hll, id).GetErrors()
-// 	if len(errs) > 0 {
-// 		return nil, errs
-// 	}
-// 	return hll, errs
-// }
+	errs = hllRepo.conn.Delete(hll, id).GetErrors()
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return hll, errs
+}
 
 // StoreComment stores a given customer comment in the database
 func (hllRepo *HallGormRepo) StoreHall(hall *model.Hall) (*model.Hall, []error) {

@@ -7,7 +7,7 @@ type HallRepository interface {
 	Halls() ([]model.Hall, []error)
 	CinemaHalls(id uint) ([]model.Hall, []error)
 	Hall(id uint) (*model.Hall, []error)
-	// UpdateHall(hall *model.Hall) (*model.Hall, []error)
-	// DeleteHall(id uint) (*model.Hall, []error)
+	UpdateHall(hall *model.Hall) (*model.Hall, []error)
+	DeleteHall(id uint) (*model.Hall, []error)
 	StoreHall(hall *model.Hall) (*model.Hall, []error)
 }

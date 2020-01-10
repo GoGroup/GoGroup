@@ -30,13 +30,13 @@ func (hs *HallService) Hall(id uint) (*model.Hall, []error) {
 	return cmnts, errs
 }
 
-// func (hs *HallService) DeleteHall(id uint) (*model.Hall, []error) {
-// 	cmnts, errs := hs.hallRepo.Hall()
-// 	if len(errs) > 0 {
-// 		return nil, errs
-// 	}
-// 	return cmnts, errs
-// }
+func (hs *HallService) DeleteHall(id uint) (*model.Hall, []error) {
+	cmnts, errs := hs.hallRepo.Hall(id)
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return cmnts, errs
+}
 func (hs *HallService) StoreHall(hall *model.Hall) (*model.Hall, []error) {
 	cmnts, errs := hs.hallRepo.StoreHall(hall)
 	if len(errs) > 0 {
@@ -53,10 +53,10 @@ func (hs *HallService) CinemaHalls(id uint) ([]model.Hall, []error) {
 	return hll, errs
 }
 
-// func (hs *HallService) UpdateHall(hall *model.Hall) (*model.Hall, []error) {
-// 	cmnts, errs := hs.hallRepo.StoreHall(hall)
-// 	if len(errs) > 0 {
-// 		return nil, errs
-// 	}
-// 	return cmnts, errs
-// }
+func (hs *HallService) UpdateHall(hall *model.Hall) (*model.Hall, []error) {
+	cmnts, errs := hs.hallRepo.UpdateHall(hall)
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return cmnts, errs
+}

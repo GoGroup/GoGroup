@@ -1,6 +1,9 @@
 package repository
 
 import (
+	"fmt"
+
+	asvv "github.com/GoGroup/Movie-and-events/hall/repository"
 	"github.com/GoGroup/Movie-and-events/model"
 	"github.com/GoGroup/Movie-and-events/schedule"
 	"github.com/jinzhu/gorm"
@@ -23,6 +26,30 @@ func (scheduleRepo *ScheduleGormRepo) Schedules() ([]model.Schedule, []error) {
 		return nil, errs
 	}
 	return schdls, errs
+
+}
+func (scheduleRepo *ScheduleGormRepo) HallSchedules(id uint, day string) ([]model.Schedule, []error) {
+	ids := []uint{}
+	HallRepo := asvv.NewHallGormRepo(scheduleRepo.conn)
+	hll := []model.Hall{}
+	hll, err := HallRepo.CinemaHalls(id)
+	if len(err) > 0 {
+		return nil, err
+	}
+	for _, ar := range hll {
+		ids = append(ids, ar.ID)
+	}
+
+	schdls := []model.Schedule{}
+	fmt.Printf(day)
+	errs := scheduleRepo.conn.Where("hall_id in (?) And Day=?", ids, day).Find(&schdls).GetErrors()
+	//errs := scheduleRepo.conn.Joins("JOIN schedules on hall_id=halls.id AND day = ?", day).Joins("Join halls on halls.id=cinemas.id").Where("cinemas.id=?", id).Find(&schdls).GetErrors()
+
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return schdls, errs
+
 }
 
 // StoreComment stores a given customer comment in the database
@@ -33,4 +60,35 @@ func (scheduleRepo *ScheduleGormRepo) StoreSchedule(schedule *model.Schedule) (*
 		return nil, errs
 	}
 	return schdl, errs
+}
+func (schRepo *ScheduleGormRepo) UpdateSchedules(schedule *model.Schedule) (*model.Schedule, []error) {
+	schdl := schedule
+	errs := schRepo.conn.Save(schdl).GetErrors()
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return schdl, errs
+}
+
+// DeleteComment deletes a given customer comment from the database
+func (schRepo *ScheduleGormRepo) DeleteSchedules(id uint) (*model.Schedule, []error) {
+	schdl, errs := schRepo.Schedule(id)
+
+	if len(errs) > 0 {
+		return nil, errs
+	}
+
+	errs = schRepo.conn.Delete(schdl, id).GetErrors()
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return schdl, errs
+}
+func (schRepo *ScheduleGormRepo) Schedule(id uint) (*model.Schedule, []error) {
+	schdl := model.Schedule{}
+	errs := schRepo.conn.First(&schdl, id).GetErrors()
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return &schdl, errs
 }
