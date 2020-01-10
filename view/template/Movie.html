@@ -22,7 +22,7 @@
             <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 ">
                 {{with .MovieList}}
                 {{range .}}
-                <a href="/eachmovie?id={{.Id}}">
+                <a href="/movie/{{.Id}}">
                     <div class="col mb-4 ">
                         <div class="card h-100">
                             <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img-top" alt="...">

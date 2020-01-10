@@ -69,6 +69,12 @@ func main() {
 	myRouter.GET("/adminCinemas/adminSchedule/:hId/new/", mh.NewAdminSchedule)
 	myRouter.POST("/adminCinemas/adminSchedule/:hId/new/", mh.NewAdminSchedulePost)
 
+	myRouter.GET("/", mh.Index)
+	myRouter.GET("/movies", mh.Movies)
+	myRouter.GET("/movie/:mId", mh.EachMovieHandler)
+	myRouter.GET("/theaters", mh.Theaters)
+	myRouter.GET("/theater/schedule/:cName/:cId", mh.TheaterSchedule)
+
 	myRouter.GET("/admin/schedules", adminScheduleHandler.GetSchedules)
 	myRouter.GET("/admin/schedules/:id/:day", adminScheduleHandler.GetHallSchedules)
 	myRouter.GET("/admin/schedule/:id", adminScheduleHandler.GetSingleSchedule)

@@ -104,20 +104,117 @@ func (m *MenuHandler) NewAdminSchedule(w http.ResponseWriter, r *http.Request, p
 func (m *MenuHandler) NewAdminSchedulePost(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
 	var a *model.Schedule
 	hallid, _ := strconv.Atoi(pm.ByName("hId"))
-
+	temp := struct{ HallID int }{HallID: hallid}
 	MID, _ := strconv.Atoi(r.FormValue("mid"))
 	fmt.Println("printing mid", MID)
 	Time := r.FormValue("time")
 	fmt.Println("printing time", Time)
 	DAy := r.FormValue("day")
 	fmt.Println("printing day", DAy)
-	Dimen := r.FormValue("dimension")
+	Dimen := r.FormValue("3or2d")
 	fmt.Println("printing day", Dimen)
 	a = &model.Schedule{MoviemID: MID, StartingTime: Time, Dimension: Dimen, HallID: hallid, Day: DAy}
 	if MID != 0 && Time != "" && DAy != "" && hallid != 0 {
 		m.ssrv.StoreSchedule(a)
 	}
 
-	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminNewSchedule.layout", nil))
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminNewSchedule.layout", temp))
 
+}
+
+func (m *MenuHandler) Index(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
+
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "index.layout", nil))
+
+}
+func (m *MenuHandler) EachMovieHandler(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
+
+	id := pm.ByName("mId")
+	fmt.Println(id)
+	trailerKey := controller.GetTrailer(id)
+	i, _ := strconv.Atoi(id)
+	details, _, _ := controller.GetMovieDetails(i)
+	details.Trailer = trailerKey
+
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "EachMovie.layout", details))
+	//	fmt.Println(m.tmpl.ExecuteTemplate(w, "index.layout", nil))
+
+}
+func (m *MenuHandler) Movies(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
+	upcomingmovies, _, _ := controller.GetUpcomingMovies()
+	fmt.Println(upcomingmovies)
+
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "Movie.layout", upcomingmovies))
+
+}
+func (m *MenuHandler) Theaters(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
+	var errr []error
+	var NewCinemaArray []model.Cinema
+
+	c, err := m.csrv.Cinemas()
+	for _, element := range c {
+		element.Halls, errr = m.hsrv.CinemaHalls(element.ID)
+		NewCinemaArray = append(NewCinemaArray, element)
+	}
+	fmt.Println(NewCinemaArray)
+
+	if len(err) > 0 || len(errr) > 0 {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	}
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "theatersList.layout", NewCinemaArray))
+
+}
+
+func (m *MenuHandler) TheaterSchedule(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
+
+	CName := pm.ByName("cName")
+	CId, _ := strconv.Atoi(pm.ByName("cId"))
+	uCId := uint(CId)
+	H := HallSchedule{}
+	B := BindedSchedule{}
+
+	Days := []string{"Monday", "Tuesday", "Wednsday", "Thursday", "Friday", "Saturday", "Sunday"}
+
+	for _, d := range Days {
+		fmt.Println(d)
+		schdls, _ := m.ssrv.HallSchedules(uCId, d)
+		fmt.Println(schdls)
+		for _, s := range schdls {
+			mo, _, _ := controller.GetMovieDetails(s.MoviemID)
+			fmt.Println(mo)
+
+			B.PosterPath = mo.PosterPath
+			B.MovieName = mo.Title
+			B.Runtime = mo.RunTime
+			hall, _ := m.hsrv.Hall(uint(s.HallID))
+			fmt.Println("hall is", hall)
+			B.HallName = hall.HallName
+			B.StartTime = s.StartingTime
+			B.Day = d
+
+			H.All = append(H.All, B)
+		}
+
+	}
+	H.CinemaName = CName
+	fmt.Println("************************************")
+	fmt.Println(H)
+	// if len(err) > 0 {
+	// 	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	// }
+
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "scheduleDisplay.layout", H))
+
+}
+
+type HallSchedule struct {
+	CinemaName string
+	All        []BindedSchedule
+}
+type BindedSchedule struct {
+	PosterPath, MovieName string
+	Runtime               int
+	HallName              string
+	Day                   string
+	StartTime             string
 }

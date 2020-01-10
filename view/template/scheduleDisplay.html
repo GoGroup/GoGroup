@@ -1,7 +1,7 @@
 {{define "scheduleDisplay.content"}}
 
 <div id="schedule">
-    <h1 class="m-5"> Century</h1>
+    <h1 class="m-5"> {{.CinemaName}}</h1>
 
     <ul class="nav nav-tabs mb-5 mt-1 nav-fill" id="myTab" role="tablist">
         <li class="nav-item">
@@ -36,28 +36,32 @@
     <div class="tab-content pt-4" id="myTabContent">
         <div class="tab-pane fade show active" id="monday" role="tabpanel" aria-labelledby="monday-tab">
             <div class="container">
+              {{with .All}}
+                {{range .}}
+                {{if eq .Day "Monday"}}
                 <div class="card mb-3" style="max-width: 1240px;">
                   <div class="row no-gutters">
                     <div class="col-md-2">
-                      <img src="../assets/images/joker2.jpg" class="card-img" alt="...">
+                      <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
                     </div>
                     <div class="col-md-10">
                       <div class="card-body">
-                        <h5 class="card-title">Movie Name <span class="badge badge-warning">3D</span></h5> 
-                        <p class="card-text">Starts at: <span>12:45</span> </p>
+                        <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">3D</span></h5> 
+                        <p class="card-text">Starts at: <span>{{.StartTime}}</span> </p>
 
-                        <p class="card-text">Running time: <span>2hr 20mins</span> </p>
-                        <p class="card-text">Cinema 1<span class="badge badge-success">Available</span></p> <br>
+                        <p class="card-text">Running time: <span>{{.Runtime}}</span> </p>
+                        <p class="card-text">{{.HallName}}<span class="badge badge-success">Available</span></p> <br>
                         <div class="row">
                             <div class="col-md-6"></div>
                             <div class="col-md-6 text-right"> <button type="button" class="btn btn-light justify-content-end">Book now!</button></div>
                         </div>
-                       
-                       
                       </div>
                     </div>
                   </div>
                 </div>
+                {{end}}
+                {{end}}
+                {{end}}
     
                 <div class="card mb-3" style="max-width: 1240px;">
                     <div class="row no-gutters">
@@ -113,20 +117,35 @@
     
     
             <div class="container">
+
+              {{with .All}}
+              {{range .}}
+              {{if eq .Day "Tuesday"}}
               <div class="card mb-3" style="max-width: 1240px;">
                 <div class="row no-gutters">
                   <div class="col-md-2">
-                    <img src="../assets/images/joker2.jpg" class="card-img" alt="...">
+                    <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
                   </div>
-                  <div class="col-md-8">
+                  <div class="col-md-10">
                     <div class="card-body">
-                      <h5 class="card-title">Tuesday</h5>
-                      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                      <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">3D</span></h5> 
+                      <p class="card-text">Starts at: <span>{{.StartTime}}</span> </p>
+
+                      <p class="card-text">Running time: <span>{{.Runtime}}</span> </p>
+                      <p class="card-text">{{.HallName}}<span class="badge badge-success">Available</span></p> <br>
+                      <div class="row">
+                          <div class="col-md-6"></div>
+                          <div class="col-md-6 text-right"> <button type="button" class="btn btn-light justify-content-end">Book now!</button></div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+              {{end}}
+              {{end}}
+              {{end}}
+  
+         
       
     
              
@@ -136,6 +155,34 @@
     
     
               <div class="container">
+
+                {{with .All}}
+                {{range .}}
+                {{if eq .Day "Wednsday"}}
+                <div class="card mb-3" style="max-width: 1240px;">
+                  <div class="row no-gutters">
+                    <div class="col-md-2">
+                      <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
+                    </div>
+                    <div class="col-md-10">
+                      <div class="card-body">
+                        <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">3D</span></h5> 
+                        <p class="card-text">Starts at: <span>{{.StartTime}}</span> </p>
+
+                        <p class="card-text">Running time: <span>{{.Runtime}}</span> </p>
+                        <p class="card-text">{{.HallName}}<span class="badge badge-success">Available</span></p> <br>
+                        <div class="row">
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6 text-right"> <button type="button" class="btn btn-light justify-content-end">Book now!</button></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {{end}}
+                {{end}}
+                {{end}}
+    
       
          
       
@@ -147,6 +194,34 @@
     
     
                 <div class="container">
+
+                  {{with .All}}
+                  {{range .}}
+                  {{if eq .Day "Thursday"}}
+                  <div class="card mb-3" style="max-width: 1240px;">
+                    <div class="row no-gutters">
+                      <div class="col-md-2">
+                        <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
+                      </div>
+                      <div class="col-md-10">
+                        <div class="card-body">
+                          <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">3D</span></h5> 
+                          <p class="card-text">Starts at: <span>{{.StartTime}}</span> </p>
+  
+                          <p class="card-text">Running time: <span>{{.Runtime}}</span> </p>
+                          <p class="card-text">{{.HallName}}<span class="badge badge-success">Available</span></p> <br>
+                          <div class="row">
+                              <div class="col-md-6"></div>
+                              <div class="col-md-6 text-right"> <button type="button" class="btn btn-light justify-content-end">Book now!</button></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {{end}}
+                  {{end}}
+                  {{end}}
+      
         
            
         
@@ -158,6 +233,33 @@
     
     
                   <div class="container">
+                    {{with .All}}
+                    {{range .}}
+                    {{if eq .Day "Friday"}}
+                    <div class="card mb-3" style="max-width: 1240px;">
+                      <div class="row no-gutters">
+                        <div class="col-md-2">
+                          <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
+                        </div>
+                        <div class="col-md-10">
+                          <div class="card-body">
+                            <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">3D</span></h5> 
+                            <p class="card-text">Starts at: <span>{{.StartTime}}</span> </p>
+    
+                            <p class="card-text">Running time: <span>{{.Runtime}}</span> </p>
+                            <p class="card-text">{{.HallName}}<span class="badge badge-success">Available</span></p> <br>
+                            <div class="row">
+                                <div class="col-md-6"></div>
+                                <div class="col-md-6 text-right"> <button type="button" class="btn btn-light justify-content-end">Book now!</button></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {{end}}
+                    {{end}}
+                    {{end}}
+        
           
              
           
@@ -169,6 +271,33 @@
     
     
                     <div class="container">
+                      {{with .All}}
+                      {{range .}}
+                      {{if eq .Day "Saturday"}}
+                      <div class="card mb-3" style="max-width: 1240px;">
+                        <div class="row no-gutters">
+                          <div class="col-md-2">
+                            <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
+                          </div>
+                          <div class="col-md-10">
+                            <div class="card-body">
+                              <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">3D</span></h5> 
+                              <p class="card-text">Starts at: <span>{{.StartTime}}</span> </p>
+      
+                              <p class="card-text">Running time: <span>{{.Runtime}}</span> </p>
+                              <p class="card-text">{{.HallName}}<span class="badge badge-success">Available</span></p> <br>
+                              <div class="row">
+                                  <div class="col-md-6"></div>
+                                  <div class="col-md-6 text-right"> <button type="button" class="btn btn-light justify-content-end">Book now!</button></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {{end}}
+                      {{end}}
+                      {{end}}
+          
             
                
             
@@ -180,6 +309,33 @@
     
     
                       <div class="container">
+                        {{with .All}}
+                        {{range .}}
+                        {{if eq .Day "Sunday"}}
+                        <div class="card mb-3" style="max-width: 1240px;">
+                          <div class="row no-gutters">
+                            <div class="col-md-2">
+                              <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
+                            </div>
+                            <div class="col-md-10">
+                              <div class="card-body">
+                                <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">3D</span></h5> 
+                                <p class="card-text">Starts at: <span>{{.StartTime}}</span> </p>
+        
+                                <p class="card-text">Running time: <span>{{.Runtime}}</span> </p>
+                                <p class="card-text">{{.HallName}}<span class="badge badge-success">Available</span></p> <br>
+                                <div class="row">
+                                    <div class="col-md-6"></div>
+                                    <div class="col-md-6 text-right"> <button type="button" class="btn btn-light justify-content-end">Book now!</button></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {{end}}
+                        {{end}}
+                        {{end}}
+            
               
                  
               

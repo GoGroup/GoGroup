@@ -1,0 +1,5 @@
+{{define "theatersList.layout"}}
+{{template "header"}}
+{{template "theatersList.content" .}}
+{{template "footer"}}
+{{end}}
