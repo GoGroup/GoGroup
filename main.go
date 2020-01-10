@@ -6,7 +6,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/hannasamuel20/Movie-and-events/controller"
+	
+	"gitlab.com/username/excercise/Project-GO/Movie-and-events/Controller"
+	"gitlab.com/username/excercise/Project-GO/Movie-and-events/Controller/Database"
 )
 
 var tmpl = template.Must(template.ParseGlob("view/template/*"))
@@ -32,6 +34,19 @@ func admin(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(tmpl.ExecuteTemplate(w, "check.layout", nil))
 
 }
+
+func halls(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		name :=r.FormValue("name")
+		cap,_ := strconv.Atoi(r.FormValue("cap"))
+		price,_ := strconv.Atoi(r.FormValue("price"))
+		vip,_:= strconv.Atoi(r.FormValue("vip"))
+		discount,_ := strconv.Atoi(r.FormValue("discount"))
+		Database.Inserthall(name,3,cap,price,vip,discount)
+	}
+	fmt.Println(tmpl.ExecuteTemplate(w, "halls.layout", nil))
+
+}
 func eachmovieHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.FormValue("id")
 	fmt.Println(id)
@@ -51,6 +66,7 @@ func main() {
 	http.HandleFunc("/Movie", display)
 	http.HandleFunc("/admin", admin)
 	http.HandleFunc("/theater", displayTheater)
+	http.HandleFunc("/hall", halls)
 	http.HandleFunc("/eachmovie/", eachmovieHandler)
 	http.ListenAndServe(":8080", nil)
 }

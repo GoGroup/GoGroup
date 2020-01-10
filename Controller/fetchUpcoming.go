@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/hannasamuel20/Movie-and-events/model"
+	"gitlab.com/username/excercise/Project-GO/Movie-and-events/model"
 )
 
 const base = "https://api.themoviedb.org/3/movie/"
