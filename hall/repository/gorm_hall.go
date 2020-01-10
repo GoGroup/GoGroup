@@ -24,15 +24,26 @@ func (hllRepo *HallGormRepo) Halls() ([]model.Hall, []error) {
 	return hll, errs
 }
 
-// Comment retrieves a customer comment from the database by its id
-// func (hllRepo *HallGormRepo) Hall(id uint) (*model.Hall, []error) {
-// 	hll := model.Hall{}
-// 	errs := hllRepo.conn.First(&hll, id).GetErrors()
-// 	if len(errs) > 0 {
-// 		return nil, errs
-// 	}
-// 	return &hll, errs
-// }
+func (hllRepo *HallGormRepo) CinemaHalls(id uint) ([]model.Hall, []error) {
+	hlls := []model.Hall{}
+
+	errs := hllRepo.conn.Where("Cinema_id = ?", id).Find(&hlls).GetErrors()
+
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return hlls, errs
+}
+
+//Hall retrieves a Hall from the database by its id
+func (hllRepo *HallGormRepo) Hall(id uint) (*model.Hall, []error) {
+	hll := model.Hall{}
+	errs := hllRepo.conn.First(&hll, id).GetErrors()
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return &hll, errs
+}
 
 // // UpdateComment updates a given customer comment in the database
 // func (hllRepo *HallGormRepo) UpdateHall(hall *model.Hall) (*model.Hall, []error) {

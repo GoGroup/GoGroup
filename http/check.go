@@ -46,7 +46,10 @@ func main() {
 	myRouter := httprouter.New()
 	myRouter.GET("/cinema", CinemaHandler.GetCinemas)
 	myRouter.POST("/cinemas", CinemaHandler.PostCinema)
+	myRouter.GET("/cinema/:id", CinemaHandler.GetSingleCinema)
+	myRouter.GET("/hallcinema/:id", HallHandler.GetCinemaHalls)
 	myRouter.GET("/hall", HallHandler.GetHalls)
+	myRouter.GET("/hall/:id", HallHandler.GetSingleHall)
 	myRouter.POST("/halls", HallHandler.PostHall)
 	http.ListenAndServe(":8080", myRouter)
 

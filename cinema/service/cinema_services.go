@@ -23,13 +23,15 @@ func (cs *CinemaService) Cinemas() ([]model.Cinema, []error) {
 	return cll, errs
 }
 
-// func (hs *HallService) Hall(id uint) ([]*model.Hall, []error) {
-// 	cmnts, errs := hs.hallRepo.Hall()
-// 	if len(errs) > 0 {
-// 		return nil, errs
-// 	}
-// 	return cmnts, errs
-// }
+func (cs *CinemaService) Cinema(id uint) (*model.Cinema, []error) {
+	cmnts, errs := cs.cinemaRepo.Cinema(id)
+
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return cmnts, errs
+}
+
 // func (hs *HallService) DeleteHall(id uint) (*model.Hall, []error) {
 // 	cmnts, errs := hs.hallRepo.Hall()
 // 	if len(errs) > 0 {

@@ -24,15 +24,15 @@ func (cllRepo *CinemaGormRepo) Cinemas() ([]model.Cinema, []error) {
 	return cll, errs
 }
 
-// Comment retrieves a customer comment from the database by its id
-// func (hllRepo *HallGormRepo) Hall(id uint) (*model.Hall, []error) {
-// 	hll := model.Hall{}
-// 	errs := hllRepo.conn.First(&hll, id).GetErrors()
-// 	if len(errs) > 0 {
-// 		return nil, errs
-// 	}
-// 	return &hll, errs
-// }
+//Cinema retrieves a cinema from the database by its id
+func (cllRepo *CinemaGormRepo) Cinema(id uint) (*model.Cinema, []error) {
+	cll := model.Cinema{}
+	errs := cllRepo.conn.First(&cll, id).GetErrors()
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return &cll, errs
+}
 
 // // UpdateComment updates a given customer comment in the database
 // func (hllRepo *HallGormRepo) UpdateHall(hall *model.Hall) (*model.Hall, []error) {
