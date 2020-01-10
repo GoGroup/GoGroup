@@ -34,6 +34,7 @@ func admin(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(tmpl.ExecuteTemplate(w, "check.layout", nil))
 
 }
+<<<<<<< HEAD
 
 func halls(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
@@ -45,6 +46,16 @@ func halls(w http.ResponseWriter, r *http.Request) {
 		Database.Inserthall(name,3,cap,price,vip,discount)
 	}
 	fmt.Println(tmpl.ExecuteTemplate(w, "halls.layout", nil))
+=======
+func adminCinemas(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println(tmpl.ExecuteTemplate(w, "adminCinemaList.layout", nil))
+
+}
+func adminSchedule(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println(tmpl.ExecuteTemplate(w, "adminScheduleList.layout", nil))
+>>>>>>> 334895ac9bee4f33ab4aefabc7fd282102d034ee
 
 }
 func eachmovieHandler(w http.ResponseWriter, r *http.Request) {
@@ -65,6 +76,8 @@ func main() {
 	http.HandleFunc("/", index)
 	http.HandleFunc("/Movie", display)
 	http.HandleFunc("/admin", admin)
+	http.HandleFunc("/adminCinemas", adminCinemas)
+	http.HandleFunc("/adminCinemas/adminSchedule", adminSchedule)
 	http.HandleFunc("/theater", displayTheater)
 	http.HandleFunc("/hall", halls)
 	http.HandleFunc("/eachmovie/", eachmovieHandler)

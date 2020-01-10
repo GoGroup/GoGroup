@@ -1,0 +1,5 @@
+{{define "adminCinemaList.layout"}}
+{{template "admin_header"}}
+{{template "adminCinemaList.content" .}}
+{{template "admin_footer"}}
+{{end}}
