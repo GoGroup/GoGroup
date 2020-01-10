@@ -59,7 +59,7 @@ func main() {
 	mh := handler.NewMenuHandler(tmpl, Cinemasr, Hallsr, scheduleService)
 
 	//myRouter.ServeFiles("/assets/css/*filepath", http.Dir("../view/assets"))
-	myRouter.ServeFiles("/assets/*filepath", http.Dir("../view/assetts"))
+	myRouter.ServeFiles("/assets/*filepath", http.Dir("../view/assets"))
 
 	// fs := http.FileServer(http.Dir("../view/assetts"))
 	// http.Handle("/assets/", http.StripPrefix("/assets/", fs))
