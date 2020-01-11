@@ -1,0 +1,14 @@
+{{define "theatersList.content"}}
+
+
+<div class="list-group">
+    {{range .}}
+    <a href="/theater/schedule/{{.CinemaName}}/{{.ID}}" class="list-group-item list-group-item-action"><h2>{{.CinemaName}}</h2> </a>
+    {{end}}
+  
+ 
+    
+  </div>
+
+
+{{end}}

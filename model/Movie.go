@@ -12,10 +12,12 @@ type Movie struct {
 	Trailer     string
 }
 type MovieDetails struct {
-	GenreList []Genre `json:"genres"`
-	Overview  string  `json:"overview"`
-	Title     string  `json:"original_title"`
-	Trailer   string
+	GenreList  []Genre `json:"genres"`
+	Overview   string  `json:"overview"`
+	Title      string  `json:"original_title"`
+	RunTime    int     `json:"runtime"`
+	PosterPath string  `json:"poster_path"`
+	Trailer    string
 }
 type Genre struct {
 	Name string `json:"name"`
