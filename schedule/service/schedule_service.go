@@ -57,3 +57,12 @@ func (ss *ScheduleService) Schedule(id uint) (*model.Schedule, []error) {
 	}
 	return schdls, errs
 }
+
+func (ss *ScheduleService) ScheduleHallDay(hallid uint, day string) ([]model.Schedule, []error) {
+
+	schdls, errs := ss.scheduleRepo.ScheduleHallDay(hallid, day)
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return schdls, errs
+}

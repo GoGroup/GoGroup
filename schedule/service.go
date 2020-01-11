@@ -9,4 +9,5 @@ type ScheduleService interface {
 	Schedule(id uint) (*model.Schedule, []error)
 	UpdateSchedules(hall *model.Schedule) (*model.Schedule, []error)
 	DeleteSchedules(id uint) (*model.Schedule, []error)
+	ScheduleHallDay(hallid uint, day string) ([]model.Schedule, []error)
 }

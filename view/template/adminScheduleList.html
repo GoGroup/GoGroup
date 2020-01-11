@@ -2,10 +2,20 @@
 <main class="col">
     <h4>Simple Sidebar</h4>
 <div id="adminSchedule">
+  {{$var:=index .List 0}}
+  {{if lt 0 (len $var)}} {{$var2:= index $var 0}}{{else}}{{end}}
+
+ 
+
+
 
     <div class="btn-group-fab" role="group" aria-label="FAB Menu">
         <div>
-          <a href="/adminCinemas/adminSchedule/{{.}}/new/"
+         
+        
+          
+        
+          <a href="/adminCinemas/adminSchedule/{{.HallId}}/new/"
           style="padding:0"
             type="button"
             class="btn btn-main btn-primary has-tooltip"
@@ -13,53 +23,14 @@
            
             title="Menu"
           >
-            <i class="fas fa-plus"></i>
+        
+            <i class="fas pt-3 fa-plus"></i>
         </a>
         </div>
       </div>
 
 
 <!--Modal: Login / Register Form-->
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -100,68 +71,92 @@
         <div class="tab-pane fade show active" id="monday" role="tabpanel" aria-labelledby="monday-tab">
            
             <div class="container">
-
-
-
-              <div class="row">
+             {{with .List}}
+              {{with index . 0}}
+              {{range .}}
+              <div class="row d-flex justify-content-center">
                 <div class="col-sm-6">
                   <div class="card">
                     <div class="card-body">
                     
-                      <div class="md-form form-sm mb-1">
-            
-                        <input type="text" id="MovieName" class="form-control form-control-sm">
-                        <label data-error="wrong" data-success="right" for="MovieName">Movie</label>
-                      </div>
-        
-                      <div style="margin:10px;float:left;">
-        
-                        <input id="timepkr" style="width:100px;float:left;" class="form-control" placeholder="HH:MM" />
-                        <button class="btn btn-primary" onclick="showpickers('timepkr',24)" style="width:40px;float:left;"><i class="fa fa-clock-o"></i>
-                    
-                      </div>
-                    <div class="timepicker"></div> 
-                    
-        
-        
-                    <select class="browser-default custom-select">
-                      <option selected>Day</option>
-                      <option value="Monday">Monday</option>
-                      <option value="Tuesday">Tuesday</option>
-                      <option value="Wednsday">Wednsday</option>
-                      <option value="Thursday">Thursday</option>
-                      <option value="Friday">Friday</option>
-                      <option value="Saturday">Saturday</option>
-                      <option value="Sunday">Sunday</option>
-        
-                    </select>
-        
-        
-               
-        <div class="form-check">
-          <input type="radio" class="form-check-input" id="for3d" name="dimension">
-          <label class="form-check-label" for="for3D">3D</label>
-        </div>
-        
-        
-        <div class="form-check">
-          <input type="radio" class="form-check-input" id="for2D" name="dimension" checked>
-          <label class="form-check-label" for="for2D">2D</label>
-        </div>        
-        
-                      <div class="text-center form-sm mt-2">
-                        <input type="submit" class="btn btn-info" value="Save changes">
-                      </div>
-        
+                      <div class="mb-1">
+              
+<form action="/adminCinemas/adminSchedule/{{.Sch.HallID}}" method="post">     
+  <input value="{{.MovieName}}"  name="chosen" type="text" id="chosen" class="form-control form-control-sm" disabled>
+  <input value="{{.Sch.MoviemID}}" style="visibility: hidden;" name="mid" type="text" id="mid" class="form-control form-control-sm" >
+ 
+
+  <div style="margin:10px;float:left;">
+
+    <input id="timepkr" value="{{.Sch.StartingTime}}" name="time" style="width:100px;float:left;" class="form-control" placeholder="HH:MM" />
+    <button class="btn btn-primary" onclick="showpickers('timepkr',24)" style="width:40px;float:left;"><i class="fa fa-clock-o"></i>
+
+  </div>
+<div class="timepicker"></div> 
+
+
+<select id="day" name="day" class="browser-default mt-5 custom-select">
+  <option selected value="Monday">Monday</option>
+  <option value="Tuesday">Tuesday</option>
+  <option value="Wednsday">Wednsday</option>
+  <option value="Thursday">Thursday</option>
+  <option value="Friday">Friday</option>
+  <option value="Saturday">Saturday</option>
+  <option value="Sunday">Sunday</option>
+
+</select>
+
+
+{{if eq .Sch.Dimension "2D" }}
+
+<div class="form-check">
+<input type="radio" value="3D" class="form-check-input" id="for3d" name="3or2d">
+<label class="form-check-label"  for="for3D">3D</label>
+</div>
+
+
+<div class="form-check">
+<input type="radio" value="2D" class="form-check-input" id="for2D" name="3or2d" checked>
+<label class="form-check-label" for="for2D">2D</label>
+</div>   
+{{else if eq .Sch.Dimension "3D" }}
+<div class="form-check">
+  <input type="radio" value="3D" class="form-check-input" id="for3d" checked name="3or2d">
+  <label class="form-check-label"  for="for3D">3D</label>
+  </div>
+  
+  
+  <div class="form-check">
+  <input type="radio" value="2D" class="form-check-input" id="for2D" name="3or2d" >
+  <label class="form-check-label" for="for2D">2D</label>
+  </div>
 
 
 
+{{end}}
+
+  <div class="text-center form-sm mt-2">
+    <input type="submit" class="btn btn-info" value="Save changes">
+    <a href="/adminCinemas/adminSchedule/{{.Sch.HallID}}/delete/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>
+   
+  </div>
 
 
-                    </div>
+</form>
+
+</div>
+</div>
                   </div>
                 </div>
               </div>
+
+
+
+          
+              {{end}}
+              {{end}}
+              {{end}}
+
 
     
             </div>
@@ -177,6 +172,94 @@
     
     
             <div class="container">
+              {{with .List}}
+              {{with index . 1}}
+              {{range .}}
+              <div class="row d-flex justify-content-center">
+                <div class="col-sm-6">
+                  <div class="card">
+                    <div class="card-body">
+                    
+                      <div class="mb-1">
+              
+<form action="/adminCinemas/adminSchedule/{{.Sch.HallID}}" method="post">     
+  <input value="{{.MovieName}}"  name="chosen" type="text" id="chosen" class="form-control form-control-sm" disabled>
+  <input value="{{.Sch.MoviemID}}" style="visibility: hidden;" name="mid" type="text" id="mid" class="form-control form-control-sm" >
+ 
+
+  <div style="margin:10px;float:left;">
+
+    <input id="timepkr" value="{{.Sch.StartingTime}}" name="time" style="width:100px;float:left;" class="form-control" placeholder="HH:MM" />
+    <button class="btn btn-primary" onclick="showpickers('timepkr',24)" style="width:40px;float:left;"><i class="fa fa-clock-o"></i>
+
+  </div>
+<div class="timepicker"></div> 
+
+
+<select id="day" name="day" class="browser-default mt-5 custom-select">
+  <option  value="Monday">Monday</option>
+  <option selected value="Tuesday">Tuesday</option>
+  <option value="Wednsday">Wednsday</option>
+  <option value="Thursday">Thursday</option>
+  <option value="Friday">Friday</option>
+  <option value="Saturday">Saturday</option>
+  <option value="Sunday">Sunday</option>
+
+</select>
+
+
+{{if eq .Sch.Dimension "2D" }}
+
+<div class="form-check">
+<input type="radio" value="3D" class="form-check-input" id="for3d" name="3or2d">
+<label class="form-check-label"  for="for3D">3D</label>
+</div>
+
+
+<div class="form-check">
+<input type="radio" value="2D" class="form-check-input" id="for2D" name="3or2d" checked>
+<label class="form-check-label" for="for2D">2D</label>
+</div>   
+{{else if eq .Sch.Dimension "3D" }}
+<div class="form-check">
+  <input type="radio" value="3D" class="form-check-input" id="for3d" checked name="3or2d">
+  <label class="form-check-label"  for="for3D">3D</label>
+  </div>
+  
+  
+  <div class="form-check">
+  <input type="radio" value="2D" class="form-check-input" id="for2D" name="3or2d" >
+  <label class="form-check-label" for="for2D">2D</label>
+  </div>
+
+
+
+{{end}}
+
+  <div class="text-center form-sm mt-2">
+    <input type="submit" class="btn btn-info" value="Save changes">
+    <a href="/adminCinemas/adminSchedule/{{.Sch.HallID}}/delete/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>
+   
+  </div>
+
+
+</form>
+
+</div>
+</div>
+                  </div>
+                </div>
+              </div>
+
+
+
+          
+              {{end}}
+              {{end}}
+              {{end}}
+
+
+        
       
     
              
@@ -186,6 +269,91 @@
     
     
               <div class="container">
+                {{with .List}}
+                {{with index . 2}}
+                {{range .}}
+                <div class="row d-flex justify-content-center">
+                  <div class="col-sm-6">
+                    <div class="card">
+                      <div class="card-body">
+                      
+                        <div class="mb-1">
+                
+  <form action="/adminCinemas/adminSchedule/{{.Sch.HallID}}" method="post">     
+    <input value="{{.MovieName}}"  name="chosen" type="text" id="chosen" class="form-control form-control-sm" disabled>
+    <input value="{{.Sch.MoviemID}}" style="visibility: hidden;" name="mid" type="text" id="mid" class="form-control form-control-sm" >
+   
+  
+    <div style="margin:10px;float:left;">
+  
+      <input id="timepkr" value="{{.Sch.StartingTime}}" name="time" style="width:100px;float:left;" class="form-control" placeholder="HH:MM" />
+      <button class="btn btn-primary" onclick="showpickers('timepkr',24)" style="width:40px;float:left;"><i class="fa fa-clock-o"></i>
+  
+    </div>
+  <div class="timepicker"></div> 
+  
+  
+  <select id="day" name="day" class="browser-default mt-5 custom-select">
+    <option  value="Monday">Monday</option>
+    <option value="Tuesday">Tuesday</option>
+    <option selected value="Wednsday">Wednsday</option>
+    <option value="Thursday">Thursday</option>
+    <option value="Friday">Friday</option>
+    <option value="Saturday">Saturday</option>
+    <option value="Sunday">Sunday</option>
+  
+  </select>
+  
+  
+  {{if eq .Sch.Dimension "2D" }}
+  
+  <div class="form-check">
+  <input type="radio" value="3D" class="form-check-input" id="for3d" name="3or2d">
+  <label class="form-check-label"  for="for3D">3D</label>
+  </div>
+  
+  
+  <div class="form-check">
+  <input type="radio" value="2D" class="form-check-input" id="for2D" name="3or2d" checked>
+  <label class="form-check-label" for="for2D">2D</label>
+  </div>   
+  {{else if eq .Sch.Dimension "3D" }}
+  <div class="form-check">
+    <input type="radio" value="3D" class="form-check-input" id="for3d" checked name="3or2d">
+    <label class="form-check-label"  for="for3D">3D</label>
+    </div>
+    
+    
+    <div class="form-check">
+    <input type="radio" value="2D" class="form-check-input" id="for2D" name="3or2d" >
+    <label class="form-check-label" for="for2D">2D</label>
+    </div>
+  
+  
+  
+  {{end}}
+  
+    <div class="text-center form-sm mt-2">
+      <input type="submit" class="btn btn-info" value="Save changes">
+      <a href="/adminCinemas/adminSchedule/{{.Sch.HallID}}/delete/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>
+     
+    </div>
+  
+  
+  </form>
+  
+  </div>
+  </div>
+                    </div>
+                  </div>
+                </div>
+  
+  
+  
+            
+                {{end}}
+                {{end}}
+                {{end}}
       
          
       
@@ -197,6 +365,91 @@
     
     
                 <div class="container">
+                  {{with .List}}
+                  {{with index . 3}}
+                  {{range .}}
+                  <div class="row d-flex justify-content-center">
+                    <div class="col-sm-6">
+                      <div class="card">
+                        <div class="card-body">
+                        
+                          <div class="mb-1">
+                  
+    <form action="/adminCinemas/adminSchedule/{{.Sch.HallID}}" method="post">     
+      <input value="{{.MovieName}}"  name="chosen" type="text" id="chosen" class="form-control form-control-sm" disabled>
+      <input value="{{.Sch.MoviemID}}" style="visibility: hidden;" name="mid" type="text" id="mid" class="form-control form-control-sm" >
+     
+    
+      <div style="margin:10px;float:left;">
+    
+        <input id="timepkr" value="{{.Sch.StartingTime}}" name="time" style="width:100px;float:left;" class="form-control" placeholder="HH:MM" />
+        <button class="btn btn-primary" onclick="showpickers('timepkr',24)" style="width:40px;float:left;"><i class="fa fa-clock-o"></i>
+    
+      </div>
+    <div class="timepicker"></div> 
+    
+    
+    <select id="day" name="day" class="browser-default mt-5 custom-select">
+      <option  value="Monday">Monday</option>
+      <option value="Tuesday">Tuesday</option>
+      <option value="Wednsday">Wednsday</option>
+      <option selected value="Thursday">Thursday</option>
+      <option value="Friday">Friday</option>
+      <option value="Saturday">Saturday</option>
+      <option value="Sunday">Sunday</option>
+    
+    </select>
+    
+    
+    {{if eq .Sch.Dimension "2D" }}
+    
+    <div class="form-check">
+    <input type="radio" value="3D" class="form-check-input" id="for3d" name="3or2d">
+    <label class="form-check-label"  for="for3D">3D</label>
+    </div>
+    
+    
+    <div class="form-check">
+    <input type="radio" value="2D" class="form-check-input" id="for2D" name="3or2d" checked>
+    <label class="form-check-label" for="for2D">2D</label>
+    </div>   
+    {{else if eq .Sch.Dimension "3D" }}
+    <div class="form-check">
+      <input type="radio" value="3D" class="form-check-input" id="for3d" checked name="3or2d">
+      <label class="form-check-label"  for="for3D">3D</label>
+      </div>
+      
+      
+      <div class="form-check">
+      <input type="radio" value="2D" class="form-check-input" id="for2D" name="3or2d" >
+      <label class="form-check-label" for="for2D">2D</label>
+      </div>
+    
+    
+    
+    {{end}}
+    
+      <div class="text-center form-sm mt-2">
+        <input type="submit" class="btn btn-info" value="Save changes">
+        <a href="/adminCinemas/adminSchedule/{{.Sch.HallID}}/delete/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>
+       
+      </div>
+    
+    
+    </form>
+    
+    </div>
+    </div>
+                      </div>
+                    </div>
+                  </div>
+    
+    
+    
+              
+                  {{end}}
+                  {{end}}
+                  {{end}}
         
            
         
@@ -208,6 +461,91 @@
     
     
                   <div class="container">
+                    {{with .List}}
+                    {{with index . 4}}
+                    {{range .}}
+                    <div class="row d-flex justify-content-center">
+                      <div class="col-sm-6">
+                        <div class="card">
+                          <div class="card-body">
+                          
+                            <div class="mb-1">
+                    
+      <form action="/adminCinemas/adminSchedule/{{.Sch.HallID}}" method="post">     
+        <input value="{{.MovieName}}"  name="chosen" type="text" id="chosen" class="form-control form-control-sm" disabled>
+        <input value="{{.Sch.MoviemID}}" style="visibility: hidden;" name="mid" type="text" id="mid" class="form-control form-control-sm" >
+       
+      
+        <div style="margin:10px;float:left;">
+      
+          <input id="timepkr" value="{{.Sch.StartingTime}}" name="time" style="width:100px;float:left;" class="form-control" placeholder="HH:MM" />
+          <button class="btn btn-primary" onclick="showpickers('timepkr',24)" style="width:40px;float:left;"><i class="fa fa-clock-o"></i>
+      
+        </div>
+      <div class="timepicker"></div> 
+      
+      
+      <select id="day" name="day" class="browser-default mt-5 custom-select">
+        <option  value="Monday">Monday</option>
+        <option value="Tuesday">Tuesday</option>
+        <option value="Wednsday">Wednsday</option>
+        <option value="Thursday">Thursday</option>
+        <option selected value="Friday">Friday</option>
+        <option value="Saturday">Saturday</option>
+        <option value="Sunday">Sunday</option>
+      
+      </select>
+      
+      
+      {{if eq .Sch.Dimension "2D" }}
+      
+      <div class="form-check">
+      <input type="radio" value="3D" class="form-check-input" id="for3d" name="3or2d">
+      <label class="form-check-label"  for="for3D">3D</label>
+      </div>
+      
+      
+      <div class="form-check">
+      <input type="radio" value="2D" class="form-check-input" id="for2D" name="3or2d" checked>
+      <label class="form-check-label" for="for2D">2D</label>
+      </div>   
+      {{else if eq .Sch.Dimension "3D" }}
+      <div class="form-check">
+        <input type="radio" value="3D" class="form-check-input" id="for3d" checked name="3or2d">
+        <label class="form-check-label"  for="for3D">3D</label>
+        </div>
+        
+        
+        <div class="form-check">
+        <input type="radio" value="2D" class="form-check-input" id="for2D" name="3or2d" >
+        <label class="form-check-label" for="for2D">2D</label>
+        </div>
+      
+      
+      
+      {{end}}
+      
+        <div class="text-center form-sm mt-2">
+          <input type="submit" class="btn btn-info" value="Save changes">
+          <a href="/adminCinemas/adminSchedule/{{.Sch.HallID}}/delete/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>
+         
+        </div>
+      
+      
+      </form>
+      
+      </div>
+      </div>
+                        </div>
+                      </div>
+                    </div>
+      
+      
+      
+                
+                    {{end}}
+                    {{end}}
+                    {{end}}
           
              
           
@@ -219,6 +557,91 @@
     
     
                     <div class="container">
+                      {{with .List}}
+                      {{with index . 5}}
+                      {{range .}}
+                      <div class="row d-flex justify-content-center">
+                        <div class="col-sm-6">
+                          <div class="card">
+                            <div class="card-body">
+                            
+                              <div class="mb-1">
+                      
+        <form action="/adminCinemas/adminSchedule/{{.Sch.HallID}}" method="post">     
+          <input value="{{.MovieName}}"  name="chosen" type="text" id="chosen" class="form-control form-control-sm" disabled>
+          <input value="{{.Sch.MoviemID}}" style="visibility: hidden;" name="mid" type="text" id="mid" class="form-control form-control-sm" >
+         
+        
+          <div style="margin:10px;float:left;">
+        
+            <input id="timepkr" value="{{.Sch.StartingTime}}" name="time" style="width:100px;float:left;" class="form-control" placeholder="HH:MM" />
+            <button class="btn btn-primary" onclick="showpickers('timepkr',24)" style="width:40px;float:left;"><i class="fa fa-clock-o"></i>
+        
+          </div>
+        <div class="timepicker"></div> 
+        
+        
+        <select id="day" name="day" class="browser-default mt-5 custom-select">
+          <option  value="Monday">Monday</option>
+          <option value="Tuesday">Tuesday</option>
+          <option value="Wednsday">Wednsday</option>
+          <option value="Thursday">Thursday</option>
+          <option value="Friday">Friday</option>
+          <option selected value="Saturday">Saturday</option>
+          <option value="Sunday">Sunday</option>
+        
+        </select>
+        
+        
+        {{if eq .Sch.Dimension "2D" }}
+        
+        <div class="form-check">
+        <input type="radio" value="3D" class="form-check-input" id="for3d" name="3or2d">
+        <label class="form-check-label"  for="for3D">3D</label>
+        </div>
+        
+        
+        <div class="form-check">
+        <input type="radio" value="2D" class="form-check-input" id="for2D" name="3or2d" checked>
+        <label class="form-check-label" for="for2D">2D</label>
+        </div>   
+        {{else if eq .Sch.Dimension "3D" }}
+        <div class="form-check">
+          <input type="radio" value="3D" class="form-check-input" id="for3d" checked name="3or2d">
+          <label class="form-check-label"  for="for3D">3D</label>
+          </div>
+          
+          
+          <div class="form-check">
+          <input type="radio" value="2D" class="form-check-input" id="for2D" name="3or2d" >
+          <label class="form-check-label" for="for2D">2D</label>
+          </div>
+        
+        
+        
+        {{end}}
+        
+          <div class="text-center form-sm mt-2">
+            <input type="submit" class="btn btn-info" value="Save changes">
+            <a href="/adminCinemas/adminSchedule/{{.Sch.HallID}}/delete/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>
+           
+          </div>
+        
+        
+        </form>
+        
+        </div>
+        </div>
+                          </div>
+                        </div>
+                      </div>
+        
+        
+        
+                  
+                      {{end}}
+                      {{end}}
+                      {{end}}
             
                
             
@@ -230,6 +653,91 @@
     
     
                       <div class="container">
+                        {{with .List}}
+                        {{with index . 6}}
+                        {{range .}}
+                        <div class="row d-flex justify-content-center">
+                          <div class="col-sm-6">
+                            <div class="card">
+                              <div class="card-body">
+                              
+                                <div class="mb-1">
+                        
+          <form action="/adminCinemas/adminSchedule/{{.Sch.HallID}}" method="post">     
+            <input value="{{.MovieName}}"  name="chosen" type="text" id="chosen" class="form-control form-control-sm" disabled>
+            <input value="{{.Sch.MoviemID}}" style="visibility: hidden;" name="mid" type="text" id="mid" class="form-control form-control-sm" >
+           
+          
+            <div style="margin:10px;float:left;">
+          
+              <input id="timepkr" value="{{.Sch.StartingTime}}" name="time" style="width:100px;float:left;" class="form-control" placeholder="HH:MM" />
+              <button class="btn btn-primary" onclick="showpickers('timepkr',24)" style="width:40px;float:left;"><i class="fa fa-clock-o"></i>
+          
+            </div>
+          <div class="timepicker"></div> 
+          
+          
+          <select id="day" name="day" class="browser-default mt-5 custom-select">
+            <option  value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednsday">Wednsday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+            <option selected value="Sunday">Sunday</option>
+          
+          </select>
+          
+          
+          {{if eq .Sch.Dimension "2D" }}
+          
+          <div class="form-check">
+          <input type="radio" value="3D" class="form-check-input" id="for3d" name="3or2d">
+          <label class="form-check-label"  for="for3D">3D</label>
+          </div>
+          
+          
+          <div class="form-check">
+          <input type="radio" value="2D" class="form-check-input" id="for2D" name="3or2d" checked>
+          <label class="form-check-label" for="for2D">2D</label>
+          </div>   
+          {{else if eq .Sch.Dimension "3D" }}
+          <div class="form-check">
+            <input type="radio" value="3D" class="form-check-input" id="for3d" checked name="3or2d">
+            <label class="form-check-label"  for="for3D">3D</label>
+            </div>
+            
+            
+            <div class="form-check">
+            <input type="radio" value="2D" class="form-check-input" id="for2D" name="3or2d" >
+            <label class="form-check-label" for="for2D">2D</label>
+            </div>
+          
+          
+          
+          {{end}}
+          
+            <div class="text-center form-sm mt-2">
+              <input type="submit" class="btn btn-info" value="Save changes">
+              <a href="/adminCinemas/adminSchedule/{{.Sch.HallID}}/delete/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>
+             
+            </div>
+          
+          
+          </form>
+          
+          </div>
+          </div>
+                            </div>
+                          </div>
+                        </div>
+          
+          
+          
+                    
+                        {{end}}
+                        {{end}}
+                        {{end}}
               
                  
               

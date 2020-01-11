@@ -46,7 +46,7 @@ func (as *AdminScheduleHandler) GetSchedules(w http.ResponseWriter,
 
 }
 
-func (as *AdminScheduleHandler) GetHallSchedules(w http.ResponseWriter,
+func (as *AdminScheduleHandler) GetSchedulesCinemaDay(w http.ResponseWriter,
 	r *http.Request, ps httprouter.Params) {
 	id, err := strconv.Atoi(ps.ByName("id"))
 	if err != nil {
@@ -205,4 +205,36 @@ func (as *AdminScheduleHandler) UpdateSchedule(w http.ResponseWriter, r *http.Re
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(output)
 	return
+}
+
+func (as *AdminScheduleHandler) GetSchedulesHallDay(w http.ResponseWriter,
+	r *http.Request, ps httprouter.Params) {
+	id, err := strconv.Atoi(ps.ByName("hid"))
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		return
+	}
+	day := ps.ByName("day")
+
+	schedules, errs := as.scheduleService.ScheduleHallDay(uint(id), day)
+
+	if len(errs) > 0 {
+		w.Header().Set("Content-Type", "application/json")
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		return
+	}
+
+	output, err := json.MarshalIndent(schedules, "", "\t\t")
+
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(output)
+	return
+
 }

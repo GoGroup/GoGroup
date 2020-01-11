@@ -9,6 +9,21 @@ type Schedule struct {
 	Day          string `json: "day" gorm:"type:varchar(255);not null"`
 }
 type Moviem struct {
-	ID   uint `json: "id" gorm:"primary_key;AUTO_INCREMENT"`
-	Tmdb int  `json: "tmdb"`
+	TmdbID int `json: "TmdbID"  gorm:"unique"`
+}
+
+type HallSchedule struct {
+	CinemaName string
+	All        []BindedSchedule
+}
+type BindedSchedule struct {
+	PosterPath, MovieName string
+	Runtime               int
+	HallName              string
+	Day                   string
+	StartTime             string
+}
+type ScheduleWithMovie struct {
+	Sch       Schedule
+	MovieName string
 }
