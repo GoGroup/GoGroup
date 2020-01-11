@@ -1,0 +1,72 @@
+{{ define "admin.eveeg.update.layout" }}
+{{ template "aheader" . }}
+{{ template "admin.eveeg.update.content" . }}
+{{ template "afooter" . }}
+{{ end }}
+
+{{ define "admin.eveeg.update.content"}}
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2>Update Event</h2>
+  </div>
+  <div class="container">
+    <form method="POST" action="/admin/events/update" enctype="multipart/form-data">
+      <input type="hidden" name="_csrf" value="{{ .CSRF }}" />
+      <input type="hidden" name="eveid" value='{{ .Values.Get "eveid" }}' />
+      <div class="form-group row">
+        <label for="evename" class="col-sm-2 col-form-label">Event Name</label>
+        {{with .VErrors.Get "evename"}}
+        <label class="col-sm-2 col-form-label text-danger">{{.}}</label>
+        {{end}}
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="evename" id="evename" placeholder="Event Name"
+            value='{{ .Values.Get "evename" }}'>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="evedesc" class="col-sm-2 col-form-label">Description</label>
+        {{with .VErrors.Get "evedesc"}}
+        <label class="col-sm-2 col-form-label text-danger">{{.}}</label>
+        {{end}}
+        <div class="col-sm-10">
+          <textarea class="form-control" name="evedesc" id="evedesc">{{ .Values.Get "evedesc" }}</textarea>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="eveloc" class="col-sm-2 col-form-label">Event Location</label>
+        {{with .VErrors.Get "eveloc"}}
+        <label class="col-sm-2 col-form-label text-danger">{{.}}</label>
+        {{end}}
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="eveloc" id="eveloc" placeholder="Event Location"
+            value='{{ .Values.Get "eveloc" }}'>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="evetime" class="col-sm-2 col-form-label">Event Time</label>
+        {{with .VErrors.Get "evetime"}}
+        <label class="col-sm-2 col-form-label text-danger">{{.}}</label>
+        {{end}}
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="evetime" id="evetime" placeholder="Event Time"
+            value='{{ .Values.Get "evetime" }}'>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="eveimg" class="col-sm-2 col-form-label">Current Image</label>
+        <input type="hidden" name="imgname" value='{{ .Values.Get "eveimg" }}' />
+        <img src='/assets/img/{{ .Values.Get "eveimg" }}' width="80px" height="80px" />
+        <label for="eveimg" class="col-sm-2 col-form-label">Upload New Image</label>
+        <div class="col-sm-10">
+          <input type="file" class="form-control-file" name="eveimg" id="eveimg">
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-10">
+          <button type="submit" class="btn btn-primary float-right">Update Event</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</main>
+{{ end }}

@@ -1,0 +1,24 @@
+#admin-cinemas .btn-primary.colorless {
+  background-color: white !important;
+  border: none;
+  color: #8d8d8d !important;
+}
+#admin-cinemas .btn.colorless {
+  text-align: left;
+}
+#admin-cinemas .btn.colorless:hover {
+  background-color: #eeeeee !important;
+  border-radius: 0 !important;
+}
+#admin-cinemas .dropdown-divider {
+  height: 0;
+  margin: 0.1rem 0;
+}
+#admin-cinemas .card-body {
+  padding: 0.75rem !important;
+}
+#admin-cinemas .btn:focus,
+.btn:active {
+  outline: none !important;
+  box-shadow: none;
+}
