@@ -8,6 +8,10 @@
 
     <div class="container">
         <h2 class="text-dark">{{.Title}} </h2>
+        {{range .GenreList}}
+        <span class="badge badge-info">{{.Name}}</span>
+        {{end}}
+       
         <p>
            {{.Overview}}
 

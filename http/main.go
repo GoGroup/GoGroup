@@ -4,6 +4,8 @@ import (
 	"html/template"
 	"net/http"
 
+	"github.com/GoGroup/Movie-and-events/http/util"
+
 	"github.com/GoGroup/Movie-and-events/cinema/repository"
 	"github.com/GoGroup/Movie-and-events/cinema/service"
 	usrvim "github.com/GoGroup/Movie-and-events/hall/repository"
@@ -11,6 +13,7 @@ import (
 	"github.com/GoGroup/Movie-and-events/http/handler"
 	"github.com/GoGroup/Movie-and-events/model"
 	"github.com/GoGroup/Movie-and-events/rtoken"
+
 	schrep "github.com/GoGroup/Movie-and-events/schedule/repository"
 	schser "github.com/GoGroup/Movie-and-events/schedule/service"
 
@@ -25,17 +28,8 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-const (
-	host = "localhost"
-	port = 5432
-	user = "postgres"
-
-	password = "admin"
-	dbname   = "MovieEvent"
-)
-
 func main() {
-	db, err := gorm.Open("postgres", "postgres://postgres:admin@localhost/MovieEvent?sslmode=disable")
+	db, err := gorm.Open("postgres", util.DBConnectString)
 	if err != nil {
 		panic(err)
 	}
@@ -44,7 +38,10 @@ func main() {
 	db.AutoMigrate(&model.Cinema{})
 	db.AutoMigrate(&model.Schedule{})
 	db.AutoMigrate(&model.Moviem{})
-
+	db.AutoMigrate(&model.Session{})
+	db.AutoMigrate(&model.Role{})
+	db.AutoMigrate(&model.Role{ID: 1, Name: "USER"})
+	db.AutoMigrate(&model.Role{ID: 2, Name: "ADMIN"})
 	tmpl := template.Must(template.ParseGlob("../view/template/*"))
 
 	myRouter := httprouter.New()
@@ -74,9 +71,11 @@ func main() {
 	Moviesr := mvser.NewMovieService(MovieRepo)
 	MovieHandler := handler.NewMovieHander(Moviesr)
 
+	uh := handler.NewUserHandler(tmpl, userService, sessionService, roleService, csrfSignKey)
+
 	mh := handler.NewMenuHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr)
 	ah := handler.NewAdminHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr)
-	uh := handler.NewUserHandler(tmpl, userService, sessionService, roleService, csrfSignKey)
+
 	myRouter.ServeFiles("/assets/*filepath", http.Dir("../view/assets"))
 
 	myRouter.GET("/adminCinemas", ah.AdminCinema)

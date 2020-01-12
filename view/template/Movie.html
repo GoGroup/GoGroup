@@ -23,14 +23,14 @@
                 {{with .Upc }}
                 {{with .MovieList}}
                 {{range .}}
-                <a href="/movie/{{.Id}}">
+                <a class=" " href="/movie/{{.Id}}">
                     <div class="col mb-4 ">
                         <div class="card h-100">
                             <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img-top" alt="...">
     
                             <div class="card-body">
                                 <p class="text-center font-weight-bold">{{.Title}}</p>
-                                <p class="font-weight-bold text-center ">opens {{.ReleaseDate}}</p>
+                                <p class="text-center ">opens {{.ReleaseDate}}</p>
                             </div>
                         </div>
                     </div>
