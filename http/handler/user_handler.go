@@ -2,11 +2,13 @@ package handler
 
 import (
 	"context"
+	"fmt"
 	"html/template"
 	"net/http"
 
 	"github.com/GoGroup/Movie-and-events/hash"
 	"github.com/GoGroup/Movie-and-events/permission"
+	"github.com/julienschmidt/httprouter"
 
 	"github.com/dgrijalva/jwt-go"
 
@@ -125,20 +127,23 @@ func (userHandler *UserHandler) Authorized(handle http.Handler) http.Handler {
 	})
 }
 
-func (userHandler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
+func (userHandler *UserHandler) Login(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
 	//If it's requesting the login page return CSFR Signed token with the form
+	fmt.Println("in...........log in")
 	if r.Method == http.MethodGet {
+		fmt.Println("insinde...........log in")
 		CSFRToken, err := rtoken.GenerateCSRFToken(userHandler.csrfSignKey)
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		}
-		userHandler.tmpl.ExecuteTemplate(w, "login.layout", form.Input{
+		fmt.Println("insinde,,,,,...........log in")
+		fmt.Println(userHandler.tmpl.ExecuteTemplate(w, "login.html", form.Input{
 			CSRF: CSFRToken,
-		})
+		}))
 		return
 	}
 	//Only reply to forms that have that are parsable and have valid csfrToken
-	if userHandler.isParsableFormPost(w, r) {
+	if userHandler.isParsableFormPost(w, r, pm) {
 
 		//Validate form data
 		loginForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}}
@@ -150,7 +155,7 @@ func (userHandler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		///Check form validity and user password
 		if len(errs) > 0 || !hash.ArePasswordsSame(user.Password, password) {
 			loginForm.VErrors.Add("generic", "Your email address or password is incorrect")
-			userHandler.tmpl.ExecuteTemplate(w, "login.layout", loginForm)
+			fmt.Println(userHandler.tmpl.ExecuteTemplate(w, "login.html", loginForm))
 			return
 		}
 
@@ -159,7 +164,7 @@ func (userHandler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		claims := rtoken.NewClaims(newSession.SessionId, newSession.Expires)
 		if len(errs) > 0 {
 			loginForm.VErrors.Add("generic", "Failed to create session")
-			userHandler.tmpl.ExecuteTemplate(w, "login.layout", loginForm)
+			userHandler.tmpl.ExecuteTemplate(w, "login.html", loginForm)
 			return
 		}
 		//Save session Id in cookies
@@ -181,7 +186,7 @@ func (uh *UserHandler) checkAdmin(roleID uint) bool {
 }
 
 // Logout logout requests
-func (userHandler *UserHandler) Logout(w http.ResponseWriter, r *http.Request) {
+func (userHandler *UserHandler) Logout(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	//Remove cookies
 	session.RemoveCookie(w)
 	//Delete session from the database
@@ -190,18 +195,18 @@ func (userHandler *UserHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	//Redirect to login page
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
-func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
+func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
 	if r.Method == http.MethodGet {
 		CSFRToken, err := rtoken.GenerateCSRFToken(userHandler.csrfSignKey)
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		}
-		userHandler.tmpl.ExecuteTemplate(w, "signup.layout", form.Input{CSRF: CSFRToken})
+		userHandler.tmpl.ExecuteTemplate(w, "login.html", form.Input{CSRF: CSFRToken})
 
 		return
 	}
 	//Only reply to forms that have that are parsable and have valid csfrToken
-	if userHandler.isParsableFormPost(w, r) {
+	if userHandler.isParsableFormPost(w, r, pm) {
 		///Validate the form data
 		signUpForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}}
 		signUpForm.ValidateRequiredFields(usernameKey, emailKey, passwordKey)
@@ -210,24 +215,24 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		signUpForm.PasswordMatches(passwordKey, confirmPasswordKey)
 
 		if !signUpForm.IsValid() {
-			userHandler.tmpl.ExecuteTemplate(w, "signup.layout", signUpForm)
+			userHandler.tmpl.ExecuteTemplate(w, "login.html", signUpForm)
 			return
 		}
 		if userHandler.userService.EmailExists(r.FormValue(emailKey)) {
 			signUpForm.VErrors.Add(emailKey, "This email is already in use!")
-			userHandler.tmpl.ExecuteTemplate(w, "signup.layout", signUpForm)
+			userHandler.tmpl.ExecuteTemplate(w, "login.html", signUpForm)
 			return
 		}
 		//Create password hash
 		hashedPassword, err := hash.HashPassword(r.FormValue(passwordKey))
 		if err != nil {
 			signUpForm.VErrors.Add("password", "Password Could not be stored")
-			userHandler.tmpl.ExecuteTemplate(w, "signup.layout", signUpForm)
+			userHandler.tmpl.ExecuteTemplate(w, "login.html", signUpForm)
 			return
 		}
 		//Create a user role for the User
 		role, errs := userHandler.roleService.RoleByName("USER")
-		if r.FormValue(typeKey) == "barbershop" {
+		if r.FormValue(typeKey) == "admin" {
 			role, errs = userHandler.roleService.RoleByName("ADMIN")
 		} else {
 			role, errs = userHandler.roleService.RoleByName("USER")
@@ -235,7 +240,7 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 
 		if len(errs) > 0 {
 			signUpForm.VErrors.Add("generic", "Role couldn't be assigned to user")
-			userHandler.tmpl.ExecuteTemplate(w, "signup.layout", signUpForm)
+			userHandler.tmpl.ExecuteTemplate(w, "login.html", signUpForm)
 			return
 		}
 		///Get the data from the form and construct user object
@@ -255,11 +260,11 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (userHandler *UserHandler) isParsableFormPost(w http.ResponseWriter, r *http.Request) bool {
+func (userHandler *UserHandler) isParsableFormPost(w http.ResponseWriter, r *http.Request, pm httprouter.Params) bool {
 	return r.Method == http.MethodPost &&
 		hash.ParseForm(w, r) &&
 		rtoken.IsCSRFValid(r.FormValue(csrfKey), userHandler.csrfSignKey)
 }
-func (userHandler *UserHandler) Index(w http.ResponseWriter, r *http.Request) {
+func (userHandler *UserHandler) Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	userHandler.tmpl.ExecuteTemplate(w, "index.layout", nil)
 }

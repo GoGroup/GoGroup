@@ -12,17 +12,16 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-type AdminScheduleHandler struct {
+type ScheduleHandler struct {
 	scheduleService schedule.ScheduleService
 }
 
-func NewAdminScheduleHandler(schdlService schedule.ScheduleService) *AdminScheduleHandler {
+func NewScheduleHandler(schdlService schedule.ScheduleService) *ScheduleHandler {
 	fmt.Println("admin schedule handler created")
-	return &AdminScheduleHandler{scheduleService: schdlService}
+	return &ScheduleHandler{scheduleService: schdlService}
 }
 
-func (as *AdminScheduleHandler) GetSchedules(w http.ResponseWriter,
-	r *http.Request, _ httprouter.Params) {
+func (as *ScheduleHandler) GetSchedules(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	schedules, errs := as.scheduleService.Schedules()
 
@@ -46,8 +45,7 @@ func (as *AdminScheduleHandler) GetSchedules(w http.ResponseWriter,
 
 }
 
-func (as *AdminScheduleHandler) GetSchedulesCinemaDay(w http.ResponseWriter,
-	r *http.Request, ps httprouter.Params) {
+func (as *ScheduleHandler) GetSchedulesCinemaDay(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	id, err := strconv.Atoi(ps.ByName("id"))
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
@@ -78,7 +76,7 @@ func (as *AdminScheduleHandler) GetSchedulesCinemaDay(w http.ResponseWriter,
 
 }
 
-func (as *AdminScheduleHandler) PostSchedule(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (as *ScheduleHandler) PostSchedule(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	fmt.Println("in post schedule 1")
 
 	l := r.ContentLength
@@ -109,7 +107,7 @@ func (as *AdminScheduleHandler) PostSchedule(w http.ResponseWriter, r *http.Requ
 	w.WriteHeader(http.StatusCreated)
 	return
 }
-func (as *AdminScheduleHandler) GetSingleSchedule(w http.ResponseWriter,
+func (as *ScheduleHandler) GetSingleSchedule(w http.ResponseWriter,
 	r *http.Request, ps httprouter.Params) {
 
 	id, err := strconv.Atoi(ps.ByName("id"))
@@ -140,7 +138,7 @@ func (as *AdminScheduleHandler) GetSingleSchedule(w http.ResponseWriter,
 	w.Write(output)
 	return
 }
-func (as *AdminScheduleHandler) DeleteSchedule(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (as *ScheduleHandler) DeleteSchedule(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	id, err := strconv.Atoi(ps.ByName("id"))
 
@@ -162,7 +160,7 @@ func (as *AdminScheduleHandler) DeleteSchedule(w http.ResponseWriter, r *http.Re
 	w.WriteHeader(http.StatusNoContent)
 	return
 }
-func (as *AdminScheduleHandler) UpdateSchedule(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (as *ScheduleHandler) UpdateSchedule(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	id, err := strconv.Atoi(ps.ByName("id"))
 	if err != nil {
@@ -207,7 +205,7 @@ func (as *AdminScheduleHandler) UpdateSchedule(w http.ResponseWriter, r *http.Re
 	return
 }
 
-func (as *AdminScheduleHandler) GetSchedulesHallDay(w http.ResponseWriter,
+func (as *ScheduleHandler) GetSchedulesHallDay(w http.ResponseWriter,
 	r *http.Request, ps httprouter.Params) {
 	id, err := strconv.Atoi(ps.ByName("hid"))
 	if err != nil {
