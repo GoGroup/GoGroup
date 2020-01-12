@@ -49,6 +49,12 @@ func adminSchedule(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(tmpl.ExecuteTemplate(w, "adminScheduleList.layout", nil))
 
 }
+func login(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println(tmpl.ExecuteTemplate(w, "login.layout", nil))
+
+}
+
 func eachmovieHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.FormValue("id")
 	fmt.Println(id)
@@ -64,7 +70,7 @@ func main() {
 
 	fs := http.FileServer(http.Dir("view/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
-	http.HandleFunc("/", index)
+	http.HandleFunc("/",login)
 	http.HandleFunc("/Movie", display)
 	http.HandleFunc("/admin", admin)
 	http.HandleFunc("/adminCinemas", adminCinemas)
