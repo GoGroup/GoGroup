@@ -23,10 +23,11 @@ import (
 )
 
 const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "admin"
+	host = "localhost"
+	port = 5432
+	user = "postgres"
+
+	password = "Bangtan123"
 	dbname   = "MovieEvent"
 )
 
@@ -44,7 +45,7 @@ func main() {
 	db.AutoMigrate(&model.Schedule{})
 	db.AutoMigrate(&model.Moviem{})
 
-	tmpl := template.Must(template.ParseGlob("../view/template/*"))
+	tmpl := template.Must(template.ParseGlob("./view/template/*"))
 
 	myRouter := httprouter.New()
 
