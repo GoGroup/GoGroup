@@ -1,0 +1,6 @@
+
+{{define "adminScheduleList.layout"}}
+{{template "admin_header"}}
+{{template "adminScheduleList.content" .}}
+{{template "admin_footer"}}
+{{end}}

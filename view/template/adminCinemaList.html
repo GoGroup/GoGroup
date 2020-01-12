@@ -1,0 +1,66 @@
+{{define "adminCinemaList.content" }}
+
+<body id="admin-cinemas">
+  <main class="col">
+    <h4>Simple Sidebar</h4>
+    <div
+      class="accordion m-5 md-accordion"
+      id="accordionEx1"
+      role="tablist"
+      aria-multiselectable="true"
+    >
+
+
+    {{range .}}
+
+
+      <div class="card">
+        <div class="card-header" role="tab" id="headingTwo1">
+          <a
+            class="collapsed"
+            data-toggle="collapse"
+            data-parent="#accordionEx1"
+            href="#collapseTwo{{.ID}}"
+            aria-expanded="false"
+            aria-controls="collapseTwo1"
+          >
+            <h5 class="mb-0">
+              {{.CinemaName}}
+              <i class="fas fa-angle-down rotate-icon"></i>
+            </h5>
+          </a>
+        </div>
+
+        <div
+          id="collapseTwo{{.ID}}"
+          class="collapse"
+          role="tabpanel"
+          aria-labelledby="headingTwo1"
+          data-parent="#accordionEx1"
+        >
+          <div class="card-body">
+            {{with .Halls}}
+            {{range .}}
+            <a
+              href="/adminCinemas/adminSchedule/{{.ID}}"
+              class="btn colorless btn-primary btn-lg active btn-block"
+              role="button"
+              aria-pressed="true"
+              >{{.HallName}}</a
+            >
+            {{end}}
+            {{end}}
+         
+          
+          </div>
+        </div>
+      </div>
+      {{end}}
+
+  
+     
+    </div>
+  </main>
+
+  {{end}}
+</body>
