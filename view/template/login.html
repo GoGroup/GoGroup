@@ -1,12 +1,16 @@
+{{ define "login.layout" }}
+{{ template "login.content" . }}
+{{end}}
 
+{{define "login.content"}}
 
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
+        <meta charset="UTF-8"`>
         <meta name="viewport" content="width=device-width, intial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Login</title>
+        <title>Cinev park</title>
         <link rel="stylesheet" href="/assets/css/Login_style.css">
         
     </head>
@@ -27,7 +31,11 @@
 			<h1>Sign in</h1>
 			<span>or use your account</span>
 			<input name="lousername" type="email" placeholder="Email" />
-			<input name="lopassword" type="password" placeholder="Password" />
+      <input name="lopassword" type="password" placeholder="Password" />
+      <!-- <span>
+        {{with .VErrors.Get "generic" }}
+    <label class="text-danger">{{ . }}</label> {{end}}
+    </span> -->
 			<a href="#">Forgot your password?</a>
 			<button>Sign In</button>
 		</form>

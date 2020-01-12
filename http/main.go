@@ -4,8 +4,6 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/GoGroup/Movie-and-events/http/util"
-
 	"github.com/GoGroup/Movie-and-events/cinema/repository"
 	"github.com/GoGroup/Movie-and-events/cinema/service"
 	usrvim "github.com/GoGroup/Movie-and-events/hall/repository"
@@ -27,8 +25,17 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+const (
+	host = "localhost"
+	port = 5432
+	user = "postgres"
+
+	password = "admin"
+	dbname   = "MovieEvent"
+)
+
 func main() {
-	db, err := gorm.Open("postgres", util.DBConnectString)
+	db, err := gorm.Open("postgres", "postgres://postgres:admin@localhost/MovieEvent?sslmode=disable")
 	if err != nil {
 		panic(err)
 	}
@@ -37,16 +44,6 @@ func main() {
 	db.AutoMigrate(&model.Cinema{})
 	db.AutoMigrate(&model.Schedule{})
 	db.AutoMigrate(&model.Moviem{})
-	db.AutoMigrate(&model.Session{})
-	db.AutoMigrate(&model.Role{})
-	errs = dbconn.Create(&entity.Role{ID: 1, Name: "USER"}).GetErrors()
-	errs = dbconn.Create(&entity.Role{ID: 2, Name: "ADMIN"}).GetErrors()
-	if errs != nil {
-		return errs
-	}
-
-	return nil
-}
 
 	tmpl := template.Must(template.ParseGlob("../view/template/*"))
 
@@ -76,21 +73,6 @@ func main() {
 	MovieRepo := mvrep.NewMovieGormRepo(db)
 	Moviesr := mvser.NewMovieService(MovieRepo)
 	MovieHandler := handler.NewMovieHander(Moviesr)
-
-
-	csrfSignKey := []byte(rtoken.GenerateRandomID(32))
-	userRepo := userRepoImport.NewUserGormRepo(dbconn)
-	userService := userServiceImport.NewUserService(userRepo)
-
-	sessionRepo := userRepoImport.NewSessionGormRepo(dbconn)
-	sessionService := userServiceImport.NewSessionService(sessionRepo)
-
-	roleRepo := userRepoImport.NewRoleGormRepo(dbconn)
-	roleService := userServiceImport.NewRoleService(roleRepo)
-
-
-	userHandler := handler.NewUserHandler(tmpl, userService, sessionService, roleService, csrfSignKey)
-
 
 	mh := handler.NewMenuHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr)
 	ah := handler.NewAdminHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr)

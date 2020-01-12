@@ -227,16 +227,11 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request, p
 		hashedPassword, err := hash.HashPassword(r.FormValue(passwordKey))
 		if err != nil {
 			signUpForm.VErrors.Add("password", "Password Could not be stored")
-			userHandler.tmpl.ExecuteTemplate(w, "login.html", signUpForm)
+			userHandler.tmpl.ExecuteTemplate(w, "loginlayout.layout", signUpForm)
 			return
 		}
 		//Create a user role for the User
 		role, errs := userHandler.roleService.RoleByName("USER")
-		if r.FormValue(typeKey) == "admin" {
-			role, errs = userHandler.roleService.RoleByName("ADMIN")
-		} else {
-			role, errs = userHandler.roleService.RoleByName("USER")
-		}
 
 		if len(errs) > 0 {
 			signUpForm.VErrors.Add("generic", "Role couldn't be assigned to user")
@@ -264,7 +259,4 @@ func (userHandler *UserHandler) isParsableFormPost(w http.ResponseWriter, r *htt
 	return r.Method == http.MethodPost &&
 		hash.ParseForm(w, r) &&
 		rtoken.IsCSRFValid(r.FormValue(csrfKey), userHandler.csrfSignKey)
-}
-func (userHandler *UserHandler) Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	userHandler.tmpl.ExecuteTemplate(w, "index.layout", nil)
 }
