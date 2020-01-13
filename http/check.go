@@ -4,6 +4,8 @@ import (
 	"html/template"
 	"net/http"
 
+	"github.com/GoGroup/Movie-and-events/http/util"
+
 	"github.com/GoGroup/Movie-and-events/cinema/repository"
 	"github.com/GoGroup/Movie-and-events/cinema/service"
 	usrvim "github.com/GoGroup/Movie-and-events/hall/repository"
@@ -21,17 +23,8 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-const (
-	host = "localhost"
-	port = 5432
-	user = "postgres"
-
-	password = "Bangtan123"
-	dbname   = "MovieEvent"
-)
-
 func main() {
-	db, err := gorm.Open("postgres", "postgres://postgres:Bangtan123@localhost/MovieEvent?sslmode=disable")
+	db, err := gorm.Open("postgres", util.DBConnectString)
 	if err != nil {
 		panic(err)
 	}
