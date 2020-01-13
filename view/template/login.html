@@ -1,134 +1,59 @@
-{{ define "login.layout" }}
-{{ template "login.content" . }}
-
-{{ end }}
-{{ define "login.content" }}
+{{define "EachMovie.content"}}
 
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-
-    <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-      crossorigin="anonymous"
-    />
-    <link
-      href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"
-      rel="stylesheet"
-    />
-
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
-    />
-    <link rel="stylesheet" href="/assets/css/headerfooter.css" />
-    <link rel="stylesheet" href="/assets/css/style.css" />
-    <link rel="stylesheet" href="/assets/css/schedule.css" />
-    <link rel="stylesheet" href="/assets/css/Login_style.css">
-
-    <title>-----</title>
-  </head>
-  <body>
-    <!-- <i class="fa fa-search"></i>
-    <i class="fa fa-user"></i>
-    <i class="fa fa-user-circle-o"></i> -->
-    
-    <!-- ----------------------------- end of nav 1 -->
-    <div class="con">
-        <div class="container" id="container">
-            <div class="form-container sign-up-container">
-                <form class="form-signup" method="POST" action="/signup">
-                    <input type="hidden" name="_csrf" value="{{ .CSRF }}" />
-                    <div>
-                    {{with .VErrors.Get "fullname"}}
-                    <label class="text-danger">{{.}}</label>
-                    {{end}}
-                    <h1>Create Account</h1>
-                    <input type='text' class='form-control' name='fullname' id='fullname' value='{{ .Values.Get "fullname" }}'
-                    required autofocus placeholder='Full Name'>
-                </div>
-                <div>
-                    {{with .VErrors.Get "email"}}
-                    <label class="text-danger">{{.}}</label>
-                    {{end}}
-                    <input type='email' class='form-control' name='email' id='email' value='{{ .Values.Get "email" }}'
-                    required placeholder='Email Address'>
-                </div>
-                <div> 
-                    {{with .VErrors.Get "phone"}}
-                    <label class="text-danger">{{.}}</label>
-                    {{end}}
-                    <input type='text' class='form-control' name='phone' id='phone' value='{{ .Values.Get "phone" }}'
-                    required  placeholder='Phone Number'>
-                </div>
-                <div>
-                    {{with .VErrors.Get "password"}}
-                        <label class="text-danger">{{.}}</label>
-                        {{end}}
-                        <input type='password' class='form-control' name='password' id='password' required placeholder='Password'>
-            
-                </div>
-                    <div>
-                        {{with .VErrors.Get "confirmpassword"}}
-                        <label class="text-danger">{{.}}</label>
-                        {{end}}
-                        <input type='password' class='form-control' name='confirmpassword' id='confirmpassword'
-                        required placeholder='Confirm Password'>
-                    </div>
-                    
-                    <button>Sign Up</button>
-                </form>
-            </div>
-        <div class="form-container sign-in-container">
-            <form class="form-signin" method="POST" action="/login">
-                <h3 class="h3 mb-3 font-weight-normal">Please sign in</h3>
-                <input type="hidden" name="_csrf" value="{{ .CSRF }}" />
-                {{with .VErrors.Get "generic" }}
-                <label class="text-danger">{{ . }}</label>
-                {{end}}
-                <h1>Sign in</h1>
-                <span>or use your account</span>
-                <label for="email" class="col-form-label">Email Address</label>
-                <input  type="email" id="email" name="email" value='{{ .Values.Get "email" }}' class="form-control" placeholder="Email address"
-                required autofocus>
-                <label for="password" class="col-form-label">Password</label>
-                <input  type="password" id="password" name="password" class="form-control" placeholder="Password" required>
-                <a href="#">Forgot your password?</a>
-                <button>Sign In</button>
-            </form>
-        </div>
-    
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <h1>Welcome Back!</h1>
-                    <p>To keep connected with us please login with your personal info</p>
-                    <button class="ghost" id="signIn">Sign In</button>
-                </div>
-                <div class="overlay-panel overlay-right">
-                    <h1>Hello, Friend!</h1>
-                    <p>Enter your personal details and start journey with us</p>
-                    <button class="ghost" id="signUp">Sign Up</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, intial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Login</title>
+        <link rel="stylesheet" href="../assets/css/Login_style.css">
+        
+    </head>
+    <body>
+      <div class="container" id="container">
+	<div class="form-container sign-up-container">
+		<form action="#" method="POST">
+			<h1>Create Account</h1>
+			<input name="username" type="text" placeholder="Name" />
+			<input name="email" type="email" placeholder="Email" />
+            <input name="password" type="password" placeholder="Password" />
+            <input name="repassword" type="password" placeholder="Retype Password" />
+			<button>Sign Up</button>
+		</form>
+	</div>
+	<div class="form-container sign-in-container">
+		<form action="#">
+			<h1>Sign in</h1>
+			<span>or use your account</span>
+			<input name="lousername" type="email" placeholder="Email" />
+			<input name="lopassword" type="password" placeholder="Password" />
+			<a href="#">Forgot your password?</a>
+			<button>Sign In</button>
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<h1>Welcome Back!</h1>
+				<p>To keep connected with us please login with your personal info</p>
+				<button class="ghost" id="signIn">Sign In</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<h1>Hello, Friend!</h1>
+				<p>Enter your personal details and start journey with us</p>
+				<button class="ghost" id="signUp">Sign Up</button>
+			</div>
+		</div>
+	</div>
 </div>
+<script src="../assets/app.js"></script>
 
-<script src="/assets/js/app.js"></script>
+<footer>
+	<p>
+	</p>
+</footer>
 
-    {{end}}
-
-
-    
-  </body>
+    </body>
 </html>
+{{end}}
