@@ -33,6 +33,16 @@ func main() {
 	db.AutoMigrate(&model.Cinema{})
 	db.AutoMigrate(&model.Schedule{})
 	db.AutoMigrate(&model.Moviem{})
+	db.AutoMigrate(&model.Session{})
+	db.AutoMigrate(&model.Role{})
+	errs = dbconn.Create(&entity.Role{ID: 1, Name: "USER"}).GetErrors()
+	errs = dbconn.Create(&entity.Role{ID: 2, Name: "ADMIN"}).GetErrors()
+	if errs != nil {
+		return errs
+	}
+
+	return nil
+}
 
 	tmpl := template.Must(template.ParseGlob("./view/template/*"))
 
@@ -54,6 +64,21 @@ func main() {
 	Moviesr := mvser.NewMovieService(MovieRepo)
 	MovieHandler := handler.NewMovieHander(Moviesr)
 
+
+	csrfSignKey := []byte(rtoken.GenerateRandomID(32))
+	userRepo := userRepoImport.NewUserGormRepo(dbconn)
+	userService := userServiceImport.NewUserService(userRepo)
+
+	sessionRepo := userRepoImport.NewSessionGormRepo(dbconn)
+	sessionService := userServiceImport.NewSessionService(sessionRepo)
+
+	roleRepo := userRepoImport.NewRoleGormRepo(dbconn)
+	roleService := userServiceImport.NewRoleService(roleRepo)
+
+
+	userHandler := handler.NewUserHandler(tmpl, userService, sessionService, roleService, csrfSignKey)
+
+
 	mh := handler.NewMenuHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr)
 
 	//myRouter.ServeFiles("/assets/css/*filepath", http.Dir("../view/assets"))
@@ -61,7 +86,8 @@ func main() {
 
 	// fs := http.FileServer(http.Dir("../view/assetts"))
 	// http.Handle("/assets/", http.StripPrefix("/assets/", fs))
-
+	myRouter.GET("/signup", userHandler.SignUp)
+	myRouter.GET("/adminCinemas", mh.AdminCinema)
 	myRouter.GET("/adminCinemas", mh.AdminCinema)
 	myRouter.GET("/adminCinemas/adminSchedule/:hId", mh.AdminSchedule)
 	myRouter.GET("/adminCinemas/adminSchedule/:hId/delete/:sId", mh.AdminScheduleDelete)
