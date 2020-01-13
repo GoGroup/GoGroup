@@ -1,5 +1,7 @@
 package model
 
+import "github.com/jinzhu/gorm"
+
 type UpcomingMovies struct {
 	MovieList []Movie `json:"results"`
 }
@@ -70,4 +72,23 @@ type Cinema struct {
 	ID         uint   `json:"id" gorm:"primary_key;AUTO_INCREMENT"`
 	CinemaName string ` json:"cinemaname" gorm:"type:varchar(255);not null"`
 	Halls      []Hall
+}
+type Role struct {
+	ID   uint
+	Name string `gorm:"type:varchar(255)"`
+}
+type User struct {
+	ID       uint
+	FullName string `gorm:"type:varchar(255);not null"`
+	Email    string `gorm:"type:varchar(255);not null;unique"`
+	Password string `gorm:"type:varchar(255)"`
+	Phone    string `gorm:"type:varchar(16);not null; unique"`
+	RoleID   uint
+}
+type Session struct {
+	gorm.Model
+	SessionId  string `gorm:"type:varchar(255);not null"`
+	UUID       uint
+	Expires    int64  `gorm:"type:varchar(255);not null"`
+	SigningKey []byte `gorm:"type:varchar(255);not null"`
 }
