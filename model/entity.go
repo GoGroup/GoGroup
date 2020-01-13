@@ -92,3 +92,12 @@ type Session struct {
 	Expires    int64  `gorm:"type:varchar(255);not null"`
 	SigningKey []byte `gorm:"type:varchar(255);not null"`
 }
+type Comment struct {
+	gorm.Model
+	UserID  uint
+	Message string ` json:"message" gorm:"type:varchar(255);not null"`
+}
+type Event struct {
+	gorm.Model
+	Description string ` json:"description" gorm:"type:varchar(255);not null"`
+}
