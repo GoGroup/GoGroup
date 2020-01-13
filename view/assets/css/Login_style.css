@@ -5,7 +5,7 @@
 	box-sizing: border-box;
 }
 
-.con {
+body {
     background-image: url(../images/bg.jpg);
     background-repeat: no-repeat;
     background-size: cover;
