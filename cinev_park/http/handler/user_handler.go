@@ -201,7 +201,7 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request, p
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		}
-		userHandler.tmpl.ExecuteTemplate(w, "login.html", form.Input{CSRF: CSFRToken})
+		userHandler.tmpl.ExecuteTemplate(w, "signup.layout", form.Input{CSRF: CSFRToken})
 
 		return
 	}
