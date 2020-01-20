@@ -1,0 +1,57 @@
+{{ define "signup.layout" .}}
+{{ template "loginheader.content" . }}
+{{ template "signup.content" . }}
+
+{{end}}
+
+{{define "signup.content"}}
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form action="/signup" method="POST">
+                <h1>Create Account</h1>
+                <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
+                <input name="username" type="text" placeholder="Name" />
+                {{with .VErrors.Get "username" }}
+                <label class="text-danger">{{ . }}</label>
+            {{end}}
+                <input name="email" type="email" placeholder="Email" required="required " value='{{ .Values.Get "email" }}'/>
+                <span>
+                    {{with .VErrors.Get "email" }}
+                        <label class="text-danger">{{ . }}</label>
+                    {{end}}
+                </span>
+                <input name="password" type="password" placeholder="Password" required />
+                <span>
+                    {{with .VErrors.Get "password" }}
+                        <label class="text-danger">{{ . }}</label>
+                    {{end}}
+                </span>
+                <input name="repassword" type="password" placeholder="Retype Password" required/>
+                {{with .VErrors.Get "confirmPassword" }}
+                <label class="text-danger">{{ . }}</label>
+            {{end}}
+                <button>Sign Up</button>
+                <a href="Loginnew.html">Already have an account,signin</a>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-right">
+                    <h1>Welcome Back!</h1>
+                    <p>To keep connected with us please login with your personal info</p>
+
+                </div>
+
+            </div>
+        </div>
+
+{{end}}
+
+        <footer>
+            <p>
+            </p>
+        </footer>
+
+</body>
+
+</html>
