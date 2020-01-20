@@ -8,7 +8,6 @@ import (
 
 	"github.com/GoGroup/Movie-and-events/hash"
 	"github.com/GoGroup/Movie-and-events/permission"
-	"github.com/julienschmidt/httprouter"
 
 	"github.com/dgrijalva/jwt-go"
 
@@ -127,23 +126,23 @@ func (userHandler *UserHandler) Authorized(handle http.Handler) http.Handler {
 	})
 }
 
-func (userHandler *UserHandler) Login(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
+func (userHandler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	//If it's requesting the login page return CSFR Signed token with the form
-	fmt.Println("in...........log in")
+
 	if r.Method == http.MethodGet {
-		fmt.Println("insinde...........log in")
+
 		CSFRToken, err := rtoken.GenerateCSRFToken(userHandler.csrfSignKey)
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		}
-		fmt.Println("insinde,,,,,...........log in")
+
 		fmt.Println(userHandler.tmpl.ExecuteTemplate(w, "login.html", form.Input{
 			CSRF: CSFRToken,
 		}))
 		return
 	}
 	//Only reply to forms that have that are parsable and have valid csfrToken
-	if userHandler.isParsableFormPost(w, r, pm) {
+	if userHandler.isParsableFormPost(w, r) {
 
 		//Validate form data
 		loginForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}}
@@ -186,7 +185,7 @@ func (uh *UserHandler) checkAdmin(roleID uint) bool {
 }
 
 // Logout logout requests
-func (userHandler *UserHandler) Logout(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (userHandler *UserHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	//Remove cookies
 	session.RemoveCookie(w)
 	//Delete session from the database
@@ -195,7 +194,7 @@ func (userHandler *UserHandler) Logout(w http.ResponseWriter, r *http.Request, _
 	//Redirect to login page
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
-func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
+func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		CSFRToken, err := rtoken.GenerateCSRFToken(userHandler.csrfSignKey)
 		if err != nil {
@@ -206,7 +205,7 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request, p
 		return
 	}
 	//Only reply to forms that have that are parsable and have valid csfrToken
-	if userHandler.isParsableFormPost(w, r, pm) {
+	if userHandler.isParsableFormPost(w, r) {
 		///Validate the form data
 		signUpForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}}
 		signUpForm.ValidateRequiredFields(usernameKey, emailKey, passwordKey)
@@ -255,7 +254,7 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request, p
 	}
 }
 
-func (userHandler *UserHandler) isParsableFormPost(w http.ResponseWriter, r *http.Request, pm httprouter.Params) bool {
+func (userHandler *UserHandler) isParsableFormPost(w http.ResponseWriter, r *http.Request) bool {
 	return r.Method == http.MethodPost &&
 		hash.ParseForm(w, r) &&
 		rtoken.IsCSRFValid(r.FormValue(csrfKey), userHandler.csrfSignKey)
