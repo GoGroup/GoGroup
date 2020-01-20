@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/GoGroup/Movie-and-events/cinema"
 	"github.com/GoGroup/Movie-and-events/controller"
@@ -12,7 +13,6 @@ import (
 	"github.com/GoGroup/Movie-and-events/model"
 	"github.com/GoGroup/Movie-and-events/movie"
 	"github.com/GoGroup/Movie-and-events/schedule"
-	"github.com/julienschmidt/httprouter"
 )
 
 type AdminHandler struct {
@@ -29,7 +29,7 @@ func NewAdminHandler(t *template.Template, cs cinema.CinemaService, hs hall.Hall
 
 }
 
-func (m *AdminHandler) AdminCinema(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (m *AdminHandler) AdminCinema(w http.ResponseWriter, r *http.Request) {
 
 	var errr []error
 	var NewCinemaArray []model.Cinema
@@ -48,46 +48,43 @@ func (m *AdminHandler) AdminCinema(w http.ResponseWriter, r *http.Request, _ htt
 
 }
 
-func (m *AdminHandler) AdminScheduleDelete(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
+func (m *AdminHandler) AdminScheduleDelete(w http.ResponseWriter, r *http.Request) {
+
+	var HallID int
+	var SchedulelID int
+	p := strings.Split(r.URL.Path, "/")
+	if len(p) == 1 {
+		fmt.Println("in first if")
+		//return defaultCode, p[0]
+	} else if len(p) > 1 {
+		fmt.Println("..in first if")
+		code, err := strconv.Atoi(p[4])
+		code2, err2 := strconv.Atoi(p[5])
+		fmt.Println(err)
+		fmt.Println(p)
+		fmt.Println(code)
+		if err == nil && err2 == nil {
+			fmt.Println(".....in first if")
+			HallID = code
+			SchedulelID = code2
+		}
+	}
+
 	fmt.Println("In admin schedule*****************")
 
 	fmt.Println("trying to delete*****************")
-	SchedulelID, _ := strconv.Atoi(pm.ByName("sId"))
+
 	uSchID := uint(SchedulelID)
 	m.ssrv.DeleteSchedules(uSchID)
 
-	fmt.Println(pm.ByName("hId"))
-
-	var All [][]model.Schedule
-	var err []error
-	var schedules []model.Schedule
-	HallID, _ := strconv.Atoi(pm.ByName("hId"))
-	uHallID := uint(HallID)
-	Days := []string{"Monday", "Tuesday", "Wednsday", "Thursday", "Friday", "Saturday", "Sunday"}
-	for _, d := range Days {
-		schedules, err = m.ssrv.ScheduleHallDay(uHallID, d)
-		All = append(All, schedules)
-
-	}
-	if len(err) > 0 {
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-	}
-
-	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminScheduleList.layout", All))
-
-}
-
-func (m *AdminHandler) AdminSchedule(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
-	fmt.Println("In admin schedule*****************")
-
-	fmt.Println(pm.ByName("hId"))
+	fmt.Println(r.FormValue("hId"))
 
 	var All [][]model.ScheduleWithMovie
 	var SWM []model.ScheduleWithMovie
 	var err []error
 	var sm model.ScheduleWithMovie
 	var schedules []model.Schedule
-	HallID, _ := strconv.Atoi(pm.ByName("hId"))
+
 	uHallID := uint(HallID)
 	Days := []string{"Monday", "Tuesday", "Wednsday", "Thursday", "Friday", "Saturday", "Sunday"}
 	for _, d := range Days {
@@ -102,12 +99,93 @@ func (m *AdminHandler) AdminSchedule(w http.ResponseWriter, r *http.Request, pm 
 		All = append(All, SWM)
 
 	}
+	hall, _ := m.hsrv.Hall(uint(HallID))
+	cinema, _ := m.csrv.Cinema(uint(hall.CinemaID))
 	tempo := struct {
 		HallId int
 		List   [][]model.ScheduleWithMovie
+		Hall   *model.Hall
+		Cinema *model.Cinema
 	}{
 		HallId: HallID,
 		List:   All,
+		Hall:   hall,
+		Cinema: cinema,
+	}
+	if len(err) > 0 {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	}
+	fmt.Println(tempo)
+
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminScheduleList.layout", tempo))
+}
+
+func (m *AdminHandler) NewAdminScheduleHandler(w http.ResponseWriter, r *http.Request) {
+	var err error
+	if r.Method == "POST" {
+		m.NewAdminSchedulePost(w, r)
+	} else if r.Method == "GET" {
+		m.NewAdminSchedule(w, r)
+	}
+
+	if err != nil {
+		fmt.Println("hi")
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+	}
+
+}
+
+func (m *AdminHandler) AdminSchedule(w http.ResponseWriter, r *http.Request) {
+	var HallID int
+
+	p := strings.Split(r.URL.Path, "/")
+	if len(p) == 1 {
+		fmt.Println("in first if")
+		//return defaultCode, p[0]
+	} else if len(p) > 1 {
+		fmt.Println("..in first if")
+		code, err := strconv.Atoi(p[3])
+		fmt.Println(err)
+		fmt.Println(p)
+		fmt.Println(code)
+		if err == nil {
+			fmt.Println(".....in first if")
+			HallID = code
+		}
+	}
+
+	var All [][]model.ScheduleWithMovie
+	var SWM []model.ScheduleWithMovie
+	var err []error
+	var sm model.ScheduleWithMovie
+	var schedules []model.Schedule
+	//HallID, _ := strconv.Atoi(r.FormValue("hId"))
+	uHallID := uint(HallID)
+	Days := []string{"Monday", "Tuesday", "Wednsday", "Thursday", "Friday", "Saturday", "Sunday"}
+	for _, d := range Days {
+		schedules, err = m.ssrv.ScheduleHallDay(uHallID, d)
+		SWM = nil
+		for _, s := range schedules {
+			m, _, _ := controller.GetMovieDetails(s.MoviemID)
+			sm = model.ScheduleWithMovie{s, m.Title}
+			SWM = append(SWM, sm)
+
+		}
+		All = append(All, SWM)
+
+	}
+	hall, _ := m.hsrv.Hall(uint(HallID))
+	cinema, _ := m.csrv.Cinema(uint(hall.CinemaID))
+	tempo := struct {
+		HallId int
+		List   [][]model.ScheduleWithMovie
+		Hall   *model.Hall
+		Cinema *model.Cinema
+	}{
+		HallId: HallID,
+		List:   All,
+		Hall:   hall,
+		Cinema: cinema,
 	}
 	if len(err) > 0 {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -118,10 +196,26 @@ func (m *AdminHandler) AdminSchedule(w http.ResponseWriter, r *http.Request, pm 
 
 }
 
-func (m *AdminHandler) NewAdminSchedule(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
+func (m *AdminHandler) NewAdminSchedule(w http.ResponseWriter, r *http.Request) {
 	var MovieTitles *model.UpcomingMovies
 	var err error
 	var err2 error
+	var hallid int
+	p := strings.Split(r.URL.Path, "/")
+	if len(p) == 1 {
+		fmt.Println("in first if")
+		//return defaultCode, p[0]
+	} else if len(p) > 1 {
+		fmt.Println("..in first if")
+		code, err := strconv.Atoi(p[4])
+		fmt.Println(err)
+		fmt.Println(p)
+		fmt.Println(code)
+		if err == nil {
+			fmt.Println(".....in first if")
+			hallid = code
+		}
+	}
 
 	if r.FormValue("movie") != "" {
 		Movie := r.FormValue("movie")
@@ -140,37 +234,67 @@ func (m *AdminHandler) NewAdminSchedule(w http.ResponseWriter, r *http.Request, 
 	}
 
 	convid, _ := strconv.Atoi(r.FormValue("id"))
-	hallid, _ := strconv.Atoi(pm.ByName("hId"))
+	//hallid, _ := strconv.Atoi(r.FormValue("hId"))
+	hall, _ := m.hsrv.Hall(uint(hallid))
+	cinema, _ := m.csrv.Cinema(uint(hall.CinemaID))
 
 	tempo := struct {
 		M       *model.UpcomingMovies
 		MovieN  string
 		MovieID int
 		HallID  int
+		Hall    *model.Hall
+		Cinema  *model.Cinema
 	}{
 		M:       MovieTitles,
 		MovieN:  r.FormValue("moviename"),
 		MovieID: convid,
 		HallID:  hallid,
+		Hall:    hall,
+		Cinema:  cinema,
 	}
 
 	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminNewSchedule.layout", tempo))
 
 }
-func (m *AdminHandler) NewAdminSchedulePost(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
+func (m *AdminHandler) NewAdminSchedulePost(w http.ResponseWriter, r *http.Request) {
+	var hallid int
+
+	p := strings.Split(r.URL.Path, "/")
+	if len(p) == 1 {
+		fmt.Println("in first if")
+		//return defaultCode, p[0]
+	} else if len(p) > 1 {
+		fmt.Println("..in first if")
+		code, err := strconv.Atoi(p[4])
+		fmt.Println(err)
+		fmt.Println(p)
+		fmt.Println(code)
+		if err == nil {
+			fmt.Println(".....in first if")
+			hallid = code
+		}
+	}
+
 	var a *model.Schedule
 	var movie *model.Moviem
-	hallid, _ := strconv.Atoi(pm.ByName("hId"))
+
+	hall, _ := m.hsrv.Hall(uint(hallid))
+	cinema, _ := m.csrv.Cinema(uint(hall.CinemaID))
 	tempo := struct {
 		M       *model.UpcomingMovies
 		MovieN  string
 		MovieID int
 		HallID  int
+		Hall    *model.Hall
+		Cinema  *model.Cinema
 	}{
 		M:       nil,
 		MovieN:  "",
 		MovieID: 0,
 		HallID:  hallid,
+		Hall:    hall,
+		Cinema:  cinema,
 	}
 	MID, _ := strconv.Atoi(r.FormValue("mid"))
 	fmt.Println("printing mid", MID)

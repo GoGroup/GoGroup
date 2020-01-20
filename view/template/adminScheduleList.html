@@ -1,7 +1,16 @@
 {{define "adminScheduleList.content"}}
 <main class="col">
     <h4>Schedule List</h4>
+
+  <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Schedule</a></li>
+        <li class="breadcrumb-item"><a href="#">{{.Cinema.CinemaName}}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{.Hall.HallName}}</li>
+      </ol>
+    </nav>
 <div id="adminSchedule">
+
   {{$var:=index .List 0}}
   {{if lt 0 (len $var)}} {{$var2:= index $var 0}}{{else}}{{end}}
 
@@ -15,7 +24,7 @@
         
           
         
-          <a href="/adminCinemas/adminSchedule/{{.HallId}}/new/"
+          <a href="/adminCinemas/adminSchedule/new/{{.HallId}}"
           style="padding:0"
             type="button"
             class="btn btn-main btn-primary has-tooltip"
@@ -137,7 +146,7 @@
 
   <div class="text-center form-sm mt-2">
     <input type="submit" class="btn btn-info" value="Save changes">
-    <a href="/adminCinemas/adminSchedule/{{.Sch.HallID}}/delete/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>
+    <a href="/adminCinemas/adminSchedule/delete/{{.Sch.HallID}}/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>
    
   </div>
 
@@ -238,8 +247,7 @@
 
   <div class="text-center form-sm mt-2">
     <input type="submit" class="btn btn-info" value="Save changes">
-    <a href="/adminCinemas/adminSchedule/{{.Sch.HallID}}/delete/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>
-   
+    <a href="/adminCinemas/adminSchedule/delete/{{.Sch.HallID}}/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>   
   </div>
 
 
@@ -335,8 +343,7 @@
   
     <div class="text-center form-sm mt-2">
       <input type="submit" class="btn btn-info" value="Save changes">
-      <a href="/adminCinemas/adminSchedule/{{.Sch.HallID}}/delete/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>
-     
+      <a href="/adminCinemas/adminSchedule/delete/{{.Sch.HallID}}/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>     
     </div>
   
   
@@ -431,8 +438,7 @@
     
       <div class="text-center form-sm mt-2">
         <input type="submit" class="btn btn-info" value="Save changes">
-        <a href="/adminCinemas/adminSchedule/{{.Sch.HallID}}/delete/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>
-       
+        <a href="/adminCinemas/adminSchedule/delete/{{.Sch.HallID}}/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>       
       </div>
     
     
@@ -527,8 +533,7 @@
       
         <div class="text-center form-sm mt-2">
           <input type="submit" class="btn btn-info" value="Save changes">
-          <a href="/adminCinemas/adminSchedule/{{.Sch.HallID}}/delete/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>
-         
+          <a href="/adminCinemas/adminSchedule/delete/{{.Sch.HallID}}/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>         
         </div>
       
       
@@ -623,8 +628,7 @@
         
           <div class="text-center form-sm mt-2">
             <input type="submit" class="btn btn-info" value="Save changes">
-            <a href="/adminCinemas/adminSchedule/{{.Sch.HallID}}/delete/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>
-           
+            <a href="/adminCinemas/adminSchedule/delete/{{.Sch.HallID}}/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>           
           </div>
         
         
@@ -719,8 +723,7 @@
           
             <div class="text-center form-sm mt-2">
               <input type="submit" class="btn btn-info" value="Save changes">
-              <a href="/adminCinemas/adminSchedule/{{.Sch.HallID}}/delete/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>
-             
+              <a href="/adminCinemas/adminSchedule/delete/{{.Sch.HallID}}/{{.Sch.ID}}" class="btn btn-danger" value="Delete">Delete</a>             
             </div>
           
           
@@ -758,6 +761,7 @@
     </div>
     
     </div>
+
     
 </div>
 

@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/GoGroup/Movie-and-events/controller"
 	"github.com/GoGroup/Movie-and-events/movie"
@@ -13,7 +14,6 @@ import (
 	"github.com/GoGroup/Movie-and-events/hall"
 	"github.com/GoGroup/Movie-and-events/model"
 	"github.com/GoGroup/Movie-and-events/schedule"
-	"github.com/julienschmidt/httprouter"
 )
 
 type MenuHandler struct {
@@ -198,25 +198,53 @@ func NewMenuHandler(t *template.Template, cs cinema.CinemaService, hs hall.HallS
 
 // }
 
-func (m *MenuHandler) Index(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
+func (m *MenuHandler) Index(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(m.tmpl.ExecuteTemplate(w, "index.layout", nil))
 
 }
-func (m *MenuHandler) EachMovieHandler(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
+func getCode(r *http.Request, defaultCode int) (int, string) {
+	p := strings.Split(r.URL.Path, "/")
+	if len(p) == 1 {
+		fmt.Println("in first if")
+		return defaultCode, p[0]
+	} else if len(p) > 1 {
+		fmt.Println("..in first if")
+		code, err := strconv.Atoi(p[2])
+		fmt.Println(err)
+		fmt.Println(p)
+		fmt.Println(code)
+		if err == nil {
+			fmt.Println(".....in first if")
+			return code, p[2]
+		} else {
+			fmt.Println("...........in first if")
+			fmt.Println(p)
+			return defaultCode, p[1]
+		}
+	} else {
+		fmt.Println("...........in not if")
+		return defaultCode, ""
+	}
 
-	id := pm.ByName("mId")
-	fmt.Println(id)
-	trailerKey := controller.GetTrailer(id)
-	i, _ := strconv.Atoi(id)
-	details, _, _ := controller.GetMovieDetails(i)
+}
+
+func (m *MenuHandler) EachMovieHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("sdfdasasdcsdgvasfgsfkljsdfklsjdlfmslk")
+	d, stringid := getCode(r, 0)
+	fmt.Println(d)
+	fmt.Println(stringid)
+	trailerKey := controller.GetTrailer(stringid)
+	id, _ := strconv.Atoi(stringid)
+
+	details, _, _ := controller.GetMovieDetails(id)
 	details.Trailer = trailerKey
 
 	fmt.Println(m.tmpl.ExecuteTemplate(w, "EachMovie.layout", details))
 	//	fmt.Println(m.tmpl.ExecuteTemplate(w, "index.layout", nil))
 
 }
-func (m *MenuHandler) Movies(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
+func (m *MenuHandler) Movies(w http.ResponseWriter, r *http.Request) {
 	var nowshowingdetails []model.MovieDetails
 	upcomingmovies, err1, err2 := controller.GetUpcomingMovies()
 	fmt.Println(upcomingmovies)
@@ -242,7 +270,7 @@ func (m *MenuHandler) Movies(w http.ResponseWriter, r *http.Request, pm httprout
 	fmt.Println(m.tmpl.ExecuteTemplate(w, "Movie.layout", tempo))
 
 }
-func (m *MenuHandler) Theaters(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
+func (m *MenuHandler) Theaters(w http.ResponseWriter, r *http.Request) {
 	var errr []error
 	var NewCinemaArray []model.Cinema
 
@@ -260,11 +288,39 @@ func (m *MenuHandler) Theaters(w http.ResponseWriter, r *http.Request, pm httpro
 
 }
 
-func (m *MenuHandler) TheaterSchedule(w http.ResponseWriter, r *http.Request, pm httprouter.Params) {
+func (m *MenuHandler) TheaterSchedule(w http.ResponseWriter, r *http.Request) {
+	var CName string
+	var CId string
+	fmt.Println("In theatesrs sdlkfsdjf")
+	p := strings.Split(r.URL.Path, "/")
+	if len(p) == 1 {
+		fmt.Println("in first if")
+		//return defaultCode, p[0]
+	} else if len(p) > 1 {
+		fmt.Println("..in first if")
+		code, err := strconv.Atoi(p[4])
+		fmt.Println(err)
+		fmt.Println(p)
+		fmt.Println(code)
+		if err == nil {
+			fmt.Println(".....in first if")
+			CName = p[3]
+			CId = p[4]
+			//return code, p[2]
+		} else {
+			fmt.Println("...........in first if")
+			fmt.Println(p)
+			//return defaultCode, p[1]
+		}
+	} else {
+		fmt.Println("...........in not if")
+		//return defaultCode, ""
+	}
 
-	CName := pm.ByName("cName")
-	CId, _ := strconv.Atoi(pm.ByName("cId"))
-	uCId := uint(CId)
+	//CName := r.FormValue("cName")
+	//CId, _ := strconv.Atoi(r.FormValue("cId"))
+	CcId, _ := strconv.Atoi(CId)
+	uCId := uint(CcId)
 	H := model.HallSchedule{}
 	B := model.BindedSchedule{}
 
