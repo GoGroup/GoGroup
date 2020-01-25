@@ -37,6 +37,7 @@ func main() {
 	db.AutoMigrate(&model.Cinema{})
 	db.AutoMigrate(&model.Schedule{})
 	db.AutoMigrate(&model.Moviem{})
+	db.AutoMigrate(&model.Comment{})
 	db.AutoMigrate(&model.Session{})
 	db.AutoMigrate(&model.Role{})
 	db.AutoMigrate(&model.Role{ID: 1, Name: "USER"})

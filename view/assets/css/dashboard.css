@@ -9,6 +9,7 @@ body {
   }
   .fix-position{
     position: fixed;
+    width: 25%;
   }
   
  .navbar li {
