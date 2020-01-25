@@ -78,11 +78,10 @@ type Role struct {
 	Name string `gorm:"type:varchar(255)"`
 }
 type User struct {
-	ID       uint
+	ID       uint   `json:"id" gorm:"primary_key;AUTO_INCREMENT"`
 	FullName string `gorm:"type:varchar(255);not null"`
 	Email    string `gorm:"type:varchar(255);not null;unique"`
 	Password string `gorm:"type:varchar(255)"`
-	Phone    string `gorm:"type:varchar(16);not null; unique"`
 	RoleID   uint
 }
 type Session struct {
@@ -97,7 +96,12 @@ type Comment struct {
 	UserID  uint
 	Message string ` json:"message" gorm:"type:varchar(255);not null"`
 }
+
 type Event struct {
-	gorm.Model
-	Description string ` json:"description" gorm:"type:varchar(255);not null"`
+	ID          uint
+	Name        string `gorm:"type:varchar(255);not null"`
+	Description string
+	Location    string
+	Time        string
+	Image       string `gorm:"type:varchar(255)"`
 }

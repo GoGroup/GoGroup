@@ -11,11 +11,14 @@
         <form action="/login" method="POST">
             <h1>Sign in</h1>
             <span>or use your account</span>
-            <input name="lousername" type="email" placeholder="Email" />
+            <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
+            <input name="email" type="email" placeholder="Email" />
 
-            <input name="lopassword" type="password" placeholder="Password" />
+            <input name="password" type="password" placeholder="Password" />
     
-        
+            {{with .VErrors.Get "generic" }}
+            <label class="text-danger">{{ . }}</label> 
+            {{end}}
             <button>Sign In</button>
          <span>   <a href="#">Don't have an account</a>
             <a href="#">Signup</a></span>
