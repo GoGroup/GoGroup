@@ -1,0 +1,5 @@
+{{define "EachNowShowing.layout"}}
+{{template "header"}}
+{{template "EachNowShowing.content" .}}
+{{template "footer"}}
+{{end}}

@@ -25,6 +25,15 @@ func (cmntRepo *CommentGormRepo) Comments() ([]model.Comment, []error) {
 	}
 	return cmnts, errs
 }
+func (cmntRepo *CommentGormRepo) RetrieveComments(movieid uint) ([]model.Comment, []error) {
+	cmnts := []model.Comment{}
+	errs := cmntRepo.conn.Where("movie_id = ?", movieid).Find(&cmnts).GetErrors()
+
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return cmnts, errs
+}
 
 // Comment retrieves a customer comment from the database by its id
 func (cmntRepo *CommentGormRepo) Comment(id uint) (*model.Comment, []error) {

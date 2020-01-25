@@ -14,6 +14,9 @@ import (
 	"github.com/GoGroup/Movie-and-events/model"
 	"github.com/GoGroup/Movie-and-events/rtoken"
 
+	cmrep "github.com/GoGroup/Movie-and-events/comment/repository"
+	cmser "github.com/GoGroup/Movie-and-events/comment/service"
+
 	schrep "github.com/GoGroup/Movie-and-events/schedule/repository"
 	schser "github.com/GoGroup/Movie-and-events/schedule/service"
 
@@ -60,6 +63,9 @@ func main() {
 	HallRepo := usrvim.NewHallGormRepo(db)
 	Hallsr := urepim.NewHallService(HallRepo)
 
+	CommentRepo := cmrep.NewCommentGormRepo(db)
+	CommentSer := cmser.NewCommentService(CommentRepo)
+
 	CinemaRepo := repository.NewCinemaGormRepo(db)
 	Cinemasr := service.NewCinemaService(CinemaRepo)
 
@@ -68,7 +74,7 @@ func main() {
 
 	uh := handler.NewUserHandler(tmpl, userService, sessionService, roleService, csrfSignKey)
 
-	mh := handler.NewMenuHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr)
+	mh := handler.NewMenuHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr, CommentSer)
 	ah := handler.NewAdminHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr)
 
 	fs := http.FileServer(http.Dir("view/assets"))
@@ -89,6 +95,7 @@ func main() {
 	http.HandleFunc("/movies", mh.Movies)
 	//http.HandleFunc("/movie/{mId}", mh.EachMovieHandler)
 	http.HandleFunc("/movie/", mh.EachMovieHandler)
+	http.HandleFunc("/movie/nowshowing/", mh.EachNowShowing)
 	http.HandleFunc("/theaters", mh.Theaters)
 	//http.HandleFunc("/theater/schedule/{cName}/{cId}", mh.TheaterSchedule)
 	http.HandleFunc("/theater/schedule/", mh.TheaterSchedule)

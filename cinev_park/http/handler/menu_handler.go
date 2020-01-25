@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/GoGroup/Movie-and-events/comment"
 	"github.com/GoGroup/Movie-and-events/controller"
 	"github.com/GoGroup/Movie-and-events/movie"
 
@@ -17,16 +18,17 @@ import (
 )
 
 type MenuHandler struct {
-	tmpl *template.Template
-	csrv cinema.CinemaService
-	hsrv hall.HallService
-	ssrv schedule.ScheduleService
-	msrv movie.MovieService
+	tmpl   *template.Template
+	csrv   cinema.CinemaService
+	hsrv   hall.HallService
+	ssrv   schedule.ScheduleService
+	msrv   movie.MovieService
+	comsrv comment.CommentService
 }
 
-func NewMenuHandler(t *template.Template, cs cinema.CinemaService, hs hall.HallService, ss schedule.ScheduleService, ms movie.MovieService) *MenuHandler {
+func NewMenuHandler(t *template.Template, cs cinema.CinemaService, hs hall.HallService, ss schedule.ScheduleService, ms movie.MovieService, comser comment.CommentService) *MenuHandler {
 
-	return &MenuHandler{tmpl: t, csrv: cs, hsrv: hs, ssrv: ss, msrv: ms}
+	return &MenuHandler{tmpl: t, csrv: cs, hsrv: hs, ssrv: ss, msrv: ms, comsrv: comser}
 
 }
 
@@ -230,7 +232,7 @@ func getCode(r *http.Request, defaultCode int) (int, string) {
 }
 
 func (m *MenuHandler) EachMovieHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("sdfdasasdcsdgvasfgsfkljsdfklsjdlfmslk")
+
 	d, stringid := getCode(r, 0)
 	fmt.Println(d)
 	fmt.Println(stringid)
@@ -241,6 +243,47 @@ func (m *MenuHandler) EachMovieHandler(w http.ResponseWriter, r *http.Request) {
 	details.Trailer = trailerKey
 
 	fmt.Println(m.tmpl.ExecuteTemplate(w, "EachMovie.layout", details))
+	//	fmt.Println(m.tmpl.ExecuteTemplate(w, "index.layout", nil))
+
+}
+
+func (m *MenuHandler) EachNowShowing(w http.ResponseWriter, r *http.Request) {
+	var id int
+
+	p := strings.Split(r.URL.Path, "/")
+	if len(p) == 1 {
+		fmt.Println("in first if")
+		//return defaultCode, p[0]
+	} else if len(p) > 1 {
+		fmt.Println("..in first if")
+		code, err := strconv.Atoi(p[3])
+
+		if err == nil {
+			fmt.Println(".....in first if")
+			id = code
+		}
+	}
+
+	if r.FormValue("comment") != "" {
+		c := model.Comment{UserID: 2, UserName: "Hanna", MovieID: uint(id), Message: r.FormValue("comment")}
+
+		m.comsrv.StoreComment(&c)
+	}
+
+	trailerKey := controller.GetTrailer(strconv.Itoa(id))
+	details, _, _ := controller.GetMovieDetails(id)
+	details.Trailer = trailerKey
+	comments, _ := m.comsrv.RetrieveComments(uint(id))
+
+	tempo := struct {
+		Comments    []model.Comment
+		MovieDetail *model.MovieDetails
+	}{
+		Comments:    comments,
+		MovieDetail: details,
+	}
+
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "EachNowShowing.layout", tempo))
 	//	fmt.Println(m.tmpl.ExecuteTemplate(w, "index.layout", nil))
 
 }

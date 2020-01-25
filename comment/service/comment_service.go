@@ -59,3 +59,10 @@ func (cs *CommentService) StoreComment(comment *model.Comment) (*model.Comment, 
 	}
 	return cmnt, errs
 }
+func (cs *CommentService) RetrieveComments(movieid uint) ([]model.Comment, []error) {
+	cmnts, errs := cs.commentRepo.RetrieveComments(movieid)
+	if len(errs) > 0 {
+		return nil, errs
+	}
+	return cmnts, errs
+}

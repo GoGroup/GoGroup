@@ -1,0 +1,114 @@
+{{define "EachNowShowing.content"}}
+<body>
+    {{$commentlength:= len .Comments}}
+    {{with .MovieDetail}}
+   
+    <div class="embed-responsive embed-responsive-16by9 " style="height:600px">
+        <iframe src="https://www.youtube.com/embed/{{.Trailer}}" class="embed-responsive-item" allowfullscreen></iframe>
+    </div>
+    
+
+    <div class="container">
+       
+        <h2 class="text-dark">{{.Title}} </h2>
+        {{if .GenreList}}
+        {{range .GenreList}}
+        <span class="badge badge-info">{{.Name}}</span>
+        {{end}}
+        {{end}}
+       
+        <p>
+           {{.Overview}}
+
+        </p>
+        
+
+    </div>
+
+
+    
+    <div class="contain">
+
+        <h2 class="text-black-50">{{$commentlength}} Comments</h2>
+        <hr>
+    </div>
+ 
+
+    <div class=" my row ">
+        <div class="col-md-6 col-md-offset-2 col-sm-12">
+            <div class="comment-wrapper">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+
+                    </div>
+                    <div class="panel-body">
+                        <form action="/movie/nowshowing/{{.Id}}" method="POST">
+                        <textarea name="comment" class="form-control" placeholder="write a comment..." rows="3"></textarea>
+                        <br>
+                        <input type="submit" value="Post" class="btn btn-info pull-right">
+                        </form>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <hr>
+    {{end}}
+
+    <ul class="media-list">
+        {{with .Comments}}
+        {{range .}}
+        <li class="media">
+            <a href="#" class="pull-left">
+                <img src="" alt="" class="imgxl rounded-circle p-3 mb-2 bg-info text-white">
+            </a>
+            <div class="media-body">
+                <span class="text-muted pull-right">
+                    <small class="text-muted">30 min ago</small>
+                </span>
+                <strong class="text-success">@{{.UserName}}</strong>
+                <p>
+                    {{.Message}}
+                </p>
+            </div>
+        </li>
+        <hr>
+        {{end}}
+        {{end}}
+        <li class="media">
+            <a href="#" class="pull-left">
+                <img src="" alt="" class="imgxl rounded-circle p-3 mb-2 bg-secondary text-white">
+            </a>
+            <div class="media-body">
+                <span class="text-muted pull-right">
+                    <small class="text-muted">30 min ago</small>
+                </span>
+                <strong class="text-success">@LaurenceCorreil</strong>
+                <p>
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Accusantium nihil rem aliquid nesciunt
+                    veniam, distinctio odio numquam necessitatibus, voluptates, inventore at velit quidem voluptas
+                    facilis consequuntur perferendis sequi illo provident.
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem ratione laborum numquam
+                    consequuntur quaerat possimus officiis adipisci sint necessitatibus. Fugiat aperiam libero
+                    reiciendis delectus quia? Perferendis natus vel vitae officia.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Lorem ipsum dolor <a href="#">#ipsumdolor </a>adipiscing elit.
+                </p>
+            </div>
+        </li>
+
+    </ul>
+</div>
+</body>
+    {{end}}
+
+
+
+
+
+
+
+
+   

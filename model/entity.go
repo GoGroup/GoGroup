@@ -16,6 +16,7 @@ type Movie struct {
 type MovieDetails struct {
 	GenreList  []Genre `json:"genres"`
 	Overview   string  `json:"overview"`
+	Id         int     `json:"id"`
 	Title      string  `json:"original_title"`
 	RunTime    int     `json:"runtime"`
 	PosterPath string  `json:"poster_path"`
@@ -94,8 +95,10 @@ type Session struct {
 }
 type Comment struct {
 	gorm.Model
-	UserID  uint
-	Message string ` json:"message" gorm:"type:varchar(255);not null"`
+	UserID   uint
+	UserName string
+	MovieID  uint
+	Message  string ` json:"message" gorm:"type:varchar(255);not null"`
 }
 type Event struct {
 	gorm.Model
