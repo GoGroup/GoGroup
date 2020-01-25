@@ -98,10 +98,10 @@ type Comment struct {
 }
 
 type Event struct {
-	ID          uint
-	Name        string `gorm:"type:varchar(255);not null"`
-	Description string
-	Location    string
-	Time        string
-	Image       string `gorm:"type:varchar(255)"`
+	ID          uint   `json:"id"  gorm:"primary_key;AUTO_INCREMENT"`
+	Name        string `json:"name" gorm:"type:varchar(255);not null"`
+	Description string `json:"description"`
+	Location    string `json:"location"`
+	Time        string `json:"time"`
+	Image       string `json:"image" gorm:"type:varchar(255)"`
 }

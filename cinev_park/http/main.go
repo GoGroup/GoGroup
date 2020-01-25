@@ -1,7 +1,6 @@
 package main
 
 import (
-	"html/template"
 	"net/http"
 
 	"github.com/GoGroup/Movie-and-events/cinev_park/http/util"
@@ -12,7 +11,6 @@ import (
 	usrvim "github.com/GoGroup/Movie-and-events/hall/repository"
 	urepim "github.com/GoGroup/Movie-and-events/hall/service"
 	"github.com/GoGroup/Movie-and-events/model"
-	"github.com/GoGroup/Movie-and-events/rtoken"
 
 	schrep "github.com/GoGroup/Movie-and-events/schedule/repository"
 	schser "github.com/GoGroup/Movie-and-events/schedule/service"
@@ -20,8 +18,8 @@ import (
 	mvrep "github.com/GoGroup/Movie-and-events/movie/repository"
 	mvser "github.com/GoGroup/Movie-and-events/movie/service"
 
-	usrep "github.com/GoGroup/Movie-and-events/user/repository"
-	usser "github.com/GoGroup/Movie-and-events/user/service"
+	evrep "github.com/GoGroup/Movie-and-events/event/repository"
+	evser "github.com/GoGroup/Movie-and-events/event/service"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -39,21 +37,22 @@ func main() {
 	db.AutoMigrate(&model.Schedule{})
 	db.AutoMigrate(&model.Moviem{})
 	db.AutoMigrate(&model.Session{})
+	db.AutoMigrate(&model.Event{})
 	db.AutoMigrate(&model.Role{})
 	db.AutoMigrate(&model.Role{ID: 1, Name: "USER"})
 	db.AutoMigrate(&model.Role{ID: 2, Name: "ADMIN"})
-	tmpl := template.Must(template.ParseGlob("../view/template/*"))
+	// tmpl := template.Must(template.ParseGlob("../view/template/*"))
 
 	myRouter := httprouter.New()
-	csrfSignKey := []byte(rtoken.GenerateRandomID(32))
-	userRepo := usrep.NewUserGormRepo(db)
-	userService := usser.NewUserService(userRepo)
+	// csrfSignKey := []byte(rtoken.GenerateRandomID(32))
+	// userRepo := usrep.NewUserGormRepo(db)
+	// userService := usser.NewUserService(userRepo)
 
-	sessionRepo := usrep.NewSessionGormRepo(db)
-	sessionService := usser.NewSessionService(sessionRepo)
+	// sessionRepo := usrep.NewSessionGormRepo(db)
+	// sessionService := usser.NewSessionService(sessionRepo)
 
-	roleRepo := usrep.NewRoleGormRepo(db)
-	roleService := usser.NewRoleService(roleRepo)
+	// roleRepo := usrep.NewRoleGormRepo(db)
+	// roleService := usser.NewRoleService(roleRepo)
 
 	scheduleRepo := schrep.NewScheduleGormRepo(db)
 	scheduleService := schser.NewScheduleService(scheduleRepo)
@@ -71,29 +70,33 @@ func main() {
 	Moviesr := mvser.NewMovieService(MovieRepo)
 	MovieHandler := handler.NewMovieHander(Moviesr)
 
-	uh := handler.NewUserHandler(tmpl, userService, sessionService, roleService, csrfSignKey)
+	EventRepo := evrep.NewEventGormRepo(db)
+	Eventsr := evser.NewEventService(EventRepo)
+	EventHandler := handler.NewEventHandler(Eventsr)
 
-	mh := handler.NewMenuHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr)
-	ah := handler.NewAdminHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr)
+	// uh := handler.NewUserHandler(tmpl, userService, sessionService, roleService, csrfSignKey)
+
+	// mh := handler.NewMenuHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr)
+	// ah := handler.NewAdminHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr)
 
 	myRouter.ServeFiles("/assets/*filepath", http.Dir("../view/assets"))
 
-	myRouter.GET("/adminCinemas", ah.AdminCinema)
-	myRouter.GET("/adminCinemas/adminSchedule/:hId", ah.AdminSchedule)
-	myRouter.GET("/adminCinemas/adminSchedule/:hId/delete/:sId", ah.AdminScheduleDelete)
-	myRouter.GET("/adminCinemas/adminSchedule/:hId/new/", ah.NewAdminSchedule)
-	myRouter.POST("/adminCinemas/adminSchedule/:hId/new/", ah.NewAdminSchedulePost)
-	myRouter.GET("/home", mh.Index)
-	myRouter.GET("/movies", mh.Movies)
-	myRouter.GET("/movie/:mId", mh.EachMovieHandler)
-	myRouter.GET("/theaters", mh.Theaters)
-	myRouter.GET("/theater/schedule/:cName/:cId", mh.TheaterSchedule)
+	// myRouter.GET("/adminCinemas", ah.AdminCinema)
+	// myRouter.GET("/adminCinemas/adminSchedule/:hId", ah.AdminSchedule)
+	// myRouter.GET("/adminCinemas/adminSchedule/:hId/delete/:sId", ah.AdminScheduleDelete)
+	// myRouter.GET("/adminCinemas/adminSchedule/:hId/new/", ah.NewAdminSchedule)
+	// myRouter.POST("/adminCinemas/adminSchedule/:hId/new/", ah.NewAdminSchedulePost)
+	// myRouter.GET("/home", mh.Index)
+	// myRouter.GET("/movies", mh.Movies)
+	// myRouter.GET("/movie/:mId", mh.EachMovieHandler)
+	// myRouter.GET("/theaters", mh.Theaters)
+	// myRouter.GET("/theater/schedule/:cName/:cId", mh.TheaterSchedule)
 
-	myRouter.GET("/", uh.Login)
-	myRouter.GET("/login", uh.Login)
-	myRouter.GET("/signup", uh.SignUp)
-	myRouter.POST("/login", uh.Login)
-	myRouter.POST("/signup", uh.SignUp)
+	// myRouter.GET("/", uh.Login)
+	// myRouter.GET("/login", uh.Login)
+	// myRouter.GET("/signup", uh.SignUp)
+	// myRouter.POST("/login", uh.Login)
+	// myRouter.POST("/signup", uh.SignUp)
 
 	myRouter.GET("/api/schedules", sheduleHandler.GetSchedules)
 	myRouter.GET("/api/cinemaschedules/:id/:day", sheduleHandler.GetSchedulesCinemaDay)
@@ -105,10 +108,19 @@ func main() {
 	myRouter.GET("/api/cinemas", CinemaHandler.GetCinemas)
 	myRouter.POST("/api/cinema", CinemaHandler.PostCinema)
 	myRouter.GET("/api/cinema/:id", CinemaHandler.GetSingleCinema)
+
 	myRouter.GET("/api/hallcinema/:id", HallHandler.GetCinemaHalls)
 	myRouter.GET("/api/halls", HallHandler.GetHalls)
 	myRouter.GET("/api/hall/:id", HallHandler.GetSingleHall)
+	myRouter.PUT("/api/hall/:id", HallHandler.PutHall)
+	myRouter.DELETE("/api/hall/:id", HallHandler.DeleteHall)
 	myRouter.POST("/api/hall", HallHandler.PostHall)
+
+	myRouter.GET("/api/events", EventHandler.GetEvents)
+	myRouter.GET("/api/event/:id", EventHandler.GetSingleEvent)
+	myRouter.PUT("/api/event/:id", EventHandler.PutEvent)
+	myRouter.DELETE("/api/event/:id", EventHandler.DeleteEvent)
+	myRouter.POST("/api/event", EventHandler.PostEvent)
 	myRouter.GET("/api/movies", MovieHandler.GetMovies)
 	myRouter.POST("/api/movie", MovieHandler.PostMovie)
 	http.ListenAndServe(":8080", myRouter)
