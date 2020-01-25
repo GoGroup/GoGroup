@@ -128,15 +128,16 @@ func (userHandler *UserHandler) Authorized(handle http.Handler) http.Handler {
 
 func (userHandler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	//If it's requesting the login page return CSFR Signed token with the form
-
+	fmt.Println("here")
+	fmt.Println("dumb")
 	if r.Method == http.MethodGet {
 
 		CSFRToken, err := rtoken.GenerateCSRFToken(userHandler.csrfSignKey)
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		}
-
-		fmt.Println(userHandler.tmpl.ExecuteTemplate(w, "login.html", form.Input{
+		fmt.Println("first")
+		fmt.Println(userHandler.tmpl.ExecuteTemplate(w, "login.layout", form.Input{
 			CSRF: CSFRToken,
 		}))
 		return
@@ -145,16 +146,22 @@ func (userHandler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	if userHandler.isParsableFormPost(w, r) {
 
 		//Validate form data
-		loginForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}}
+		loginForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{},CSRF: r.FormValue(csrfKey)}
+		fmt.Println("1")
 		loginForm.ValidateRequiredFields(emailKey, passwordKey)
+		fmt.Println("2")
 		email := r.FormValue(emailKey)
+		fmt.Println("3")
 		password := r.FormValue(passwordKey)
+		fmt.Println("4")
 		user, errs := userHandler.userService.UserByEmail(email)
-
+		fmt.Println("getting in")
 		///Check form validity and user password
 		if len(errs) > 0 || !hash.ArePasswordsSame(user.Password, password) {
+			fmt.Println("generic exist")
 			loginForm.VErrors.Add("generic", "Your email address or password is incorrect")
-			fmt.Println(userHandler.tmpl.ExecuteTemplate(w, "login.html", loginForm))
+			fmt.Println("generic exist 2")
+			fmt.Println(userHandler.tmpl.ExecuteTemplate(w, "login.layout", loginForm))
 			return
 		}
 
@@ -163,7 +170,7 @@ func (userHandler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		claims := rtoken.NewClaims(newSession.SessionId, newSession.Expires)
 		if len(errs) > 0 {
 			loginForm.VErrors.Add("generic", "Failed to create session")
-			userHandler.tmpl.ExecuteTemplate(w, "login.html", loginForm)
+			userHandler.tmpl.ExecuteTemplate(w, "login.layout", loginForm)
 			return
 		}
 		//Save session Id in cookies
@@ -171,10 +178,10 @@ func (userHandler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 		//Finally open the home page for the user
 		if userHandler.checkAdmin(user.RoleID) {
-			http.Redirect(w, r, "/admin", http.StatusSeeOther)
+			http.Redirect(w, r, "/home", http.StatusSeeOther)
 			return
 		}
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		http.Redirect(w, r, "/home", http.StatusSeeOther)
 	}
 }
 func (uh *UserHandler) checkAdmin(roleID uint) bool {
@@ -200,41 +207,51 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		}
-		userHandler.tmpl.ExecuteTemplate(w, "login.html", form.Input{CSRF: CSFRToken})
+		userHandler.tmpl.ExecuteTemplate(w, "signup.layout", form.Input{CSRF: CSFRToken})
 
 		return
 	}
 	//Only reply to forms that have that are parsable and have valid csfrToken
 	if userHandler.isParsableFormPost(w, r) {
 		///Validate the form data
-		signUpForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}}
+		signUpForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}, CSRF: r.FormValue(csrfKey)}
 		signUpForm.ValidateRequiredFields(usernameKey, emailKey, passwordKey)
 		signUpForm.MatchesPattern(emailKey, form.EmailRX)
 		signUpForm.MinLength(passwordKey, 8)
 		signUpForm.PasswordMatches(passwordKey, confirmPasswordKey)
 
 		if !signUpForm.IsValid() {
-			userHandler.tmpl.ExecuteTemplate(w, "login.html", signUpForm)
+			fmt.Println("last")
+			err := userHandler.tmpl.ExecuteTemplate(w, "signup.layout", signUpForm)
+			if err != nil {
+				fmt.Println("hiiii")
+				fmt.Println(err)
+			}
 			return
 		}
+		fmt.Println("emailexist")
 		if userHandler.userService.EmailExists(r.FormValue(emailKey)) {
+			fmt.Println("secondemailexist")
 			signUpForm.VErrors.Add(emailKey, "This email is already in use!")
-			userHandler.tmpl.ExecuteTemplate(w, "login.html", signUpForm)
+			userHandler.tmpl.ExecuteTemplate(w, "signup.layout", signUpForm)
 			return
 		}
 		//Create password hash
+		fmt.Println("password not match")
 		hashedPassword, err := hash.HashPassword(r.FormValue(passwordKey))
 		if err != nil {
+			fmt.Println("fourwth password not match")
 			signUpForm.VErrors.Add("password", "Password Could not be stored")
-			userHandler.tmpl.ExecuteTemplate(w, "loginlayout.layout", signUpForm)
+			userHandler.tmpl.ExecuteTemplate(w, "signup.layout", signUpForm)
 			return
 		}
 		//Create a user role for the User
 		role, errs := userHandler.roleService.RoleByName("USER")
-
+		fmt.Println("role")
 		if len(errs) > 0 {
+			fmt.Println("second role")
 			signUpForm.VErrors.Add("generic", "Role couldn't be assigned to user")
-			userHandler.tmpl.ExecuteTemplate(w, "login.html", signUpForm)
+			userHandler.tmpl.ExecuteTemplate(w, "signup.layout", signUpForm)
 			return
 		}
 		///Get the data from the form and construct user object
@@ -255,6 +272,11 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 }
 
 func (userHandler *UserHandler) isParsableFormPost(w http.ResponseWriter, r *http.Request) bool {
+	fmt.Println("parse")
+	fmt.Println(r.Method == http.MethodPost)
+	fmt.Println(hash.ParseForm(w, r))
+	fmt.Println(rtoken.IsCSRFValid(r.FormValue(csrfKey), userHandler.csrfSignKey))
+
 	return r.Method == http.MethodPost &&
 		hash.ParseForm(w, r) &&
 		rtoken.IsCSRFValid(r.FormValue(csrfKey), userHandler.csrfSignKey)

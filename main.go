@@ -4,7 +4,7 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/GoGroup/Movie-and-events/http/util"
+	"github.com/GoGroup/Movie-and-events/cinev_park/http/util"
 
 	"github.com/GoGroup/Movie-and-events/cinema/repository"
 	"github.com/GoGroup/Movie-and-events/cinema/service"
@@ -42,7 +42,7 @@ func main() {
 	db.AutoMigrate(&model.Moviem{})
 	db.AutoMigrate(&model.Comment{})
 	db.AutoMigrate(&model.Session{})
-	db.AutoMigrate(&model.Role{})
+	db.AutoMigrate(&model.User{})
 	db.AutoMigrate(&model.Role{ID: 1, Name: "USER"})
 	db.AutoMigrate(&model.Role{ID: 2, Name: "ADMIN"})
 	tmpl := template.Must(template.ParseGlob("view/template/*"))
@@ -91,7 +91,7 @@ func main() {
 	//http.HandleFunc("/adminCinemas/adminSchedule/{hId}/new/", ah.NewAdminSchedule)
 	//http.HandleFunc("/adminCinemas/adminSchedule/{hId}/new/", ah.NewAdminSchedulePost)
 
-	http.HandleFunc("/home", mh.Index)
+	http.Handle("/home", uh.Authenticated(http.HandlerFunc(mh.Index)))
 	http.HandleFunc("/movies", mh.Movies)
 	//http.HandleFunc("/movie/{mId}", mh.EachMovieHandler)
 	http.HandleFunc("/movie/", mh.EachMovieHandler)
@@ -99,7 +99,7 @@ func main() {
 	http.HandleFunc("/theaters", mh.Theaters)
 	//http.HandleFunc("/theater/schedule/{cName}/{cId}", mh.TheaterSchedule)
 	http.HandleFunc("/theater/schedule/", mh.TheaterSchedule)
-	http.HandleFunc("/", uh.Login)
+	//	http.HandleFunc("/", uh.Login)
 	http.Handle("/admin", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminCinema))))
 	http.Handle("/logout", uh.Authenticated(http.HandlerFunc(uh.Logout)))
 	http.HandleFunc("/login", uh.Login)

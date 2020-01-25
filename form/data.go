@@ -35,7 +35,10 @@ func (inVal *Input) MinLength(field string, d int) {
 func (inVal *Input) ValidateRequiredFields(fields ...string) {
 	for _, f := range fields {
 		value := inVal.Values.Get(f)
+		fmt.Println("not")
+		fmt.Println(value)
 		if value == "" {
+			fmt.Println("empty")
 			inVal.VErrors.Add(f, "This field is required field")
 		}
 	}
@@ -56,12 +59,18 @@ func (inVal *Input) MatchesPattern(field string, pattern *regexp.Regexp) {
 func (inVal *Input) PasswordMatches(password string, confPassword string) {
 	pwd := inVal.Values.Get(password)
 	confPwd := inVal.Values.Get(confPassword)
-
+	fmt.Println("first password not match")
+	fmt.Println(pwd)
+	fmt.Println("first password not match")
+	fmt.Println(confPwd)
+	fmt.Println("first password not match")
 	if pwd == "" || confPwd == "" {
+		fmt.Println("third password not match")
 		return
 	}
 
 	if pwd != confPwd {
+		fmt.Println("secondpassword not match")
 		inVal.VErrors.Add(password, "The Password and Confirm Password values did not match")
 		inVal.VErrors.Add(confPassword, "The Password and Confirm Password values did not match")
 	}
