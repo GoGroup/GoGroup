@@ -31,7 +31,7 @@ func (hs *HallService) Hall(id uint) (*model.Hall, []error) {
 }
 
 func (hs *HallService) DeleteHall(id uint) (*model.Hall, []error) {
-	cmnts, errs := hs.hallRepo.Hall(id)
+	cmnts, errs := hs.hallRepo.DeleteHall(id)
 	if len(errs) > 0 {
 		return nil, errs
 	}

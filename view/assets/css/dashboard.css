@@ -7,6 +7,9 @@ body {
     padding:0;
     margin:0;
   }
+  .fix-position{
+    position: fixed;
+  }
   
  .navbar li {
     background: none;
@@ -19,7 +22,7 @@ body {
     color: #fff;
     display: block;
     text-decoration: none;
-    background-color: #ff00ff;
+    background-color: #191919;
     font-size: 20px;
     line-height: 52px;
     text-align: center;
@@ -95,6 +98,7 @@ body {
 }
 .col{
   padding:0px;
+  min-height: 730px;
   margin:0px;
 }
 .col h4{
