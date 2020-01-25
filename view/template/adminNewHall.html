@@ -1,0 +1,56 @@
+{{define "adminNewHall.content"}}
+
+
+
+<div class="col">
+    <h4></h4>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Cinema</a></li>
+        <li class="breadcrumb-item"><a href="#">CinemaName</a></li>
+        <li class="breadcrumb-item active" aria-current="page">New</li>
+      </ol>
+    </nav>
+    <div class="card mb-2" >
+        <div class="container">
+          <div class="card-body">
+<form id="myForm2" method="POST" action="/adminCinemas/adminHalls/new/{{.Cid}}">
+    <div class="md-form mb-5">
+        <i class="fas fa-user prefix grey-text"></i>
+        <input type="text" name="name" id="orangeForm-capacity" class="form-control validate">
+        <label data-error="wrong" data-success="right" for="orangeForm-capacity">Hall Name</label>
+      </div>
+   
+    <div class="md-form mb-5">
+      <i class="fas fa-user prefix grey-text"></i>
+      <input type="text" name="cap" id="orangeForm-capacity" class="form-control validate">
+      <label data-error="wrong" data-success="right" for="orangeForm-capacity">capacity</label>
+    </div>
+
+    <div class="md-form mb-5">
+      <i class="fas fa-user prefix grey-text"></i>
+      <input type="text" name="price" id="orangeForm-VIP-price" class="form-control validate">
+      <label data-error="wrong" data-success="right" for="orangeForm-price">price</label>
+    </div>
+    <div class="md-form mb-5">
+      <i class="fas fa-user prefix grey-text"></i>
+      <input type="text" name="vip" id="orangeForm-price" class="form-control validate">
+      <label data-error="wrong" data-success="right" for="orangeForm-vIP-price">VIP price</label>
+    </div>
+
+    <div class="md-form mb-5">
+      <i class="fas fa-user prefix grey-text"></i>
+      <input name="discount" type="text" id="orangeForm-discount" class="form-control validate">
+      <label data-error="wrong" data-success="right" for="orangeForm-vIP-price">Weekend discount</label>
+    </div>
+<div class="d-flex justify-content-center">
+  <input type="submit" name="add" class="btn  grey darken-3" value="Add">
+</div>
+</form>
+
+
+</div>
+</div>
+</div>
+</main>
+{{end}}

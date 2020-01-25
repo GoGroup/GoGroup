@@ -1,5 +1,5 @@
 {{define "halls.layout"}}
 {{template "admin_header"}}
-{{template "halls.content"}}
+{{template "halls.content" .}}
 {{template "admin_footer"}}
 {{end}}

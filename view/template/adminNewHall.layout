@@ -1,0 +1,6 @@
+
+{{define "adminNewHall.layout"}}
+{{template "admin_header"}}
+{{template "adminNewHall.content" .}}
+{{template "admin_footer"}}
+{{end}}

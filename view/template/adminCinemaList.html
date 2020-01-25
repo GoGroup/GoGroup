@@ -31,8 +31,10 @@
           >
             <h5 class="mb-0">
               {{.CinemaName}}
+              
               <i class="fas fa-angle-down rotate-icon"></i>
             </h5>
+            <a class="grey-text darken-3" href="/adminCinemas/adminHalls/edit/{{.ID}}"><i class="fas fa-edit grey-text darken-3"></i>Edit</a>
           </a>
         </div>
 
@@ -51,7 +53,7 @@
               class="btn colorless btn-primary btn-lg active btn-block"
               role="button"
               aria-pressed="true"
-              >{{.HallName}}</a
+              >{{.HallName}}   </a
             >
             {{end}}
             {{end}}

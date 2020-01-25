@@ -120,18 +120,133 @@ func (m *AdminHandler) AdminScheduleDelete(w http.ResponseWriter, r *http.Reques
 	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminScheduleList.layout", tempo))
 }
 
-func (m *AdminHandler) NewAdminScheduleHandler(w http.ResponseWriter, r *http.Request) {
-	var err error
-	if r.Method == "POST" {
-		m.NewAdminSchedulePost(w, r)
-	} else if r.Method == "GET" {
-		m.NewAdminSchedule(w, r)
+func (m *AdminHandler) AdminDeleteHalls(w http.ResponseWriter, r *http.Request) {
+	var CID uint
+	var HID uint
+	p := strings.Split(r.URL.Path, "/")
+	if len(p) == 1 {
+		fmt.Println("in first if")
+		//return defaultCode, p[0]
+	} else if len(p) > 1 {
+		fmt.Println("..in first if")
+		code, err := strconv.Atoi(p[4])
+		code2, err2 := strconv.Atoi(p[5])
+		fmt.Println(err)
+		fmt.Println(err2)
+		fmt.Println(p)
+		fmt.Println(code)
+		if err == nil {
+			fmt.Println(".....in first if")
+			CID = uint(code)
+			HID = uint(code2)
+		}
+	}
+	h, e := m.hsrv.DeleteHall(HID)
+	if len(e) > 0 {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
+	}
+	fmt.Println("delteed", h)
+
+	fmt.Println("%%%%%%%%%%%%%%%%%")
+	halls, errr := m.hsrv.CinemaHalls(CID)
+	if len(errr) > 0 {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
 	}
 
-	if err != nil {
-		fmt.Println("hi")
-		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+	tempo := struct {
+		Halls []model.Hall
+		Cid   uint
+	}{Halls: halls, Cid: CID}
+
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "halls.layout", tempo))
+
+}
+
+func (m *AdminHandler) AdminHallsNew(w http.ResponseWriter, r *http.Request) {
+	var CID uint
+	fmt.Println("(((((((((((((((((((")
+	p := strings.Split(r.URL.Path, "/")
+	if len(p) == 1 {
+		fmt.Println("in first if")
+		//return defaultCode, p[0]
+	} else if len(p) > 1 {
+		fmt.Println("..in first if")
+		code, err := strconv.Atoi(p[4])
+		fmt.Println(err)
+		fmt.Println(p)
+		fmt.Println(code)
+		if err == nil {
+			fmt.Println(".....in first if")
+			CID = uint(code)
+		}
 	}
+	fmt.Println(r.FormValue("name"))
+	fmt.Println(r.FormValue("cap"))
+	fmt.Println(r.FormValue("price"))
+	fmt.Println(r.FormValue("name"))
+	fmt.Println(CID)
+
+	if r.FormValue("name") != "" && r.FormValue("cap") != "" && r.FormValue("price") != "" && r.FormValue("discount") != "" && r.FormValue("vip") != "" {
+		hn := r.FormValue("name")
+		c, _ := strconv.Atoi(r.FormValue("cap"))
+		pri, _ := strconv.Atoi(r.FormValue("price"))
+		vp, _ := strconv.Atoi(r.FormValue("vip"))
+		wd, _ := strconv.Atoi(r.FormValue("discount"))
+		h := model.Hall{
+			HallName:        hn,
+			Capacity:        uint(c),
+			CinemaID:        CID,
+			Price:           uint(pri),
+			VIPPrice:        uint(vp),
+			WeekendDiscount: uint(wd),
+		}
+		hall, errr := m.hsrv.StoreHall(&h)
+		fmt.Println("In ^^^^^^^^^^^^^^^^^^^")
+		fmt.Println(hall)
+		if len(errr) > 0 {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
+		}
+	}
+
+	tempo := struct{ Cid uint }{Cid: CID}
+
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminNewHall.layout", tempo))
+
+}
+
+func (m *AdminHandler) AdminHalls(w http.ResponseWriter, r *http.Request) {
+	var CID uint
+	p := strings.Split(r.URL.Path, "/")
+	if len(p) == 1 {
+		fmt.Println("in first if")
+		//return defaultCode, p[0]
+	} else if len(p) > 1 {
+		fmt.Println("..in first if")
+		code, err := strconv.Atoi(p[4])
+		fmt.Println(err)
+		fmt.Println(p)
+		fmt.Println(code)
+		if err == nil {
+			fmt.Println(".....in first if")
+			CID = uint(code)
+		}
+	}
+
+	halls, errr := m.hsrv.CinemaHalls(CID)
+	if len(errr) > 0 {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
+	}
+
+	tempo := struct {
+		Halls []model.Hall
+		Cid   uint
+	}{Halls: halls, Cid: CID}
+
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "halls.layout", tempo))
 
 }
 
@@ -193,6 +308,21 @@ func (m *AdminHandler) AdminSchedule(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(tempo)
 
 	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminScheduleList.layout", tempo))
+
+}
+
+func (m *AdminHandler) NewAdminScheduleHandler(w http.ResponseWriter, r *http.Request) {
+	var err error
+	if r.Method == "POST" {
+		m.NewAdminSchedulePost(w, r)
+	} else if r.Method == "GET" {
+		m.NewAdminSchedule(w, r)
+	}
+
+	if err != nil {
+		fmt.Println("hi")
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+	}
 
 }
 

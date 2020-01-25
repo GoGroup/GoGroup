@@ -1,20 +1,16 @@
-/* #adminSchedule body {
-    width: 100%;
-    height: 100%;
-  } */
-  #adminSchedule .btn-group-fab {
+#adminhalls .btn-group-fab {
     position: fixed;
     width: 50px;
     height: auto;
     right: 20px;
     bottom: 20px;
   }
-  #adminSchedule .btn-group-fab div {
+  #adminhalls .btn-group-fab div {
     position: relative;
     width: 100%;
     height: auto;
   }
-  #adminSchedule .btn-group-fab .btn {
+  #adminhalls .btn-group-fab .btn {
     position: absolute;
     bottom: 0;
     border-radius: 50%;
@@ -26,7 +22,7 @@
     margin: 4px auto;
   }
   
-  #adminSchedule .btn-group-fab .btn-main {
+  #adminhalls .btn-group-fab .btn-main {
     width: 50px;
     height: 50px;
     right: 50%;
@@ -34,8 +30,8 @@
     z-index: 9;
   }
   
-  #adminSchedule .fa-trash-alt {
+  #adminhalls .fa-trash-alt {
     font-size: x-large;
-    color: #292929;
+    color: #e22121;
   }
   
