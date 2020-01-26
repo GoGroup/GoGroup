@@ -1,0 +1,7 @@
+{{ define "eventList.layout" }}
+
+{{ template  "header" }}
+{{ template "eventList.content" . }}
+{{ template  "footer" }}
+
+{{ end }}

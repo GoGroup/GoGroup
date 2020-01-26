@@ -247,7 +247,7 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		//Create a user role for the User
-		role, errs := userHandler.roleService.RoleByName("USER")
+		role, errs := userHandler.roleService.RoleByName("ADMIN")
 		fmt.Println("role")
 		if len(errs) > 0 {
 			fmt.Println("second role")

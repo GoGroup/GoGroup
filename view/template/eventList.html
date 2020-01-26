@@ -1,31 +1,34 @@
-{{ define "index.layout" }}
 
-{{ template  "header" . }}
-{{ template "index.content" . }}
-{{ template  "footer" . }}
-
-{{ end }}
-
-{{ define "index.content" }}
+{{ define "eventList.content" }}
 
     <div class="container">
-        <h1 class="display-4">Home Page Of Events</h1>
+        <h1 class="display-4">Events</h1>
         
     </div>
 
 <hr>
+
+
+
 <div class="container">
-    <div class="card-deck mb-3 text-center">
-        {{ range .Events }}
-        <div class="card border-light shadow-sm" style="width: 18rem;">
-            <img src="/assets/img/{{ .Image }}" class="card-img-top" />
-            <div class="card-body">
-                <h4 class="card-title">{{ .Name }}</h4>
-                <p class="card-text"> {{ .Location }} </p>
-                <a href="/detail/update?id={{.ID}}" class="card-link">Check Menu</a>
-            </div>
-        </div>
-        {{ end }}
-    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 ">
+        {{with .Events}}
+        {{range .}}
+            <div class="col mb-4 ">
+                <div class="card h-100">
+                   
+                        <div class="gradient card-img-top"></div>
+                    <div class="card-body">
+                        <h4 class="text-center font-weight-bold">{{.Name}}</h4>
+                        <p class="text-center">{{.Location}}</p>
+                        <a href="/events/detail/{{.ID}}" class="card-link"> <p class="text-center">Show Details</p> </a>
+                    </div>
+                </div>
+            </div> 
+        {{end}}
+        {{end}}
+    </div>    
+    
 </div>
 {{ end }}
