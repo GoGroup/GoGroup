@@ -69,6 +69,7 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 ">
                {{with .Nws}}
                {{range .}}
+               <a class=" " href="/movie/nowshowing/{{.Id}}">
                 <div class="col mb-4">
                     <div class="card h-100">
                         <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img-top" alt="...">
@@ -76,18 +77,11 @@
                             
                                 <p class="text-center font-weight-bold">{{.Title}}</p>
                                 
-                          
-                           
-                          
-                            <!-- <div class="d-inline-block ">
-                                <p class="text-left"><i class="fa fa-thumbs-up" style="font-size:24px;color:gold"></i> 34</p>
-                            </div>
-                            <div class="d-inline-block ">
-                                <p class="text-right"><i class="fa fa-thumbs-down" style=" font-size:23px;color:gold;margin-left: 70px;"></i> 1</p>
-                            </div> -->
+                        
                         </div>
                     </div>
                 </div>
+                </a>
                 {{end}}
                 {{end}}
 
