@@ -18,7 +18,7 @@
             <!-- <h5 class="card-title">Hall 1</h5> -->
             <form>
               <div class="form-group">
-
+                <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
                 <input type="Text" class="form-control card-title" id="HallName" value="{{.HallName}}">
               </div>
 
