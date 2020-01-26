@@ -18,32 +18,48 @@
   <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
     <div class="md-form mb-5">
         <i class="fas fa-user prefix grey-text"></i>
-        <input type="text" name="name" id="orangeForm-capacity" class="form-control validate">
+        <input type="text" name="name" id="orangeForm-capacity" class="form-control validate"  value='{{ .Values.Get "name" }}'>
         <label data-error="wrong" data-success="right" for="orangeForm-capacity">Hall Name</label>
       </div>
+      {{with .VErrors.Get "name" }}
+      <label class="text-danger">{{ . }}</label>
+      {{end}}
    
     <div class="md-form mb-5">
       <i class="fas fa-user prefix grey-text"></i>
-      <input type="text" name="cap" id="orangeForm-capacity" class="form-control validate">
+      <input type="text" name="cap" id="orangeForm-capacity"  class="form-control validate"  value='{{ .Values.Get "cap" }}'>
       <label data-error="wrong" data-success="right" for="orangeForm-capacity">capacity</label>
-    </div>
+      
 
+    </div>
+    {{with .VErrors.Get "cap" }}
+    <label class="text-danger">{{ . }}</label>
+    {{end}}
     <div class="md-form mb-5">
       <i class="fas fa-user prefix grey-text"></i>
-      <input type="text" name="price" id="orangeForm-VIP-price" class="form-control validate">
+      <input type="text" name="price" id="orangeForm-VIP-price" class="form-control validate"  value='{{ .Values.Get "price" }}'>
       <label data-error="wrong" data-success="right" for="orangeForm-price">price</label>
-    </div>
-    <div class="md-form mb-5">
-      <i class="fas fa-user prefix grey-text"></i>
-      <input type="text" name="vip" id="orangeForm-price" class="form-control validate">
-      <label data-error="wrong" data-success="right" for="orangeForm-vIP-price">VIP price</label>
-    </div>
 
+    </div>
+    {{with .VErrors.Get "price" }}
+    <label class="text-danger">{{ . }}</label>
+    {{end}}
     <div class="md-form mb-5">
       <i class="fas fa-user prefix grey-text"></i>
-      <input name="discount" type="text" id="orangeForm-discount" class="form-control validate">
-      <label data-error="wrong" data-success="right" for="orangeForm-vIP-price">Weekend discount</label>
+      <input type="text" name="vip" id="orangeForm-price" class="form-control validate"   value='{{ .Values.Get "vip" }}'>
+      <label data-error="wrong" data-success="right" for="orangeForm-price">VIP price</label>
     </div>
+    {{with .VErrors.Get "vip" }}
+    <label class="text-danger">{{ . }}</label>
+    {{end}}
+    <div class="md-form mb-5">
+      <i class="fas fa-user prefix grey-text"></i>
+      <input name="discount" type="text" id="orangeForm-discount"  class="form-control validate"  value='{{ .Values.Get "discount" }}'>
+      <label data-error="wrong" data-success="right" for="orangeForm-discount">Weekend discount</label>
+    </div>
+    {{with .VErrors.Get "discount" }}
+    <label class="text-danger">{{ . }}</label>
+    {{end}}
 <div class="d-flex justify-content-center">
   <input type="submit" name="add" class="btn  grey darken-3" value="Add">
 </div>

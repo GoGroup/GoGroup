@@ -60,3 +60,7 @@ func (hs *HallService) UpdateHall(hall *model.Hall) (*model.Hall, []error) {
 	}
 	return cmnts, errs
 }
+func (hs *HallService) HallExists(hallName string) bool {
+	exists := hs.hallRepo.HallExists(hallName)
+	return exists
+}

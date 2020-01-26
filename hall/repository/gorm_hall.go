@@ -79,3 +79,11 @@ func (hllRepo *HallGormRepo) StoreHall(hall *model.Hall) (*model.Hall, []error) 
 	}
 	return hll, errs
 }
+func (hllRepo *HallGormRepo) HallExists(hallName string) bool {
+	hall := model.Hall{}
+	errs := hllRepo.conn.Find(&hall, "hall_name=?", hallName).GetErrors()
+	if len(errs) > 0 {
+		return false
+	}
+	return true
+}
