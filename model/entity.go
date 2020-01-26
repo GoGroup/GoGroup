@@ -99,7 +99,11 @@ type Comment struct {
 	MovieID  uint
 	Message  string ` json:"message" gorm:"type:varchar(255);not null"`
 }
-
+type Booking struct {
+	ID      uint `json:"id"  gorm:"primary_key;AUTO_INCREMENT"`
+	UserID  uint ` json:"userid"`
+	MovieID uint ` json:"movieid" `
+}
 type Event struct {
 	ID          uint   `json:"id"  gorm:"primary_key;AUTO_INCREMENT"`
 	Name        string `json:"name" gorm:"type:varchar(255);not null"`
