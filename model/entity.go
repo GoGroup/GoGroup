@@ -54,7 +54,7 @@ type BindedSchedule struct {
 	HallName              string
 	Day                   string
 	StartTime             string
-	Dimension string
+	Dimension             string
 }
 type ScheduleWithMovie struct {
 	Sch       Schedule

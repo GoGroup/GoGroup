@@ -17,7 +17,7 @@ var authorities = authority{
 		roles:   []string{"USER", "ADMIN"},
 		methods: []string{"POST"},
 	},
-	"/adminCinemas": permission{
+	"/admin": permission{
 		roles:   []string{"ADMIN"},
 		methods: []string{"GET", "POST"},
 	},
@@ -25,11 +25,11 @@ var authorities = authority{
 
 // HasPermission checks if a given role has permission to access a given route for a given method
 func HasPermission(path string, role string, method string) bool {
-	if strings.HasPrefix(path, "/adminCinemas") {
-		path = "/adminCinemas"
+	if strings.HasPrefix(path, "/admin") {
+		path = "/admin"
 	}
 	fmt.Println("authorities")
-	permx := authorities["/adminCinemas"]
+	permx := authorities["/admin"]
 	perm := authorities[path]
 	fmt.Println(permx)
 	fmt.Println(perm)

@@ -4,8 +4,6 @@ import (
 	"html/template"
 	"net/http"
 
-	
-
 	"github.com/GoGroup/Movie-and-events/cinema/repository"
 	"github.com/GoGroup/Movie-and-events/cinema/service"
 	"github.com/GoGroup/Movie-and-events/cinev_park/http/handler"
@@ -16,6 +14,9 @@ import (
 
 	cmrep "github.com/GoGroup/Movie-and-events/comment/repository"
 	cmser "github.com/GoGroup/Movie-and-events/comment/service"
+
+	evrep "github.com/GoGroup/Movie-and-events/event/repository"
+	evser "github.com/GoGroup/Movie-and-events/event/service"
 
 	schrep "github.com/GoGroup/Movie-and-events/schedule/repository"
 	schser "github.com/GoGroup/Movie-and-events/schedule/service"
@@ -43,6 +44,7 @@ func main() {
 	db.AutoMigrate(&model.Comment{})
 	db.AutoMigrate(&model.Session{})
 	db.AutoMigrate(&model.User{})
+	db.AutoMigrate(&model.Event{})
 	db.AutoMigrate(&model.Role{ID: 1, Name: "USER"})
 	db.AutoMigrate(&model.Role{ID: 2, Name: "ADMIN"})
 	tmpl := template.Must(template.ParseGlob("view/template/*"))
@@ -63,6 +65,9 @@ func main() {
 	HallRepo := usrvim.NewHallGormRepo(db)
 	Hallsr := urepim.NewHallService(HallRepo)
 
+	EventRepo := evrep.NewEventGormRepo(db)
+	EventSer := evser.NewEventService(EventRepo)
+
 	CommentRepo := cmrep.NewCommentGormRepo(db)
 	CommentSer := cmser.NewCommentService(CommentRepo)
 
@@ -74,20 +79,20 @@ func main() {
 
 	uh := handler.NewUserHandler(tmpl, userService, sessionService, roleService, csrfSignKey)
 
-	mh := handler.NewMenuHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr, CommentSer)
+	mh := handler.NewMenuHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr, CommentSer, EventSer)
 	ah := handler.NewAdminHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr, csrfSignKey)
 
 	fs := http.FileServer(http.Dir("view/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
-	http.Handle("/adminCinemas", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminCinema))))
+	http.Handle("/admin/cinemas", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminCinema))))
 	// http.HandleFunc("/adminCinemas/adminSchedule/{hId}", ah.AdminSchedule)
-	http.Handle("/adminCinemas/adminSchedule/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminSchedule))))
+	http.Handle("/admin/cinemas/schedule/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminSchedule))))
 	//http.HandleFunc("/adminCinemas/adminSchedule/{hId}/delete/{sId}", ah.AdminScheduleDelete)
-	http.Handle("/adminCinemas/adminSchedule/delete/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminScheduleDelete))))
-	http.Handle("/adminCinemas/adminHalls/edit/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminHalls))))
-	http.Handle("/adminCinemas/adminHalls/new/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminHallsNew))))
-	http.Handle("/adminCinemas/adminHalls/delete/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminDeleteHalls))))
-	http.Handle("/adminCinemas/adminSchedule/new/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.NewAdminScheduleHandler))))
+	http.Handle("/admin/cinemas/schedule/delete/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminScheduleDelete))))
+	http.Handle("/admin/cinemas/halls/edit/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminHalls))))
+	http.Handle("/admin/cinemas/halls/new/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminHallsNew))))
+	http.Handle("/admin/cinemas/halls/delete/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminDeleteHalls))))
+	http.Handle("/admin/cinemas/schedule/new/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.NewAdminScheduleHandler))))
 	//http.HandleFunc("/adminCinemas/adminSchedule/{hId}/new/", ah.NewAdminSchedule)
 	//http.HandleFunc("/adminCinemas/adminSchedule/{hId}/new/", ah.NewAdminSchedulePost)
 	http.Handle("/home", uh.Authenticated(http.HandlerFunc(mh.Index)))
@@ -96,6 +101,7 @@ func main() {
 	http.HandleFunc("/movie/", mh.EachMovieHandler)
 	http.HandleFunc("/movie/nowshowing/", mh.EachNowShowing)
 	http.HandleFunc("/theaters", mh.Theaters)
+	http.HandleFunc("/events", mh.EventList)
 	//http.HandleFunc("/theater/schedule/{cName}/{cId}", mh.TheaterSchedule)
 	http.HandleFunc("/theater/schedule/", mh.TheaterSchedule)
 	//	http.HandleFunc("/", uh.Login)

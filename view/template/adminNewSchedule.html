@@ -22,7 +22,7 @@
         
           <div class="md-form form-sm mb-1 d-flex justify-content-center">
 
-            <form class="form-inline my-2 my-lg-0" action="/adminCinemas/adminSchedule/new/{{$temp}}" method="get">
+            <form class="form-inline my-2 my-lg-0" action="/admin/cinemas/schedule/new/{{$temp}}" method="get">
               <input
               class="form-control form-control-sm mr-2"
                 type="search"
@@ -46,7 +46,7 @@
           {{with .M}}
            {{with .MovieList}}
           {{range .}}
-          <a href="/adminCinemas/adminSchedule/new/{{$temp}}/?moviename={{.Title}}&id={{.Id}}">{{.Title}}</a> <br>
+          <a href="/admin/cinemas/schedule/new/{{$temp}}/?moviename={{.Title}}&id={{.Id}}">{{.Title}}</a> <br>
           {{end}}
           {{end}} 
 
@@ -54,7 +54,7 @@
           {{end}} 
 
 
-<form action="/adminCinemas/adminSchedule/new/{{$temp}}" method="post">     
+<form action="/admin/cinemas/schedule/new/{{$temp}}" method="post">     
           <input value="{{.MovieN}}"  name="chosen" type="text" id="chosen" class="form-control form-control-sm" disabled>
           <input value="{{.MovieID}}" style="visibility: hidden;" name="mid" type="text" id="mid" class="form-control form-control-sm" >
 

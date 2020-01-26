@@ -9,6 +9,7 @@ import (
 
 	"github.com/GoGroup/Movie-and-events/comment"
 	"github.com/GoGroup/Movie-and-events/controller"
+	"github.com/GoGroup/Movie-and-events/event"
 	"github.com/GoGroup/Movie-and-events/movie"
 
 	"github.com/GoGroup/Movie-and-events/cinema"
@@ -24,17 +25,29 @@ type MenuHandler struct {
 	ssrv   schedule.ScheduleService
 	msrv   movie.MovieService
 	comsrv comment.CommentService
+	evsrv  event.EventService
 }
 
-func NewMenuHandler(t *template.Template, cs cinema.CinemaService, hs hall.HallService, ss schedule.ScheduleService, ms movie.MovieService, comser comment.CommentService) *MenuHandler {
+func NewMenuHandler(t *template.Template, cs cinema.CinemaService, hs hall.HallService, ss schedule.ScheduleService, ms movie.MovieService, comser comment.CommentService, evs event.EventService) *MenuHandler {
 
-	return &MenuHandler{tmpl: t, csrv: cs, hsrv: hs, ssrv: ss, msrv: ms, comsrv: comser}
+	return &MenuHandler{tmpl: t, csrv: cs, hsrv: hs, ssrv: ss, msrv: ms, comsrv: comser, evsrv: evs}
 
 }
 
 func (m *MenuHandler) Index(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(m.tmpl.ExecuteTemplate(w, "index.layout", nil))
+
+}
+
+func (m *MenuHandler) EventList(w http.ResponseWriter, r *http.Request) {
+	events, errs := m.evsrv.Events()
+	if len(errs) > 0 {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
+	}
+	tempo := struct{ Events []model.Event }{Events: events}
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "eventList.layout", tempo))
 
 }
 func getCode(r *http.Request, defaultCode int) (int, string) {

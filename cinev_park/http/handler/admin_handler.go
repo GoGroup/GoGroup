@@ -57,6 +57,8 @@ func (m *AdminHandler) AdminCinema(w http.ResponseWriter, r *http.Request) {
 	if len(err) > 0 || len(errr) > 0 {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 	}
+
+	fmt.Println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminCinemaList.layout", NewCinemaArray))
 
 }
@@ -71,8 +73,8 @@ func (m *AdminHandler) AdminScheduleDelete(w http.ResponseWriter, r *http.Reques
 		//return defaultCode, p[0]
 	} else if len(p) > 1 {
 		fmt.Println("..in first if")
-		code, err := strconv.Atoi(p[4])
-		code2, err2 := strconv.Atoi(p[5])
+		code, err := strconv.Atoi(p[5])
+		code2, err2 := strconv.Atoi(p[6])
 		fmt.Println(err)
 		fmt.Println(p)
 		fmt.Println(code)
@@ -142,8 +144,8 @@ func (m *AdminHandler) AdminDeleteHalls(w http.ResponseWriter, r *http.Request) 
 		//return defaultCode, p[0]
 	} else if len(p) > 1 {
 		fmt.Println("..in first if")
-		code, err := strconv.Atoi(p[4])
-		code2, err2 := strconv.Atoi(p[5])
+		code, err := strconv.Atoi(p[5])
+		code2, err2 := strconv.Atoi(p[6])
 		fmt.Println(err)
 		fmt.Println(err2)
 		fmt.Println(p)
@@ -185,7 +187,7 @@ func (m *AdminHandler) AdminHallsNew(w http.ResponseWriter, r *http.Request) {
 		//return defaultCode, p[0]
 	} else if len(p) > 1 {
 		fmt.Println("..in first if")
-		code, err := strconv.Atoi(p[4])
+		code, err := strconv.Atoi(p[5])
 		fmt.Println(err)
 		fmt.Println(p)
 		fmt.Println(code)
@@ -269,7 +271,7 @@ func (m *AdminHandler) AdminHalls(w http.ResponseWriter, r *http.Request) {
 		//return defaultCode, p[0]
 	} else if len(p) > 1 {
 		fmt.Println("..in first if")
-		code, err := strconv.Atoi(p[4])
+		code, err := strconv.Atoi(p[5])
 		fmt.Println(err)
 		fmt.Println(p)
 		fmt.Println(code)
@@ -303,7 +305,7 @@ func (m *AdminHandler) AdminSchedule(w http.ResponseWriter, r *http.Request) {
 		//return defaultCode, p[0]
 	} else if len(p) > 1 {
 		fmt.Println("..in first if")
-		code, err := strconv.Atoi(p[3])
+		code, err := strconv.Atoi(p[4])
 		fmt.Println(err)
 		fmt.Println(p)
 		fmt.Println(code)
@@ -381,7 +383,7 @@ func (m *AdminHandler) NewAdminSchedule(w http.ResponseWriter, r *http.Request) 
 		//return defaultCode, p[0]
 	} else if len(p) > 1 {
 		fmt.Println("..in first if")
-		code, err := strconv.Atoi(p[4])
+		code, err := strconv.Atoi(p[5])
 		fmt.Println(err)
 		fmt.Println(p)
 		fmt.Println(code)
@@ -440,7 +442,7 @@ func (m *AdminHandler) NewAdminSchedulePost(w http.ResponseWriter, r *http.Reque
 		//return defaultCode, p[0]
 	} else if len(p) > 1 {
 		fmt.Println("..in first if")
-		code, err := strconv.Atoi(p[4])
+		code, err := strconv.Atoi(p[5])
 		fmt.Println(err)
 		fmt.Println(p)
 		fmt.Println(code)
