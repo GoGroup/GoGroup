@@ -15,7 +15,6 @@
       <form method="POST" action="/admin/events/update" enctype="multipart/form-data">
         <input type="hidden" name="_csrf" value="{{ .CSRF }}" />
         <input type="hidden" name="eveid" value='{{ .Values.Get "eveid" }}' />
-        
         <div class="form-group row">
           <label for="evename" class="col-sm-2 col-form-label">Event Name</label>
           {{with .VErrors.Get "evename"}}
