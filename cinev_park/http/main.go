@@ -21,6 +21,8 @@ import (
 	evrep "github.com/GoGroup/Movie-and-events/event/repository"
 	evser "github.com/GoGroup/Movie-and-events/event/service"
 
+	bkrep "github.com/GoGroup/Movie-and-events/booking/repository"
+	bkser "github.com/GoGroup/Movie-and-events/booking/service"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/julienschmidt/httprouter"
@@ -34,6 +36,7 @@ func main() {
 	defer db.Close()
 	db.AutoMigrate(&model.Hall{})
 	db.AutoMigrate(&model.Cinema{})
+	db.AutoMigrate(&model.Booking{})
 	db.AutoMigrate(&model.Schedule{})
 	db.AutoMigrate(&model.Moviem{})
 	db.AutoMigrate(&model.Session{})
@@ -74,6 +77,9 @@ func main() {
 	Eventsr := evser.NewEventService(EventRepo)
 	EventHandler := handler.NewEventHandler(Eventsr)
 
+	BookRepo := bkrep.NewBookingGormRepo(db)
+	Booksr := bkser.NewBookingService(BookRepo)
+	BookHandler := handler.NewBookingHandler(Booksr)
 	// uh := handler.NewUserHandler(tmpl, userService, sessionService, roleService, csrfSignKey)
 
 	// mh := handler.NewMenuHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr)
@@ -123,6 +129,10 @@ func main() {
 	myRouter.POST("/api/event", EventHandler.PostEvent)
 	myRouter.GET("/api/movies", MovieHandler.GetMovies)
 	myRouter.POST("/api/movie", MovieHandler.PostMovie)
+
+	myRouter.POST("/api/booking", BookHandler.PostBooking)
+	myRouter.GET("/api/bookings/:id", BookHandler.GetBookings)
+
 	http.ListenAndServe(":8080", myRouter)
 
 }

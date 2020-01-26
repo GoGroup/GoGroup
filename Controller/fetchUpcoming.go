@@ -48,7 +48,10 @@ func GetUpcomingMovies() (*model.UpcomingMovies, error, error) {
 	if err != nil {
 		panic(err.Error())
 	}
-
+	errr := ioutil.WriteFile("WriteFile.json", body, 0644)
+	if errr != nil {
+		fmt.Println("something went wrong")
+	}
 	var upcoming = new(model.UpcomingMovies)
 	err2 := json.Unmarshal([]byte(body), &upcoming)
 	if err2 != nil {
