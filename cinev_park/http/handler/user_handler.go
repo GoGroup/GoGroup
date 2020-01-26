@@ -88,7 +88,7 @@ func (userHandler *UserHandler) IsLoggedIn(r *http.Request) *model.Session {
 	if sessionId == "" {
 		return nil
 	}
-
+	fmt.Println("is logged in")
 	activeSession, errs := userHandler.sessionService.Session(sessionId)
 	if len(errs) > 0 {
 		return nil
@@ -108,20 +108,21 @@ func (userHandler *UserHandler) Authorized(handle http.Handler) http.Handler {
 		}
 		///Get the role of the user
 		role, errs := userHandler.roleService.Role(user.RoleID)
-
+		fmt.Println(role)
+		fmt.Println(permission.HasPermission(r.URL.Path, role.Name, r.Method))
 		//Check if the user role is authorized to access the specific path and method requested
-		if len(errs) > 0 || permission.HasPermission(role.Name, r.URL.Path, r.Method) {
+		if len(errs) > 0 || !permission.HasPermission(r.URL.Path,role.Name,r.Method) {
 			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
 		}
 
 		//Check the validity of signed token inside the form if the form is post
-		if r.Method == http.MethodPost {
-			if rtoken.IsCSRFValid(r.FormValue(csrfKey), userHandler.csrfSignKey) {
-				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-				return
-			}
-		}
+		// if r.Method == http.MethodPost {
+		// 	if rtoken.IsCSRFValid(r.FormValue(csrfKey), userHandler.csrfSignKey) {
+		// 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		// 		return
+		// 	}
+		// }
 		handle.ServeHTTP(w, r)
 	})
 }
@@ -146,7 +147,7 @@ func (userHandler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	if userHandler.isParsableFormPost(w, r) {
 
 		//Validate form data
-		loginForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{},CSRF: r.FormValue(csrfKey)}
+		loginForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}, CSRF: r.FormValue(csrfKey)}
 		fmt.Println("1")
 		loginForm.ValidateRequiredFields(emailKey, passwordKey)
 		fmt.Println("2")

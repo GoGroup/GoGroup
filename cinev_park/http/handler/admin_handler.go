@@ -7,6 +7,11 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/GoGroup/Movie-and-events/form"
+
+	"github.com/GoGroup/Movie-and-events/hash"
+	"github.com/GoGroup/Movie-and-events/rtoken"
+
 	"github.com/GoGroup/Movie-and-events/cinema"
 	"github.com/GoGroup/Movie-and-events/controller"
 	"github.com/GoGroup/Movie-and-events/hall"
@@ -16,16 +21,24 @@ import (
 )
 
 type AdminHandler struct {
-	tmpl *template.Template
-	csrv cinema.CinemaService
-	hsrv hall.HallService
-	ssrv schedule.ScheduleService
-	msrv movie.MovieService
+	tmpl        *template.Template
+	csrv        cinema.CinemaService
+	hsrv        hall.HallService
+	ssrv        schedule.ScheduleService
+	msrv        movie.MovieService
+	csrfSignKey []byte
 }
 
-func NewAdminHandler(t *template.Template, cs cinema.CinemaService, hs hall.HallService, ss schedule.ScheduleService, ms movie.MovieService) *AdminHandler {
+const nameKey = "name"
+const capKey = "cap"
+const priceKey = "price"
+const discountkey = "discount"
+const vipKey = "vip"
+const csrfHKey = "_csrf"
 
-	return &AdminHandler{tmpl: t, csrv: cs, hsrv: hs, ssrv: ss, msrv: ms}
+func NewAdminHandler(t *template.Template, cs cinema.CinemaService, hs hall.HallService, ss schedule.ScheduleService, ms movie.MovieService, csKey []byte) *AdminHandler {
+
+	return &AdminHandler{tmpl: t, csrv: cs, hsrv: hs, ssrv: ss, msrv: ms, csrfSignKey: csKey}
 
 }
 
@@ -166,7 +179,6 @@ func (m *AdminHandler) AdminDeleteHalls(w http.ResponseWriter, r *http.Request) 
 
 func (m *AdminHandler) AdminHallsNew(w http.ResponseWriter, r *http.Request) {
 	var CID uint
-	fmt.Println("(((((((((((((((((((")
 	p := strings.Split(r.URL.Path, "/")
 	if len(p) == 1 {
 		fmt.Println("in first if")
@@ -182,18 +194,51 @@ func (m *AdminHandler) AdminHallsNew(w http.ResponseWriter, r *http.Request) {
 			CID = uint(code)
 		}
 	}
-	fmt.Println(r.FormValue("name"))
-	fmt.Println(r.FormValue("cap"))
-	fmt.Println(r.FormValue("price"))
-	fmt.Println(r.FormValue("name"))
-	fmt.Println(CID)
-
-	if r.FormValue("name") != "" && r.FormValue("cap") != "" && r.FormValue("price") != "" && r.FormValue("discount") != "" && r.FormValue("vip") != "" {
-		hn := r.FormValue("name")
-		c, _ := strconv.Atoi(r.FormValue("cap"))
-		pri, _ := strconv.Atoi(r.FormValue("price"))
-		vp, _ := strconv.Atoi(r.FormValue("vip"))
-		wd, _ := strconv.Atoi(r.FormValue("discount"))
+	if r.Method == http.MethodGet {
+		CSFRToken, err := rtoken.GenerateCSRFToken(m.csrfSignKey)
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		fmt.Println(m.tmpl.ExecuteTemplate(w, "adminNewHall.layout", form.Input{
+			CSRF: CSFRToken, Cid: CID}))
+		return
+	}
+	if m.isParsableFormPost(w, r) {
+		///Validate the form data
+		HallNewForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}, CSRF: r.FormValue(csrfKey), Cid: CID}
+		fmt.Println(r.FormValue("name"))
+		fmt.Println(r.FormValue("cap"))
+		fmt.Println(r.FormValue("price"))
+		fmt.Println(r.FormValue("name"))
+		fmt.Println(CID)
+		HallNewForm.ValidateRequiredFields(nameKey, capKey, priceKey, discountkey, vipKey)
+		HallNewForm.ValidateFieldsInteger(capKey, priceKey, discountkey, vipKey)
+		HallNewForm.ValidateFieldsRange(capKey, priceKey, discountkey, vipKey)
+		HallNewForm.ValidatediscountRange(discountkey)
+		if !HallNewForm.IsValid() {
+			fmt.Println("last")
+			err := m.tmpl.ExecuteTemplate(w, "adminNewHall.layout", HallNewForm)
+			if err != nil {
+				fmt.Println("hiiii")
+				fmt.Println(err)
+			}
+			return
+		}
+		if m.hsrv.HallExists(r.FormValue(nameKey)) {
+			fmt.Println("secondemailexist")
+			HallNewForm.VErrors.Add(nameKey, "This HallName is already in use!")
+			err := m.tmpl.ExecuteTemplate(w, "adminNewHall.layout", HallNewForm)
+			if err != nil {
+				fmt.Println("hiiii")
+				fmt.Println(err)
+			}
+			return
+		}
+		hn := r.FormValue(nameKey)
+		c, _ := strconv.Atoi(r.FormValue(capKey))
+		pri, _ := strconv.Atoi(r.FormValue(priceKey))
+		vp, _ := strconv.Atoi(r.FormValue(vipKey))
+		wd, _ := strconv.Atoi(r.FormValue(discountkey))
 		h := model.Hall{
 			HallName:        hn,
 			Capacity:        uint(c),
@@ -209,14 +254,13 @@ func (m *AdminHandler) AdminHallsNew(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 
 		}
+
+		// tempo := struct{ Cid uint }{Cid: CID}
+
+		fmt.Println(m.tmpl.ExecuteTemplate(w, "adminNewHall.layout", HallNewForm))
+
 	}
-
-	tempo := struct{ Cid uint }{Cid: CID}
-
-	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminNewHall.layout", tempo))
-
 }
-
 func (m *AdminHandler) AdminHalls(w http.ResponseWriter, r *http.Request) {
 	var CID uint
 	p := strings.Split(r.URL.Path, "/")
@@ -443,4 +487,15 @@ func (m *AdminHandler) NewAdminSchedulePost(w http.ResponseWriter, r *http.Reque
 
 	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminNewSchedule.layout", tempo))
 
+}
+
+func (m *AdminHandler) isParsableFormPost(w http.ResponseWriter, r *http.Request) bool {
+	fmt.Println("parse")
+	fmt.Println(r.Method == http.MethodPost)
+	fmt.Println(hash.ParseForm(w, r))
+	fmt.Println(rtoken.IsCSRFValid(r.FormValue(csrfKey), m.csrfSignKey))
+
+	return r.Method == http.MethodPost &&
+		hash.ParseForm(w, r) &&
+		rtoken.IsCSRFValid(r.FormValue(csrfKey), m.csrfSignKey)
 }

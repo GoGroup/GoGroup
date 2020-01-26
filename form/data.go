@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/url"
 	"regexp"
+	"strconv"
 	"unicode/utf8"
 )
 
@@ -18,6 +19,7 @@ type Input struct {
 	Values  url.Values
 	VErrors ValidationErrors
 	CSRF    string
+	Cid     uint
 }
 
 // MinLength checks if a given minium length is satisfied
@@ -41,6 +43,47 @@ func (inVal *Input) ValidateRequiredFields(fields ...string) {
 			fmt.Println("empty")
 			inVal.VErrors.Add(f, "This field is required field")
 		}
+	}
+}
+
+// checks if value is number
+func (inVal *Input) ValidateFieldsInteger(fields ...string) {
+	for _, f := range fields {
+		value := inVal.Values.Get(f)
+		fmt.Println("not")
+		_, err := strconv.Atoi(value)
+		if err != nil {
+			fmt.Println("empty")
+			inVal.VErrors.Add(f, "This field must be a number")
+		}
+	}
+}
+
+// checks if negative
+func (inVal *Input) ValidateFieldsRange(fields ...string) {
+	for _, f := range fields {
+		value := inVal.Values.Get(f)
+		fmt.Println("not")
+		val, err := strconv.Atoi(value)
+		if err == nil && val < 0 {
+
+			fmt.Println("empty")
+			inVal.VErrors.Add(f, "This field must be positive number")
+		}
+	}
+}
+
+//////discount range0 to 100
+func (inVal *Input) ValidatediscountRange(field string) {
+
+	value := inVal.Values.Get(field)
+	fmt.Println("not")
+	val, err := strconv.Atoi(value)
+	if err == nil && val > 100 {
+
+		fmt.Println("empty")
+		inVal.VErrors.Add(field, "This field must be less than 100")
+
 	}
 }
 
