@@ -194,7 +194,7 @@ func (m *MenuHandler) TheaterScheduleBook(w http.ResponseWriter, r *http.Request
 
 	} else if len(p) > 1 {
 
-		code, err := strconv.Atoi(p[4])
+		code, err := strconv.Atoi(p[5])
 		fmt.Println(err)
 		fmt.Println(p)
 		fmt.Println(code)
@@ -212,20 +212,29 @@ func (m *MenuHandler) TheaterScheduleBook(w http.ResponseWriter, r *http.Request
 	} else {
 
 	}
+	Sidint, _ := strconv.Atoi(SId)
 
 	fmt.Println(r.FormValue("seat"))
-	a, _ := strconv.Atoi(r.FormValue("seat"))
+	givenPrice, _ := strconv.Atoi(r.FormValue("seat"))
 	activeSession := r.Context().Value(ctxUserSessionKey).(*model.Session)
 	user, errs := m.usrv.User(activeSession.UUID)
 	fmt.Println(user)
 	fmt.Println(errs)
+	schdl, _ := m.ssrv.Schedule(uint(Sidint))
 
 	if r.FormValue("seat") != "" {
-		if a > int(user.Amount) {
+		if givenPrice >= int(user.Amount) {
 			flash.SetFlash(w, "error", []byte("You dont have enough money in your account"))
 
 		} else {
 
+			b := model.Booking{
+				UserID:     user.ID,
+				ScheduleID: uint(Sidint),
+			}
+			m.bsrv.StoreBooking(&b)
+			m.ssrv.UpdateSchedulesBooked(schdl, 1)
+			m.usrv.UpdateUserAmount(user, user.Amount-uint(givenPrice))
 			flash.SetFlash(w, "success", []byte("You Have successfully booked"))
 
 		}
