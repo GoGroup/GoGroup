@@ -1,7 +1,30 @@
 {{define "scheduleDisplay.content"}}
 
 <div id="schedule">
-    <h1 class="m-5"> {{.CinemaName}}</h1>
+{{if .Err}}
+<div class="alert mt-3 alert-danger">
+   
+  {{.Err}}
+
+
+</div>
+
+{{end}}
+{{if .Succ}}
+<div class="alert mt-3 alert-success">
+   
+  {{.Succ}}
+
+
+</div>
+
+{{end}}
+   
+   
+    {{$id:=.CinemaID}}
+    {{with .HallS}}
+    {{$name:=.CinemaName}}
+    <h1 class="mt-3 ml-5 mb-5"> {{.CinemaName}}</h1>
 
     <ul class="nav nav-tabs mb-5 mt-1 nav-fill" id="myTab" role="tablist">
         <li class="nav-item">
@@ -39,6 +62,12 @@
               {{with .All}}
                 {{range .}}
                 {{if eq .Day "Monday"}}
+              
+             
+
+
+
+
                 <div class="card mb-3" style="max-width: 1240px;">
                   <div class="row no-gutters">
                     <div class="col-md-2">
@@ -47,18 +76,61 @@
                     <div class="col-md-10">
                       <div class="card-body">
                         <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">{{.Dimension}}</span></h5> 
-                        <p class="card-text">Starts at: <span>{{.StartTime}}</span> </p>
-
-                        <p class="card-text">Running time: <span>{{.Runtime}}</span> </p>
-                        <p class="card-text">{{.HallName}}<span class="badge badge-success">Available</span></p> <br>
+                        <p class="card-text font-weight-light">Starts at: <span>{{.StartTime}}</span> </p>
+              
+                        <p class="card-text font-weight-light">Running time: <span>{{.Runtime}}</span> </p>
+                        <p class="card-text font-weight-light">{{.HallName}}  <span class="badge badge-success">Available  <span class="badge badge-light">{{.Available}}</span></span></p> <br>
+                        
+              
+              
+              
                         <div class="row">
                             <div class="col-md-6"></div>
-                            <div class="col-md-6 text-right"> <button type="button" class="btn btn-light justify-content-end">Book now!</button></div>
+                            <div class="col-md-6 text-right"> <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-light justify-content-end">Book now!</button></div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">Book</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+              
+                        <form action="/theater/schedule/book/{{$name}}/{{$id}}/{{.ScheduleID}}" method="post">
+              
+              
+                        <div class="custom-control custom-radio">
+                          <input type="radio" id="normal" name="seat" value="{{.Price}}" class="custom-control-input" checked >
+                          <label class="custom-control-label" for="normal">Normal-{{.Price}}</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                          <input type="radio" id="vip" name="seat" value="{{.VIPPrice}}"class="custom-control-input">
+                          <label class="custom-control-label" for="vip">VIP-{{.VIPPrice}}</label>
+                        </div>
+              
+                      
+              
+              
+                      </div>
+                      <div class="modal-footer">
+                        <input type="submit" value="Submit" class="btn btn-primary">
+                      </form>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              
                 {{end}}
                 {{end}}
                 {{end}}
@@ -90,14 +162,56 @@
                   <div class="col-md-10">
                     <div class="card-body">
                       <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">{{.Dimension}}</span></h5> 
-                      <p class="card-text">Starts at: <span>{{.StartTime}}</span> </p>
+                      <p class="card-text font-weight-light">Starts at: <span>{{.StartTime}}</span> </p>
 
-                      <p class="card-text">Running time: <span>{{.Runtime}}</span> </p>
-                      <p class="card-text">{{.HallName}}<span class="badge badge-success">Available</span></p> <br>
+                      <p class="card-text font-weight-light">Running time: <span>{{.Runtime}}</span> </p>
+                      <p class="card-text font-weight-light">{{.HallName}}  <span class="badge badge-success">Available  <span class="badge badge-light">{{.Available}}</span></span></p> <br>
+                      
+
+
+
                       <div class="row">
                           <div class="col-md-6"></div>
-                          <div class="col-md-6 text-right"> <button type="button" class="btn btn-light justify-content-end">Book now!</button></div>
+                          <div class="col-md-6 text-right"> <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-light justify-content-end">Book now!</button></div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Modal -->
+              <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalCenterTitle">Book</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+
+                      <form action="/theater/schedule/book/{{$name}}/{{$id}}/{{.ScheduleID}}" method="post">
+
+
+                      <div class="custom-control custom-radio">
+                        <input type="radio" id="normal" name="seat" value="{{.Price}}" class="custom-control-input" checked >
+                        <label class="custom-control-label" for="normal">Normal-{{.Price}}</label>
+                      </div>
+                      <div class="custom-control custom-radio">
+                        <input type="radio" id="vip" name="seat" value="{{.VIPPrice}}"class="custom-control-input">
+                        <label class="custom-control-label" for="vip">VIP-{{.VIPPrice}}</label>
+                      </div>
+
+                    
+
+    
+                    </div>
+                    <div class="modal-footer">
+                      <input type="submit" value="Submit" class="btn btn-primary">
+                    </form>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      
                     </div>
                   </div>
                 </div>
@@ -120,26 +234,73 @@
                 {{with .All}}
                 {{range .}}
                 {{if eq .Day "Wednsday"}}
-                <div class="card mb-3" style="max-width: 1240px;">
-                  <div class="row no-gutters">
-                    <div class="col-md-2">
-                      <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
-                    </div>
-                    <div class="col-md-10">
-                      <div class="card-body">
-                        <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">{{.Dimension}}</span></h5> 
-                        <p class="card-text">Starts at: <span>{{.StartTime}}</span> </p>
+               
 
-                        <p class="card-text">Running time: <span>{{.Runtime}}</span> </p>
-                        <p class="card-text">{{.HallName}}<span class="badge badge-success">Available</span></p> <br>
-                        <div class="row">
-                            <div class="col-md-6"></div>
-                            <div class="col-md-6 text-right"> <button type="button" class="btn btn-light justify-content-end">Book now!</button></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
+
+<div class="card mb-3" style="max-width: 1240px;">
+  <div class="row no-gutters">
+    <div class="col-md-2">
+      <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
+    </div>
+    <div class="col-md-10">
+      <div class="card-body">
+        <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">{{.Dimension}}</span></h5> 
+        <p class="card-text font-weight-light">Starts at: <span>{{.StartTime}}</span> </p>
+
+        <p class="card-text font-weight-light">Running time: <span>{{.Runtime}}</span> </p>
+        <p class="card-text font-weight-light">{{.HallName}}  <span class="badge badge-success">Available  <span class="badge badge-light">{{.Available}}</span></span></p> <br>
+        
+
+
+
+        <div class="row">
+            <div class="col-md-6"></div>
+            <div class="col-md-6 text-right"> <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-light justify-content-end">Book now!</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Book</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form action="/theater/schedule/book/{{$name}}/{{$id}}/{{.ScheduleID}}" method="post">
+
+
+        <div class="custom-control custom-radio">
+          <input type="radio" id="normal" name="seat" value="{{.Price}}" class="custom-control-input" checked >
+          <label class="custom-control-label" for="normal">Normal-{{.Price}}</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input type="radio" id="vip" name="seat" value="{{.VIPPrice}}"class="custom-control-input">
+          <label class="custom-control-label" for="vip">VIP-{{.VIPPrice}}</label>
+        </div>
+
+      
+
+
+      </div>
+      <div class="modal-footer">
+        <input type="submit" value="Submit" class="btn btn-primary">
+      </form>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
                 {{end}}
                 {{end}}
                 {{end}}
@@ -159,26 +320,73 @@
                   {{with .All}}
                   {{range .}}
                   {{if eq .Day "Thursday"}}
-                  <div class="card mb-3" style="max-width: 1240px;">
-                    <div class="row no-gutters">
-                      <div class="col-md-2">
-                        <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
-                      </div>
-                      <div class="col-md-10">
-                        <div class="card-body">
-                          <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">{{.Dimension}}</span></h5> 
-                          <p class="card-text">Starts at: <span>{{.StartTime}}</span> </p>
-  
-                          <p class="card-text">Running time: <span>{{.Runtime}}</span> </p>
-                          <p class="card-text">{{.HallName}}<span class="badge badge-success">Available</span></p> <br>
-                          <div class="row">
-                              <div class="col-md-6"></div>
-                              <div class="col-md-6 text-right"> <button type="button" class="btn btn-light justify-content-end">Book now!</button></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+         
+
+
+
+<div class="card mb-3" style="max-width: 1240px;">
+  <div class="row no-gutters">
+    <div class="col-md-2">
+      <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
+    </div>
+    <div class="col-md-10">
+      <div class="card-body">
+        <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">{{.Dimension}}</span></h5> 
+        <p class="card-text font-weight-light">Starts at: <span>{{.StartTime}}</span> </p>
+
+        <p class="card-text font-weight-light">Running time: <span>{{.Runtime}}</span> </p>
+        <p class="card-text font-weight-light">{{.HallName}}  <span class="badge badge-success">Available  <span class="badge badge-light">{{.Available}}</span></span></p> <br>
+        
+
+
+
+        <div class="row">
+            <div class="col-md-6"></div>
+            <div class="col-md-6 text-right"> <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-light justify-content-end">Book now!</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Book</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form action="/theater/schedule/book/{{$name}}/{{$id}}/{{.ScheduleID}}" method="post">
+
+
+        <div class="custom-control custom-radio">
+          <input type="radio" id="normal" name="seat" value="{{.Price}}" class="custom-control-input" checked >
+          <label class="custom-control-label" for="normal">Normal-{{.Price}}</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input type="radio" id="vip" name="seat" value="{{.VIPPrice}}"class="custom-control-input">
+          <label class="custom-control-label" for="vip">VIP-{{.VIPPrice}}</label>
+        </div>
+
+      
+
+
+      </div>
+      <div class="modal-footer">
+        <input type="submit" value="Submit" class="btn btn-primary">
+      </form>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
                   {{end}}
                   {{end}}
                   {{end}}
@@ -197,26 +405,73 @@
                     {{with .All}}
                     {{range .}}
                     {{if eq .Day "Friday"}}
-                    <div class="card mb-3" style="max-width: 1240px;">
-                      <div class="row no-gutters">
-                        <div class="col-md-2">
-                          <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
-                        </div>
-                        <div class="col-md-10">
-                          <div class="card-body">
-                            <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">{{.Dimension}}</span></h5> 
-                            <p class="card-text">Starts at: <span>{{.StartTime}}</span> </p>
-    
-                            <p class="card-text">Running time: <span>{{.Runtime}}</span> </p>
-                            <p class="card-text">{{.HallName}}<span class="badge badge-success">Available</span></p> <br>
-                            <div class="row">
-                                <div class="col-md-6"></div>
-                                <div class="col-md-6 text-right"> <button type="button" class="btn btn-light justify-content-end">Book now!</button></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                
+
+
+
+<div class="card mb-3" style="max-width: 1240px;">
+  <div class="row no-gutters">
+    <div class="col-md-2">
+      <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
+    </div>
+    <div class="col-md-10">
+      <div class="card-body">
+        <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">{{.Dimension}}</span></h5> 
+        <p class="card-text font-weight-light">Starts at: <span>{{.StartTime}}</span> </p>
+
+        <p class="card-text font-weight-light">Running time: <span>{{.Runtime}}</span> </p>
+        <p class="card-text font-weight-light">{{.HallName}}  <span class="badge badge-success">Available  <span class="badge badge-light">{{.Available}}</span></span></p> <br>
+        
+
+
+
+        <div class="row">
+            <div class="col-md-6"></div>
+            <div class="col-md-6 text-right"> <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-light justify-content-end">Book now!</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Book</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form action="/theater/schedule/book/{{$name}}/{{$id}}/{{.ScheduleID}}" method="post">
+
+
+        <div class="custom-control custom-radio">
+          <input type="radio" id="normal" name="seat" value="{{.Price}}" class="custom-control-input" checked >
+          <label class="custom-control-label" for="normal">Normal-{{.Price}}</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input type="radio" id="vip" name="seat" value="{{.VIPPrice}}"class="custom-control-input">
+          <label class="custom-control-label" for="vip">VIP-{{.VIPPrice}}</label>
+        </div>
+
+      
+
+
+      </div>
+      <div class="modal-footer">
+        <input type="submit" value="Submit" class="btn btn-primary">
+      </form>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
                     {{end}}
                     {{end}}
                     {{end}}
@@ -235,26 +490,73 @@
                       {{with .All}}
                       {{range .}}
                       {{if eq .Day "Saturday"}}
-                      <div class="card mb-3" style="max-width: 1240px;">
-                        <div class="row no-gutters">
-                          <div class="col-md-2">
-                            <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
-                          </div>
-                          <div class="col-md-10">
-                            <div class="card-body">
-                              <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">{{.Dimension}}</span></h5> 
-                              <p class="card-text">Starts at: <span>{{.StartTime}}</span> </p>
+            
+
+
+
+<div class="card mb-3" style="max-width: 1240px;">
+  <div class="row no-gutters">
+    <div class="col-md-2">
+      <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
+    </div>
+    <div class="col-md-10">
+      <div class="card-body">
+        <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">{{.Dimension}}</span></h5> 
+        <p class="card-text font-weight-light">Starts at: <span>{{.StartTime}}</span> </p>
+
+        <p class="card-text font-weight-light">Running time: <span>{{.Runtime}}</span> </p>
+        <p class="card-text font-weight-light">{{.HallName}}  <span class="badge badge-success">Available  <span class="badge badge-light">{{.Available}}</span></span></p> <br>
+        
+
+
+
+        <div class="row">
+            <div class="col-md-6"></div>
+            <div class="col-md-6 text-right"> <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-light justify-content-end">Book now!</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Book</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form action="/theater/schedule/book/{{$name}}/{{$id}}/{{.ScheduleID}}" method="post">
+
+
+        <div class="custom-control custom-radio">
+          <input type="radio" id="normal" name="seat" value="{{.Price}}" class="custom-control-input" checked >
+          <label class="custom-control-label" for="normal">Normal-{{.Price}}</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input type="radio" id="vip" name="seat" value="{{.VIPPrice}}"class="custom-control-input">
+          <label class="custom-control-label" for="vip">VIP-{{.VIPPrice}}</label>
+        </div>
+
       
-                              <p class="card-text">Running time: <span>{{.Runtime}}</span> </p>
-                              <p class="card-text">{{.HallName}}<span class="badge badge-success">Available</span></p> <br>
-                              <div class="row">
-                                  <div class="col-md-6"></div>
-                                  <div class="col-md-6 text-right"> <button type="button" class="btn btn-light justify-content-end">Book now!</button></div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+
+
+      </div>
+      <div class="modal-footer">
+        <input type="submit" value="Submit" class="btn btn-primary">
+      </form>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
                       {{end}}
                       {{end}}
                       {{end}}
@@ -273,26 +575,74 @@
                         {{with .All}}
                         {{range .}}
                         {{if eq .Day "Sunday"}}
-                        <div class="card mb-3" style="max-width: 1240px;">
-                          <div class="row no-gutters">
-                            <div class="col-md-2">
-                              <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
-                            </div>
-                            <div class="col-md-10">
-                              <div class="card-body">
-                                <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">{{.Dimension}}</span></h5> 
-                                <p class="card-text">Starts at: <span>{{.StartTime}}</span> </p>
+           
+
+
+
+<div class="card mb-3" style="max-width: 1240px;">
+  <div class="row no-gutters">
+    <div class="col-md-2">
+      <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
+    </div>
+    <div class="col-md-10">
+      <div class="card-body">
+        <h5 class="card-title">{{.MovieName}} <span class="badge badge-warning">{{.Dimension}}</span></h5> 
+        <p class="card-text font-weight-light">Starts at: <span>{{.StartTime}}</span> </p>
+
+        <p class="card-text font-weight-light">Running time: <span>{{.Runtime}}</span> </p>
+        <p class="card-text font-weight-light">{{.HallName}}  <span class="badge badge-success">Available  <span class="badge badge-light">{{.Available}}</span></span></p> <br>
         
-                                <p class="card-text">Running time: <span>{{.Runtime}}</span> </p>
-                                <p class="card-text">{{.HallName}}<span class="badge badge-success">Available</span></p> <br>
-                                <div class="row">
-                                    <div class="col-md-6"></div>
-                                    <div class="col-md-6 text-right"> <button type="button" class="btn btn-light justify-content-end">Book now!</button></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+
+
+
+        <div class="row">
+            <div class="col-md-6"></div>
+            
+            <div class="col-md-6 text-right"> <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-light justify-content-end">Book now!</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Book</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form action="/theater/schedule/book/{{$name}}/{{$id}}/{{.ScheduleID}}" method="post">
+
+
+        <div class="custom-control custom-radio">
+          <input type="radio" id="normal" name="seat" value="{{.Price}}" class="custom-control-input" checked >
+          <label class="custom-control-label" for="normal">Normal-{{.Price}}</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input type="radio" id="vip" name="seat" value="{{.VIPPrice}}"class="custom-control-input">
+          <label class="custom-control-label" for="vip">VIP-{{.VIPPrice}}</label>
+        </div>
+
+      
+
+
+      </div>
+      <div class="modal-footer">
+        <input type="submit" value="Submit" class="btn btn-primary">
+      </form>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
                         {{end}}
                         {{end}}
                         {{end}}
@@ -322,5 +672,5 @@
     
 </div>
 
-
+{{end}}
 {{end}}

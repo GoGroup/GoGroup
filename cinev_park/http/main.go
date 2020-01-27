@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/GoGroup/Movie-and-events/cinev_park/http/util"
+	
 
 	"github.com/GoGroup/Movie-and-events/cinema/repository"
 	"github.com/GoGroup/Movie-and-events/cinema/service"

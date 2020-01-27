@@ -39,7 +39,7 @@ type Schedule struct {
 	Dimension    string `json: "dimension" gorm:"type:varchar(255);not null"`
 	HallID       int    `json: "hallid"`
 	Day          string `json: "day" gorm:"type:varchar(255);not null"`
-	Booked       uint   `json: "day" gorm:"DEFAULT:0"`
+	Booked       uint   `json: "booked" gorm:"DEFAULT:0"`
 }
 type Moviem struct {
 	TmdbID int `json: "TmdbID"  gorm:"unique"`
@@ -56,6 +56,13 @@ type BindedSchedule struct {
 	Day                   string
 	StartTime             string
 	Dimension             string
+	ScheduleID            uint
+	VIPPrice              uint
+	VIPCapacity           uint
+	Price                 uint
+	Capacity              uint
+	Booked                uint
+	Available             uint
 }
 type ScheduleWithMovie struct {
 	Sch       Schedule
@@ -104,9 +111,9 @@ type Comment struct {
 	CreatedAt time.Time
 }
 type Booking struct {
-	ID      uint `json:"id"  gorm:"primary_key;AUTO_INCREMENT"`
-	UserID  uint ` json:"userid"`
-	MovieID uint ` json:"movieid" `
+	ID         uint `json:"id"  gorm:"primary_key;AUTO_INCREMENT"`
+	UserID     uint ` json:"userid"`
+	ScheduleID uint ` json:"scheduleid" `
 }
 type Event struct {
 	ID          uint   `json:"id"  gorm:"primary_key;AUTO_INCREMENT"`

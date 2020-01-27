@@ -27,12 +27,15 @@ import (
 	usrep "github.com/GoGroup/Movie-and-events/user/repository"
 	usser "github.com/GoGroup/Movie-and-events/user/service"
 
+	brep "github.com/GoGroup/Movie-and-events/booking/repository"
+	bser "github.com/GoGroup/Movie-and-events/booking/service"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 func main() {
-	db, err := gorm.Open("postgres", "postgres://postgres:Bangtan123@localhost/MovieEvent?sslmode=disable")
+	db, err := gorm.Open("postgres", "postgres://postgres:admin@localhost/MovieEvent?sslmode=disable")
 	if err != nil {
 		panic(err)
 	}
@@ -46,6 +49,8 @@ func main() {
 	db.AutoMigrate(&model.User{})
 	db.AutoMigrate(&model.Booking{})
 	db.AutoMigrate(&model.Event{})
+	db.AutoMigrate(&model.Booking{})
+
 	db.AutoMigrate(&model.Role{ID: 1, Name: "USER"})
 	db.AutoMigrate(&model.Role{ID: 2, Name: "ADMIN"})
 	tmpl := template.Must(template.ParseGlob("view/template/*"))
@@ -59,6 +64,9 @@ func main() {
 
 	roleRepo := usrep.NewRoleGormRepo(db)
 	roleService := usser.NewRoleService(roleRepo)
+
+	bookRepo := brep.NewBookingGormRepo(db)
+	bookService := bser.NewBookingService(bookRepo)
 
 	scheduleRepo := schrep.NewScheduleGormRepo(db)
 	scheduleService := schser.NewScheduleService(scheduleRepo)
@@ -80,7 +88,7 @@ func main() {
 
 	uh := handler.NewUserHandler(tmpl, userService, sessionService, roleService, csrfSignKey)
 
-	mh := handler.NewMenuHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr, CommentSer, EventSer)
+	mh := handler.NewMenuHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr, CommentSer, EventSer, userService, bookService)
 	ah := handler.NewAdminHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr, EventSer, csrfSignKey)
 
 	fs := http.FileServer(http.Dir("view/assets"))

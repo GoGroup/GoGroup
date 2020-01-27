@@ -53,7 +53,19 @@ func NewAdminHandler(t *template.Template, cs cinema.CinemaService, hs hall.Hall
 }
 
 func (m *AdminHandler) AdminCinema(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		fmt.Println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+		if r.FormValue("cinemaName") != "" {
+			fmt.Println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+			c := model.Cinema{
+				CinemaName: r.FormValue("cinemaName"),
+			}
+			cc, ee := m.csrv.StoreCinema(&c)
+			fmt.Println(cc)
+			fmt.Println(ee)
+		}
 
+	}
 	var errr []error
 	var NewCinemaArray []model.Cinema
 
@@ -68,7 +80,6 @@ func (m *AdminHandler) AdminCinema(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 	}
 
-	fmt.Println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminCinemaList.layout", NewCinemaArray))
 
 }

@@ -42,8 +42,8 @@ func (ss *ScheduleService) UpdateSchedules(schedule *model.Schedule) (*model.Sch
 	}
 	return schdls, errs
 }
-func (ss *ScheduleService) UpdateSchedulesBooked(schedule *model.Schedule,Amount uint) *model.Schedule {
-	schdls := ss.scheduleRepo.UpdateSchedulesBooked(schedule,Amount)
+func (ss *ScheduleService) UpdateSchedulesBooked(schedule *model.Schedule, Amount uint) *model.Schedule {
+	schdls := ss.scheduleRepo.UpdateSchedulesBooked(schedule, Amount)
 
 	return schdls
 }

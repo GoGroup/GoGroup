@@ -15,6 +15,21 @@
       aria-multiselectable="true"
     >
 
+    <form method="post" action="/admin/cinemas" class="form-inline my-2 my-lg-0">
+      <input
+        class="form-control mr-sm-2"
+        type="search"
+        name="cinemaName"
+        placeholder="Cinema Name"
+        aria-label="Cinema Name"
+      />
+      <input class="btn btn-primary" value="Add New" type="submit"/>
+      
+    </form>
+
+
+
+
 
     {{range .}}
 
@@ -34,8 +49,9 @@
               
               <i class="fas fa-angle-down rotate-icon"></i>
             </h5>
-            <a class="grey-text darken-3" href="/admin/cinemas/halls/edit/{{.ID}}"><i class="fas fa-edit grey-text darken-3"></i>Edit</a>
-          </a>
+            <a class="grey-text form-inline darken-3" href="/admin/cinemas/halls/edit/{{.ID}}"><i class="fas fa-edit grey-text darken-3"></i>Edit</a>
+           
+         
         </div>
 
         <div
