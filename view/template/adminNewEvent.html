@@ -18,8 +18,8 @@
   <div class="card mb-2">
     <div class="container">
       <div class="card-body">
-        <form id="myForm2" method="POST"  action="/admin/cinemas/events/new/">
-          <input type="text" name="_csrf" value="{{ .CSRF }}" />
+        <form id="myForm2" method="POST"  action="/admin/cinemas/events/new/" enctype="multipart/form-data">
+          <input type="hidden" name="_csrf" value="{{ .CSRF }}" />
           <div class="md-form mb-5">
             <i class="fas fa-user prefix grey-text"></i>
             <input type="text" name="name" id="orangeForm-capacity" class="form-control validate">

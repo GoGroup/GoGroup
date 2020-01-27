@@ -54,41 +54,36 @@
           {{end}} 
 
 
-<form action="/admin/cinemas/schedule/new/{{$temp}}" method="post">     
+<form action="/admin/cinemas/schedule/new/{{$temp}}" method="post">    
+  {{with .From }}
+  <input type="text" name="_csrf" value="{{ .CSRF }}"/>
+  {{end}}
           <input value="{{.MovieN}}"  name="chosen" type="text" id="chosen" class="form-control form-control-sm" disabled>
           <input value="{{.MovieID}}" style="visibility: hidden;" name="mid" type="text" id="mid" class="form-control form-control-sm" >
+          {{with .From }}
+          {{with .VErrors.Get "chosen" }}
+          <label class="text-danger">{{ . }}</label>
+          {{end}}
 
+         
 
-          <div style="margin:10px;float:left;">
-
-            <input id="timepkr" name="time" style="width:100px;float:left;" class="form-control" placeholder="HH:MM" />
-            <button class="btn btn-primary" onclick="showpickers('timepkr',24)" style="width:40px;float:left;"><i class="fa fa-clock-o"></i>
-        
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                  <input id="timepkr" type="text" name="time"  value='{{ .Values.Get "time" }}' class="form-control datetimepicker-input" data-target="#datetimepicker1"   />
+                  <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
+                </div>
+              </div>
+           
+  
           </div>
-        <div class="timepicker"></div> 
-
-
-
-
-
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-        <select id="day" name="day" class="browser-default mt-5 custom-select">
+        {{with .VErrors.Get "time" }}
+        <label class="text-danger">{{ . }}</label>
+        {{end}}      
+        <select id="day" name="day" class="browser-default mt-5 custom-select">  
           <option selected value="Monday">Monday</option>
           <option value="Tuesday">Tuesday</option>
           <option value="Wednsday">Wednsday</option>
@@ -100,7 +95,9 @@
         </select>
 
 
-   
+        {{with .VErrors.Get "day" }}
+        <label class="text-danger">{{ . }}</label>
+        {{end}}
 <div class="form-check">
 <input type="radio" value="3D" class="form-check-input" id="for3d" name="3or2d">
 <label class="form-check-label"  for="for3D">3D</label>
@@ -111,11 +108,14 @@
 <input type="radio" value="2D" class="form-check-input" id="for2D" name="3or2d" checked>
 <label class="form-check-label" for="for2D">2D</label>
 </div>        
+{{with .VErrors.Get "3or2d" }}
+<label class="text-danger">{{ . }}</label>
+{{end}}
 
           <div class="text-center form-sm mt-2">
             <input type="submit" class="btn btn-info" value="Add schedule">
           </div>
-
+          {{end}}
         </form>
 
 

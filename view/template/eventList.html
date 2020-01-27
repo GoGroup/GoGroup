@@ -18,13 +18,14 @@
             <div class="col mb-4 ">
                 <div class="card h-100">
                    
-                        <div class="gradient card-img-top"></div>
+                      
                     <div class="card-body">
+                        <img src="/assets/images/{{.Image}}" class="card-img-top" alt="...">
                         <h4 class="text-center font-weight-bold">{{.Name}}</h4>
                         <p class="text-center">{{.Location}}</p>
                         <a href="/events/detail/{{.ID}}" class="card-link"> <p class="text-center">Show Details</p> </a>
                     </div>
-                </div>
+              
             </div> 
         {{end}}
         {{end}}
