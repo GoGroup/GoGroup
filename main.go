@@ -103,7 +103,9 @@ func main() {
 	http.HandleFunc("/theaters", mh.Theaters)
 	http.HandleFunc("/events", mh.EventList)
 	//http.HandleFunc("/theater/schedule/{cName}/{cId}", mh.TheaterSchedule)
-	http.HandleFunc("/theater/schedule/", mh.TheaterSchedule)
+	// http.HandleFunc("/theater/schedule/", mh.TheaterSchedule)
+
+	http.Handle("/theater/schedule/", uh.Authenticated(http.HandlerFunc(mh.TheaterSchedule)))
 	//	http.HandleFunc("/", uh.Login)
 	http.Handle("/admin", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminCinema))))
 	http.Handle("/logout", uh.Authenticated(http.HandlerFunc(uh.Logout)))
