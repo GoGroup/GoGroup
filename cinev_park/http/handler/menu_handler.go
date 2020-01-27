@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/GoGroup/Movie-and-events/flash"
+
 	"github.com/GoGroup/Movie-and-events/comment"
 	"github.com/GoGroup/Movie-and-events/controller"
 	"github.com/GoGroup/Movie-and-events/event"
@@ -176,37 +178,64 @@ func (m *MenuHandler) Theaters(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (m *MenuHandler) TheaterScheduleBook(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.FormValue("seat"))
+	a, _ := strconv.Atoi(r.FormValue("seat"))
+	if r.FormValue("seat") != "" {
+		if a > 150 {
+			fmt.Println("::iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii::")
+			flash.SetFlash(w, "error", []byte("You dont have enough money in your account"))
+
+		} else {
+			flash.SetFlash(w, "success", []byte("You Have successfully booked"))
+
+		}
+
+	}
+	http.Redirect(w, r, "/theater/schedule/Century/1", 303)
+
+	// if c == nil {
+	// 	fmt.Fprint(w, "No flash messages")
+	// 	fmt.Fprintf(w, "%s", r.FormValue("seat"))
+	// } else {
+	// 	fmt.Fprintf(w, "%s", c)
+	// 	fmt.Fprintf(w, "%s", r.FormValue("seat"))
+
+	// }
+
+}
+
 func (m *MenuHandler) TheaterSchedule(w http.ResponseWriter, r *http.Request) {
 	var CName string
 	var CId string
-	fmt.Println("In theatesrs sdlkfsdjf")
+
+	c, er := flash.GetFlash(w, r, "error")
+	suc, er := flash.GetFlash(w, r, "success")
+	fmt.Println(er)
 	p := strings.Split(r.URL.Path, "/")
 	if len(p) == 1 {
-		fmt.Println("in first if")
-		//return defaultCode, p[0]
+
 	} else if len(p) > 1 {
-		fmt.Println("..in first if")
+
 		code, err := strconv.Atoi(p[4])
 		fmt.Println(err)
 		fmt.Println(p)
 		fmt.Println(code)
 		if err == nil {
-			fmt.Println(".....in first if")
+
 			CName = p[3]
 			CId = p[4]
-			//return code, p[2]
+
 		} else {
-			fmt.Println("...........in first if")
+
 			fmt.Println(p)
-			//return defaultCode, p[1]
+
 		}
 	} else {
 		fmt.Println("...........in not if")
-		//return defaultCode, ""
+
 	}
 
-	//CName := r.FormValue("cName")
-	//CId, _ := strconv.Atoi(r.FormValue("cId"))
 	CcId, _ := strconv.Atoi(CId)
 	uCId := uint(CcId)
 	H := model.HallSchedule{}
@@ -225,6 +254,7 @@ func (m *MenuHandler) TheaterSchedule(w http.ResponseWriter, r *http.Request) {
 			B.PosterPath = mo.PosterPath
 			B.MovieName = mo.Title
 			B.Runtime = mo.RunTime
+			B.ScheduleID = s.ID
 			hall, _ := m.hsrv.Hall(uint(s.HallID))
 			fmt.Println("hall is", hall)
 			B.HallName = hall.HallName
@@ -237,12 +267,21 @@ func (m *MenuHandler) TheaterSchedule(w http.ResponseWriter, r *http.Request) {
 
 	}
 	H.CinemaName = CName
-	fmt.Println("************************************")
-	fmt.Println(H)
+	tempo := struct {
+		HallS    model.HallSchedule
+		CinemaID uint
+		Err      string
+		Succ     string
+	}{
+		HallS:    H,
+		CinemaID: uint(CcId),
+		Err:      string(c[:]),
+		Succ:     string(suc[:]),
+	}
 	// if len(err) > 0 {
 	// 	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 	// }
 
-	fmt.Println(m.tmpl.ExecuteTemplate(w, "scheduleDisplay.layout", H))
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "scheduleDisplay.layout", tempo))
 
 }

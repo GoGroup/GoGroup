@@ -52,6 +52,7 @@ type HallSchedule struct {
 type BindedSchedule struct {
 	PosterPath, MovieName string
 	Runtime               int
+	ScheduleID            uint
 	HallName              string
 	Day                   string
 	StartTime             string

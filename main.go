@@ -32,7 +32,7 @@ import (
 )
 
 func main() {
-	db, err := gorm.Open("postgres", "postgres://postgres:Bangtan123@localhost/MovieEvent?sslmode=disable")
+	db, err := gorm.Open("postgres", "postgres://postgres:admin@localhost/MovieEvent?sslmode=disable")
 	if err != nil {
 		panic(err)
 	}
@@ -106,6 +106,8 @@ func main() {
 	// http.HandleFunc("/theater/schedule/", mh.TheaterSchedule)
 
 	http.Handle("/theater/schedule/", uh.Authenticated(http.HandlerFunc(mh.TheaterSchedule)))
+	http.Handle("/theater/schedule/book/", uh.Authenticated(http.HandlerFunc(mh.TheaterScheduleBook)))
+
 	//	http.HandleFunc("/", uh.Login)
 	http.Handle("/admin", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminCinema))))
 	http.Handle("/logout", uh.Authenticated(http.HandlerFunc(uh.Logout)))
