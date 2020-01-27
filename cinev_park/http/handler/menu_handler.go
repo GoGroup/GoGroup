@@ -304,6 +304,7 @@ func (m *MenuHandler) TheaterSchedule(w http.ResponseWriter, r *http.Request) {
 			B.MovieName = mo.Title
 			B.Runtime = mo.RunTime
 			B.ScheduleID = s.ID
+			B.Booked = s.Booked
 
 			hall, _ := m.hsrv.Hall(uint(s.HallID))
 			fmt.Println("hall is", hall)
@@ -315,6 +316,7 @@ func (m *MenuHandler) TheaterSchedule(w http.ResponseWriter, r *http.Request) {
 			B.StartTime = s.StartingTime
 			B.Day = d
 			B.Dimension = s.Dimension
+			B.Available = B.Capacity - B.Booked
 
 			H.All = append(H.All, B)
 		}
