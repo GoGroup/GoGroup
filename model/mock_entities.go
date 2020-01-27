@@ -47,9 +47,9 @@ var CinemaMock = Cinema{
 }
 
 var BookingMock = Booking{
-	ID:      1,
-	UserID:  1,
-	MovieID: 1,
+	ID:         1,
+	UserID:     1,
+	ScheduleID: 1,
 }
 var EvenMock = Event{
 	ID:          1,

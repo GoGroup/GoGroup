@@ -7,7 +7,10 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/GoGroup/Movie-and-events/booking"
+
 	"github.com/GoGroup/Movie-and-events/flash"
+	"github.com/GoGroup/Movie-and-events/user"
 
 	"github.com/GoGroup/Movie-and-events/comment"
 	"github.com/GoGroup/Movie-and-events/controller"
@@ -28,11 +31,13 @@ type MenuHandler struct {
 	msrv   movie.MovieService
 	comsrv comment.CommentService
 	evsrv  event.EventService
+	usrv   user.UserService
+	bsrv   booking.BookingService
 }
 
-func NewMenuHandler(t *template.Template, cs cinema.CinemaService, hs hall.HallService, ss schedule.ScheduleService, ms movie.MovieService, comser comment.CommentService, evs event.EventService) *MenuHandler {
+func NewMenuHandler(t *template.Template, cs cinema.CinemaService, hs hall.HallService, ss schedule.ScheduleService, ms movie.MovieService, comser comment.CommentService, evs event.EventService, u user.UserService, b booking.BookingService) *MenuHandler {
 
-	return &MenuHandler{tmpl: t, csrv: cs, hsrv: hs, ssrv: ss, msrv: ms, comsrv: comser, evsrv: evs}
+	return &MenuHandler{tmpl: t, csrv: cs, hsrv: hs, ssrv: ss, msrv: ms, comsrv: comser, evsrv: evs, usrv: u, bsrv: b}
 
 }
 
@@ -179,20 +184,55 @@ func (m *MenuHandler) Theaters(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *MenuHandler) TheaterScheduleBook(w http.ResponseWriter, r *http.Request) {
+	var CName string
+	var CId string
+	var SId string
+	fmt.Println(SId)
+
+	p := strings.Split(r.URL.Path, "/")
+	if len(p) == 1 {
+
+	} else if len(p) > 1 {
+
+		code, err := strconv.Atoi(p[4])
+		fmt.Println(err)
+		fmt.Println(p)
+		fmt.Println(code)
+		if err == nil {
+
+			CName = p[4]
+			CId = p[5]
+			SId = p[6]
+
+		} else {
+
+			fmt.Println(p)
+
+		}
+	} else {
+
+	}
+
 	fmt.Println(r.FormValue("seat"))
 	a, _ := strconv.Atoi(r.FormValue("seat"))
+	activeSession := r.Context().Value(ctxUserSessionKey).(*model.Session)
+	user, errs := m.usrv.User(activeSession.UUID)
+	fmt.Println(user)
+	fmt.Println(errs)
+
 	if r.FormValue("seat") != "" {
-		if a > 150 {
-			fmt.Println("::iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii::")
+		if a > int(user.Amount) {
 			flash.SetFlash(w, "error", []byte("You dont have enough money in your account"))
 
 		} else {
+
 			flash.SetFlash(w, "success", []byte("You Have successfully booked"))
 
 		}
 
 	}
-	http.Redirect(w, r, "/theater/schedule/Century/1", 303)
+	url := "/theater/schedule/" + CName + "/" + CId
+	http.Redirect(w, r, url, 303)
 
 	// if c == nil {
 	// 	fmt.Fprint(w, "No flash messages")
@@ -255,9 +295,14 @@ func (m *MenuHandler) TheaterSchedule(w http.ResponseWriter, r *http.Request) {
 			B.MovieName = mo.Title
 			B.Runtime = mo.RunTime
 			B.ScheduleID = s.ID
+
 			hall, _ := m.hsrv.Hall(uint(s.HallID))
 			fmt.Println("hall is", hall)
 			B.HallName = hall.HallName
+			B.VIPPrice = hall.VIPPrice
+			B.VIPCapacity = hall.VIPCapacity
+			B.Price = hall.Price
+			B.Capacity = hall.Capacity
 			B.StartTime = s.StartingTime
 			B.Day = d
 			B.Dimension = s.Dimension

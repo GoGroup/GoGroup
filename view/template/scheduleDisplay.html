@@ -99,12 +99,12 @@
 
 
                         <div class="custom-control custom-radio">
-                          <input type="radio" id="normal" name="seat" value="100" class="custom-control-input" checked >
-                          <label class="custom-control-label" for="normal">Normal-100</label>
+                          <input type="radio" id="normal" name="seat" value="{{.Price}}" class="custom-control-input" checked >
+                          <label class="custom-control-label" for="normal">Normal-{{.Price}}</label>
                         </div>
                         <div class="custom-control custom-radio">
-                          <input type="radio" id="vip" name="seat" value="220"class="custom-control-input">
-                          <label class="custom-control-label" for="vip">VIP-220</label>
+                          <input type="radio" id="vip" name="seat" value="{{.VIPPrice}}"class="custom-control-input">
+                          <label class="custom-control-label" for="vip">VIP-{{.VIPPrice}}</label>
                         </div>
 
                       

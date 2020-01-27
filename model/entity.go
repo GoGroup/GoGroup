@@ -52,11 +52,15 @@ type HallSchedule struct {
 type BindedSchedule struct {
 	PosterPath, MovieName string
 	Runtime               int
-	ScheduleID            uint
 	HallName              string
 	Day                   string
 	StartTime             string
 	Dimension             string
+	ScheduleID            uint
+	VIPPrice              uint
+	VIPCapacity           uint
+	Price                 uint
+	Capacity              uint
 }
 type ScheduleWithMovie struct {
 	Sch       Schedule
@@ -105,9 +109,9 @@ type Comment struct {
 	CreatedAt time.Time
 }
 type Booking struct {
-	ID      uint `json:"id"  gorm:"primary_key;AUTO_INCREMENT"`
-	UserID  uint ` json:"userid"`
-	MovieID uint ` json:"movieid" `
+	ID         uint `json:"id"  gorm:"primary_key;AUTO_INCREMENT"`
+	UserID     uint ` json:"userid"`
+	ScheduleID uint ` json:"scheduleid" `
 }
 type Event struct {
 	ID          uint   `json:"id"  gorm:"primary_key;AUTO_INCREMENT"`
