@@ -8,7 +8,7 @@ type UserRepository interface {
 	// Users() ([]model.User, []error)
 	User(id uint) (*model.User, []error)
 	UserByEmail(email string) (*model.User, []error)
-	// UpdateUser(user *model.User) (*model.User, []error)
+	UpdateUserAmount(user *model.User, Amount uint) (*model.User)
 	// DeleteUser(id uint) (*model.User, []error)
 	StoreUser(user *model.User) (*model.User, []error)
 

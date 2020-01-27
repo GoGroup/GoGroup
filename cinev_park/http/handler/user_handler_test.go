@@ -8,7 +8,7 @@ import (
 
 func TestMovie(t *testing.T) {
 	mux := http.NewServeMux()
-	// mux.HandleFunc("/movies",Movies)
+	mux.HandleFunc("/movies",Movies)
 	testServ := httptest.NewTLSServer(mux)
 	defer testServ.Close()
 

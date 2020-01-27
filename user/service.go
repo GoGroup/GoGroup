@@ -11,7 +11,7 @@ type UserService interface {
 	// UpdateUser(user *model.User) (*model.User, []error)
 	// DeleteUser(id uint) (*model.User, []error)
 	StoreUser(user *model.User) (*model.User, []error)
-
+	UpdateUserAmount(user *model.User, Amount uint) (*model.User)
 	EmailExists(email string) bool
 }
 type RoleService interface {

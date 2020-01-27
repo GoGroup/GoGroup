@@ -43,15 +43,13 @@ func (userRepo *UserGormRepo) UserByEmail(email string) (*model.User, []error) {
 	return &user, errs
 }
 
-// UpdateUser updates a given user in the database
-// func (userRepo *UserGormRepo) UpdateUser(user *model.User) (*model.User, []error) {
-// 	usr := user
-// 	errs := userRepo.conn.Save(usr).GetErrors()
-// 	if len(errs) > 0 {
-// 		return nil, errs
-// 	}
-// 	return usr, errs
-// }
+//UpdateUser updates a given user in the database
+func (userRepo *UserGormRepo) UpdateUserAmount(user *model.User, Amount uint) *model.User {
+	usr := user
+	userRepo.conn.Model(&usr).UpdateColumn("amount", Amount)
+
+	return usr
+}
 
 // // DeleteUser deletes a given user from the database
 // func (userRepo *UserGormRepo) DeleteUser(id uint) (*model.User, []error) {

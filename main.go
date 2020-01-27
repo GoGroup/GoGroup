@@ -32,7 +32,7 @@ import (
 )
 
 func main() {
-	db, err := gorm.Open("postgres", "postgres://postgres:admin@localhost/MovieEvent?sslmode=disable")
+	db, err := gorm.Open("postgres", "postgres://postgres:Bangtan123@localhost/MovieEvent?sslmode=disable")
 	if err != nil {
 		panic(err)
 	}
