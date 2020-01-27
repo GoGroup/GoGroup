@@ -29,9 +29,7 @@ func HasPermission(path string, role string, method string) bool {
 		path = "/admin"
 	}
 	fmt.Println("authorities")
-	permx := authorities["/admin"]
 	perm := authorities[path]
-	fmt.Println(permx)
 	fmt.Println(perm)
 	fmt.Println("path")
 	fmt.Println(path)

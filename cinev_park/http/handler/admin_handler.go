@@ -32,7 +32,7 @@ type AdminHandler struct {
 const nameKey = "name"
 const capKey = "cap"
 const priceKey = "price"
-const discountkey = "discount"
+const vipcapkey = "vipcap"
 const vipKey = "vip"
 const csrfHKey = "_csrf"
 
@@ -213,10 +213,10 @@ func (m *AdminHandler) AdminHallsNew(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(r.FormValue("price"))
 		fmt.Println(r.FormValue("name"))
 		fmt.Println(CID)
-		HallNewForm.ValidateRequiredFields(nameKey, capKey, priceKey, discountkey, vipKey)
-		HallNewForm.ValidateFieldsInteger(capKey, priceKey, discountkey, vipKey)
-		HallNewForm.ValidateFieldsRange(capKey, priceKey, discountkey, vipKey)
-		HallNewForm.ValidatediscountRange(discountkey)
+		HallNewForm.ValidateRequiredFields(nameKey, capKey, priceKey, vipcapkey, vipKey)
+		HallNewForm.ValidateFieldsInteger(capKey, priceKey, vipcapkey, vipKey)
+		HallNewForm.ValidateFieldsRange(capKey, priceKey, vipcapkey, vipKey)
+
 		if !HallNewForm.IsValid() {
 			fmt.Println("last")
 			err := m.tmpl.ExecuteTemplate(w, "adminNewHall.layout", HallNewForm)
@@ -240,14 +240,14 @@ func (m *AdminHandler) AdminHallsNew(w http.ResponseWriter, r *http.Request) {
 		c, _ := strconv.Atoi(r.FormValue(capKey))
 		pri, _ := strconv.Atoi(r.FormValue(priceKey))
 		vp, _ := strconv.Atoi(r.FormValue(vipKey))
-		wd, _ := strconv.Atoi(r.FormValue(discountkey))
+		wd, _ := strconv.Atoi(r.FormValue(vipcapkey))
 		h := model.Hall{
-			HallName:        hn,
-			Capacity:        uint(c),
-			CinemaID:        CID,
-			Price:           uint(pri),
-			VIPPrice:        uint(vp),
-			WeekendDiscount: uint(wd),
+			HallName:    hn,
+			Capacity:    uint(c),
+			CinemaID:    CID,
+			Price:       uint(pri),
+			VIPPrice:    uint(vp),
+			VIPCapacity: uint(wd),
 		}
 		hall, errr := m.hsrv.StoreHall(&h)
 		fmt.Println("In ^^^^^^^^^^^^^^^^^^^")

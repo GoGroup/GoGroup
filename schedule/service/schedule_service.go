@@ -42,6 +42,11 @@ func (ss *ScheduleService) UpdateSchedules(schedule *model.Schedule) (*model.Sch
 	}
 	return schdls, errs
 }
+func (ss *ScheduleService) UpdateSchedulesBooked(schedule *model.Schedule) *model.Schedule {
+	schdls := ss.scheduleRepo.UpdateSchedules(schedule)
+
+	return schdls
+}
 func (ss *ScheduleService) DeleteSchedules(id uint) (*model.Schedule, []error) {
 	schdls, errs := ss.scheduleRepo.DeleteSchedules(id)
 	if len(errs) > 0 {

@@ -39,13 +39,11 @@ func (us *UserService) UserByEmail(email string) (*model.User, []error) {
 	return usr, errs
 }
 
-// func (us *UserService) UpdateUser(user *model.User) (*model.User, []error) {
-// 	usr, errs := us.userRepo.UpdateUser(user)
-// 	if len(errs) > 0 {
-// 		return nil, errs
-// 	}
-// 	return usr, errs
-// }
+func (us *UserService) UpdateUserAmount(user *model.User, Amount uint) *model.User {
+	usr := us.userRepo.UpdateUserAmount(user, Amount)
+
+	return usr
+}
 
 // DeleteUser deletes a given application user
 // func (us *UserService) DeleteUser(id uint) (*model.User, []error) {

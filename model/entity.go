@@ -1,6 +1,6 @@
 package model
 
-import "github.com/jinzhu/gorm"
+import "time"
 
 type UpcomingMovies struct {
 	MovieList []Movie `json:"results"`
@@ -39,6 +39,7 @@ type Schedule struct {
 	Dimension    string `json: "dimension" gorm:"type:varchar(255);not null"`
 	HallID       int    `json: "hallid"`
 	Day          string `json: "day" gorm:"type:varchar(255);not null"`
+	Booked       uint   `json: "day" gorm:"DEFAULT:0"`
 }
 type Moviem struct {
 	TmdbID int `json: "TmdbID"  gorm:"unique"`
@@ -61,14 +62,14 @@ type ScheduleWithMovie struct {
 	MovieName string
 }
 type Hall struct {
-	ID              uint   `json:"id" gorm:"primary_key;AUTO_INCREMENT"`
-	HallName        string `json:"hallname" gorm:"type:varchar(255);not null"`
-	Capacity        uint   `json:"capacity"`
-	CinemaID        uint   `json:"cinemaid"`
-	schedules       []Schedule
-	Price           uint `json:"Price"`
-	VIPPrice        uint `json:"vipprice"`
-	WeekendDiscount uint `json:"discount"`
+	ID          uint   `json:"id" gorm:"primary_key;AUTO_INCREMENT"`
+	HallName    string `json:"hallname" gorm:"type:varchar(255);not null"`
+	Capacity    uint   `json:"capacity"`
+	CinemaID    uint   `json:"cinemaid"`
+	schedules   []Schedule
+	Price       uint `json:"Price"`
+	VIPPrice    uint `json:"vipprice"`
+	VIPCapacity uint `json:"vipcapacity"`
 }
 type Cinema struct {
 	ID         uint   `json:"id" gorm:"primary_key;AUTO_INCREMENT"`
@@ -85,22 +86,28 @@ type User struct {
 	Email    string `gorm:"type:varchar(255);not null;unique"`
 	Password string `gorm:"type:varchar(255)"`
 	RoleID   uint
+	Amount   uint `gorm:"DEFAULT:300"`
 }
 type Session struct {
-	gorm.Model
+	ID         uint
 	SessionId  string `gorm:"type:varchar(255);not null"`
 	UUID       uint
 	Expires    int64  `gorm:"type:varchar(255);not null"`
 	SigningKey []byte `gorm:"type:varchar(255);not null"`
 }
 type Comment struct {
-	gorm.Model
-	UserID   uint
-	UserName string
-	MovieID  uint
-	Message  string ` json:"message" gorm:"type:varchar(255);not null"`
+	ID        uint
+	UserID    uint
+	UserName  string
+	MovieID   uint
+	Message   string ` json:"message" gorm:"type:varchar(255);not null"`
+	CreatedAt time.Time
 }
-
+type Booking struct {
+	ID      uint `json:"id"  gorm:"primary_key;AUTO_INCREMENT"`
+	UserID  uint ` json:"userid"`
+	MovieID uint ` json:"movieid" `
+}
 type Event struct {
 	ID          uint   `json:"id"  gorm:"primary_key;AUTO_INCREMENT"`
 	Name        string `json:"name" gorm:"type:varchar(255);not null"`

@@ -6,7 +6,7 @@
     <h4></h4>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">Cinema</a></li>
+        <li class="breadcrumb-item"><a href="#">Event</a></li>
         <li class="breadcrumb-item"><a href="#">CinemaName</a></li>
         <li class="breadcrumb-item active" aria-current="page">New</li>
       </ol>
@@ -14,12 +14,12 @@
     <div class="card mb-2" >
         <div class="container">
           <div class="card-body">
-<form id="myForm2" method="POST" >
+<form id="myForm2" method="POST" action="/admin/cinemas/halls/new/{{.Cid}}">
   <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
     <div class="md-form mb-5">
         <i class="fas fa-user prefix grey-text"></i>
         <input type="text" name="name" id="orangeForm-capacity" class="form-control validate"  value='{{ .Values.Get "name" }}'>
-        <label data-error="wrong" data-success="right" for="orangeForm-capacity">Event  Name</label>
+        <label data-error="wrong" data-success="right" for="orangeForm-capacity">Hall Name</label>
       </div>
       {{with .VErrors.Get "name" }}
       <label class="text-danger">{{ . }}</label>

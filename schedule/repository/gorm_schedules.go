@@ -66,6 +66,12 @@ func (schRepo *ScheduleGormRepo) UpdateSchedules(schedule *model.Schedule) (*mod
 	}
 	return schdl, errs
 }
+func (schRepo *ScheduleGormRepo) UpdateSchedulesBooked(schedule *model.Schedule, Amount uint) *model.Schedule {
+	schdl := schedule
+	schRepo.conn.Model(&schdl).UpdateColumn("booked", schdl.Booked+1)
+
+	return schdl
+}
 
 // DeleteComment deletes a given customer comment from the database
 func (schRepo *ScheduleGormRepo) DeleteSchedules(id uint) (*model.Schedule, []error) {
