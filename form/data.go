@@ -5,6 +5,8 @@ import (
 	"net/url"
 	"regexp"
 	"strconv"
+	"strings"
+	"time"
 	"unicode/utf8"
 )
 
@@ -33,6 +35,26 @@ func (inVal *Input) MinLength(field string, d int) {
 	}
 }
 
+func (inVal *Input) Date(field string) {
+	value := inVal.Values.Get(field)
+
+	if value == "" {
+		return
+	} else {
+		p := strings.Split(value, " ")
+		fmt.Println("mine")
+		fmt.Println(p[0])
+		fmt.Println("mine")
+		fmt.Println("next")
+		fmt.Println(p[1])
+		fmt.Println("next")
+		_, err := time.Parse("01/02/2006", p[0])
+		if err != nil {
+			inVal.VErrors.Add(field, fmt.Sprintf("Invalid date"))
+		}
+	}
+}
+
 // Required checks if list of provided form input fields have values
 func (inVal *Input) ValidateRequiredFields(fields ...string) {
 	for _, f := range fields {
@@ -41,12 +63,13 @@ func (inVal *Input) ValidateRequiredFields(fields ...string) {
 		fmt.Println(value)
 		if value == "" {
 			fmt.Println("empty")
+			fmt.Println(f)
 			inVal.VErrors.Add(f, "This field is required field")
 		}
 	}
 }
 
-// checks if value is number
+//checks if value is number
 func (inVal *Input) ValidateFieldsInteger(fields ...string) {
 	for _, f := range fields {
 		value := inVal.Values.Get(f)
@@ -72,6 +95,20 @@ func (inVal *Input) ValidateFieldsRange(fields ...string) {
 		}
 	}
 }
+
+// func (inVal *Input) ValidateFieldFile(fields string) {
+//       w, fh, er := r.FormFile(fields)
+
+// 	value := inVal.Values.Get(fields)
+// 	fmt.Println("not")
+// 	val, err := strconv.Atoi(value)
+// 	if err == nil && val < 0 {
+
+// 		fmt.Println("empty")
+// 		inVal.VErrors.Add(fields, "This field must be positive number")
+
+// 	}
+//}
 
 //////discount range0 to 100
 // func (inVal *Input) ValidatediscountRange(field string) {

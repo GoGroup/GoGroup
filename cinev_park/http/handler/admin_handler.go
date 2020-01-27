@@ -3,7 +3,10 @@ package handler
 import (
 	"fmt"
 	"html/template"
+	"io"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -186,8 +189,9 @@ func (m *AdminHandler) AdminDeleteHalls(w http.ResponseWriter, r *http.Request) 
 
 }
 func (m *AdminHandler) AdminEventsNew(w http.ResponseWriter, r *http.Request) {
+	r.ParseMultipartForm(0)
+	CSFRToken, err := rtoken.GenerateCSRFToken(m.csrfSignKey)
 	if r.Method == http.MethodGet {
-		CSFRToken, err := rtoken.GenerateCSRFToken(m.csrfSignKey)
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		}
@@ -196,11 +200,34 @@ func (m *AdminHandler) AdminEventsNew(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if m.isParsableFormPost(w, r) {
-		EventNewForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}, CSRF: r.FormValue(csrfHKey)}
-		EventNewForm.ValidateRequiredFields(nameKey, locationKey, descriptionKey, datetimekey, fileKey)
 
+		EventNewForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}, CSRF: r.FormValue(csrfHKey)}
+		fmt.Println("name")
+		fmt.Println(r.FormValue(nameKey))
+		fmt.Println("name")
+		// _, s, _ := r.FormFile(fileKey)
+		// fmt.Println("FILE")
+		// fmt.Println(s.Filename)
+		// fmt.Println("FILE")
+		EventNewForm.ValidateRequiredFields(nameKey, locationKey, descriptionKey, datetimekey)
+		EventNewForm.MinLength(descriptionKey, 20)
+		EventNewForm.Date(datetimekey)
+		mh, _, err := r.FormFile(fileKey)
+		if err != nil || mh == nil {
+			EventNewForm.VErrors.Add(fileKey, "File error")
+		}
 		if !EventNewForm.IsValid() {
 			fmt.Println("last")
+			err := m.tmpl.ExecuteTemplate(w, "adminNewEvent.layout", EventNewForm)
+			if err != nil {
+				fmt.Println("hiiii")
+				fmt.Println(err)
+			}
+			return
+		}
+		if m.evrv.EventExists(r.FormValue(nameKey)) {
+
+			EventNewForm.VErrors.Add(nameKey, "This Event exists!")
 			err := m.tmpl.ExecuteTemplate(w, "adminNewEvent.layout", EventNewForm)
 			if err != nil {
 				fmt.Println("hiiii")
@@ -212,14 +239,26 @@ func (m *AdminHandler) AdminEventsNew(w http.ResponseWriter, r *http.Request) {
 		c := r.FormValue(descriptionKey)
 		pri := r.FormValue(datetimekey)
 		vp := r.FormValue(locationKey)
-		_, fh, _ := r.FormFile(fileKey)
+		mf, fh, _ := r.FormFile(fileKey)
+		defer mf.Close()
+		fname := fh.Filename
+		wd, err := os.Getwd()
+		path := filepath.Join(wd, "view", "assets", "images", fname)
+		image, err := os.Create(path)
+		fmt.Println(path)
+		if err != nil {
+			fmt.Println("error")
+		}
+
+		defer image.Close()
+		io.Copy(image, mf)
 		h := model.Event{
 
 			Name:        en,
 			Description: c,
 			Location:    vp,
 			Time:        pri,
-			Image:       fh.Filename,
+			Image:       fname,
 		}
 		event, errr := m.evrv.StoreEvent(&h)
 		fmt.Println("In ^^^^^^^^^^^^^^^^^^^")
@@ -231,10 +270,10 @@ func (m *AdminHandler) AdminEventsNew(w http.ResponseWriter, r *http.Request) {
 
 		// tempo := struct{ Cid uint }{Cid: CID}
 
-		fmt.Println(m.tmpl.ExecuteTemplate(w, "adminNewEvent.layout", EventNewForm))
+		fmt.Println(m.tmpl.ExecuteTemplate(w, "adminNewEvent.layout", form.Input{CSRF: CSFRToken}))
 
 	}
-	fmt.Println("NOT EXECUTE")
+
 }
 
 func (m *AdminHandler) AdminEventList(w http.ResponseWriter, r *http.Request) {
@@ -438,6 +477,11 @@ func (m *AdminHandler) NewAdminSchedule(w http.ResponseWriter, r *http.Request) 
 	var err error
 	var err2 error
 	var hallid int
+	CSFRToken, err := rtoken.GenerateCSRFToken(m.csrfSignKey)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	}
+
 	p := strings.Split(r.URL.Path, "/")
 	if len(p) == 1 {
 		fmt.Println("in first if")
@@ -481,6 +525,7 @@ func (m *AdminHandler) NewAdminSchedule(w http.ResponseWriter, r *http.Request) 
 		MovieID int
 		HallID  int
 		Hall    *model.Hall
+		From    form.Input
 		Cinema  *model.Cinema
 	}{
 		M:       MovieTitles,
@@ -488,6 +533,7 @@ func (m *AdminHandler) NewAdminSchedule(w http.ResponseWriter, r *http.Request) 
 		MovieID: convid,
 		HallID:  hallid,
 		Hall:    hall,
+		From:    form.Input{CSRF: CSFRToken},
 		Cinema:  cinema,
 	}
 
@@ -496,7 +542,6 @@ func (m *AdminHandler) NewAdminSchedule(w http.ResponseWriter, r *http.Request) 
 }
 func (m *AdminHandler) NewAdminSchedulePost(w http.ResponseWriter, r *http.Request) {
 	var hallid int
-
 	p := strings.Split(r.URL.Path, "/")
 	if len(p) == 1 {
 		fmt.Println("in first if")
@@ -512,47 +557,66 @@ func (m *AdminHandler) NewAdminSchedulePost(w http.ResponseWriter, r *http.Reque
 			hallid = code
 		}
 	}
+	if m.isParsableFormPost(w, r) {
+		var a *model.Schedule
+		var movie *model.Moviem
+		ScheduleNewForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}, CSRF: r.FormValue(csrfHKey)}
+		hall, _ := m.hsrv.Hall(uint(hallid))
+		cinema, _ := m.csrv.Cinema(uint(hall.CinemaID))
+		MID, _ := strconv.Atoi(r.FormValue("mid"))
+		fmt.Println("printing mid", MID)
+		Time := r.FormValue("time")
+		fmt.Println("printing time", Time)
+		DAy := r.FormValue("day")
+		fmt.Println("printing day", DAy)
+		Dimen := r.FormValue("3or2d")
+		fmt.Println("printing day", Dimen)
+		ScheduleNewForm.ValidateRequiredFields("time", "day", "3or2d")
+		ScheduleNewForm.Date("time")
+		tempo := struct {
+			M       *model.UpcomingMovies
+			MovieN  string
+			MovieID int
+			HallID  int
+			Hall    *model.Hall
+			From    form.Input
+			Cinema  *model.Cinema
+		}{
+			M:       nil,
+			MovieN:  "",
+			MovieID: 0,
+			HallID:  hallid,
+			Hall:    hall,
+			From:    ScheduleNewForm,
+			Cinema:  cinema,
+		}
+		if !ScheduleNewForm.IsValid() {
+			fmt.Println("last")
+			err := m.tmpl.ExecuteTemplate(w, "adminNewSchedule.layout", tempo)
+			if err != nil {
+				fmt.Println("hiiii")
+				fmt.Println(err)
+			}
+			return
+		}
+		a = &model.Schedule{MoviemID: MID, StartingTime: Time, Dimension: Dimen, HallID: hallid, Day: DAy}
+		movie = &model.Moviem{TmdbID: MID}
+		if MID != 0 && Time != "" && DAy != "" && hallid != 0 {
+			m.ssrv.StoreSchedule(a)
+			m.msrv.StoreMovie(movie)
+		}
 
-	var a *model.Schedule
-	var movie *model.Moviem
-
-	hall, _ := m.hsrv.Hall(uint(hallid))
-	cinema, _ := m.csrv.Cinema(uint(hall.CinemaID))
-	tempo := struct {
-		M       *model.UpcomingMovies
-		MovieN  string
-		MovieID int
-		HallID  int
-		Hall    *model.Hall
-		Cinema  *model.Cinema
-	}{
-		M:       nil,
-		MovieN:  "",
-		MovieID: 0,
-		HallID:  hallid,
-		Hall:    hall,
-		Cinema:  cinema,
+		fmt.Println(m.tmpl.ExecuteTemplate(w, "adminNewSchedule.layout", tempo))
 	}
-	MID, _ := strconv.Atoi(r.FormValue("mid"))
-	fmt.Println("printing mid", MID)
-	Time := r.FormValue("time")
-	fmt.Println("printing time", Time)
-	DAy := r.FormValue("day")
-	fmt.Println("printing day", DAy)
-	Dimen := r.FormValue("3or2d")
-	fmt.Println("printing day", Dimen)
-	a = &model.Schedule{MoviemID: MID, StartingTime: Time, Dimension: Dimen, HallID: hallid, Day: DAy}
-	movie = &model.Moviem{TmdbID: MID}
-	if MID != 0 && Time != "" && DAy != "" && hallid != 0 {
-		m.ssrv.StoreSchedule(a)
-		m.msrv.StoreMovie(movie)
-	}
-
-	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminNewSchedule.layout", tempo))
-
+	fmt.Println("Error")
 }
 
 func (m *AdminHandler) isParsableFormPost(w http.ResponseWriter, r *http.Request) bool {
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return false
+	}
 	fmt.Println("parse")
 	fmt.Println(r.Method == http.MethodPost)
 	fmt.Println(hash.ParseForm(w, r))
