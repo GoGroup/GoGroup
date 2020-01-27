@@ -54,10 +54,10 @@
     {{end}}
     <div class="md-form mb-5">
       <i class="fas fa-user prefix grey-text"></i>
-      <input name="discount" type="text" id="orangeForm-discount"  class="form-control validate"  value='{{ .Values.Get "discount" }}'>
-      <label data-error="wrong" data-success="right" for="orangeForm-discount">Weekend discount</label>
+      <input name="vipcap" type="text" id="orangeForm-vipcap"  class="form-control validate"  value='{{ .Values.Get "vipcap" }}'>
+      <label data-error="wrong" data-success="right" for="orangeForm-vipcap">VIP capacity</label>
     </div>
-    {{with .VErrors.Get "discount" }}
+    {{with .VErrors.Get "vipcap" }}
     <label class="text-danger">{{ . }}</label>
     {{end}}
 <div class="d-flex justify-content-center">
