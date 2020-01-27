@@ -11,4 +11,5 @@ type EventService interface {
 	UpdateEvent(event *model.Event) (*model.Event, []error)
 	DeleteEvent(id uint) (*model.Event, []error)
 	StoreEvent(event *model.Event) (*model.Event, []error)
+	EventExists(eventName string) bool
 }

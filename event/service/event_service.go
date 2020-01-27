@@ -74,3 +74,7 @@ func (cs *EventService) DeleteEvent(id uint) (*model.Event, []error) {
 
 	return eve, nil
 }
+func (cs *EventService) EventExists(eventName string) bool {
+	exists := cs.eventRepo.EventExists(eventName)
+	return exists
+}

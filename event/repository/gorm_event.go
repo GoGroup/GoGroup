@@ -69,3 +69,11 @@ func (cRepo *EventGormRepo) StoreEvent(event *model.Event) (*model.Event, []erro
 	}
 	return eve, errs
 }
+func (cRepo *EventGormRepo) EventExists(eventName string) bool {
+	eve := model.Event{}
+	errs := cRepo.conn.Find(&eve, "name=?", eventName).GetErrors()
+	if len(errs) > 0 {
+		return false
+	}
+	return true
+}
