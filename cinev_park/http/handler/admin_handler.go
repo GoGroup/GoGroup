@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/GoGroup/Movie-and-events/event"
 	"github.com/GoGroup/Movie-and-events/form"
 
 	"github.com/GoGroup/Movie-and-events/hash"
@@ -26,19 +27,25 @@ type AdminHandler struct {
 	hsrv        hall.HallService
 	ssrv        schedule.ScheduleService
 	msrv        movie.MovieService
+	evrv        event.EventService
 	csrfSignKey []byte
 }
 
 const nameKey = "name"
+const locationKey = "location"
+const descriptionKey = "description"
+const datetimekey = "datetime"
+const fileKey = "file"
+
 const capKey = "cap"
 const priceKey = "price"
 const vipcapkey = "vipcap"
 const vipKey = "vip"
 const csrfHKey = "_csrf"
 
-func NewAdminHandler(t *template.Template, cs cinema.CinemaService, hs hall.HallService, ss schedule.ScheduleService, ms movie.MovieService, csKey []byte) *AdminHandler {
+func NewAdminHandler(t *template.Template, cs cinema.CinemaService, hs hall.HallService, ss schedule.ScheduleService, ms movie.MovieService, ev event.EventService, csKey []byte) *AdminHandler {
 
-	return &AdminHandler{tmpl: t, csrv: cs, hsrv: hs, ssrv: ss, msrv: ms, csrfSignKey: csKey}
+	return &AdminHandler{tmpl: t, csrv: cs, hsrv: hs, ssrv: ss, msrv: ms, evrv: ev, csrfSignKey: csKey}
 
 }
 
@@ -178,7 +185,61 @@ func (m *AdminHandler) AdminDeleteHalls(w http.ResponseWriter, r *http.Request) 
 	fmt.Println(m.tmpl.ExecuteTemplate(w, "halls.layout", tempo))
 
 }
+func (m *AdminHandler) AdminEventsNew(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet {
+		CSFRToken, err := rtoken.GenerateCSRFToken(m.csrfSignKey)
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		fmt.Println(m.tmpl.ExecuteTemplate(w, "adminNewEvent.layout", form.Input{
+			CSRF: CSFRToken}))
+		return
+	}
+	if m.isParsableFormPost(w, r) {
+		EventNewForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}, CSRF: r.FormValue(csrfHKey)}
+		EventNewForm.ValidateRequiredFields(nameKey, locationKey, descriptionKey, datetimekey, fileKey)
 
+		if !EventNewForm.IsValid() {
+			fmt.Println("last")
+			err := m.tmpl.ExecuteTemplate(w, "adminNewEvent.layout", EventNewForm)
+			if err != nil {
+				fmt.Println("hiiii")
+				fmt.Println(err)
+			}
+			return
+		}
+		en := r.FormValue(nameKey)
+		c := r.FormValue(descriptionKey)
+		pri := r.FormValue(datetimekey)
+		vp := r.FormValue(locationKey)
+		_, fh, _ := r.FormFile(fileKey)
+		h := model.Event{
+
+			Name:        en,
+			Description: c,
+			Location:    vp,
+			Time:        pri,
+			Image:       fh.Filename,
+		}
+		event, errr := m.evrv.StoreEvent(&h)
+		fmt.Println("In ^^^^^^^^^^^^^^^^^^^")
+		fmt.Println(event)
+		if len(errr) > 0 {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
+		}
+
+		// tempo := struct{ Cid uint }{Cid: CID}
+
+		fmt.Println(m.tmpl.ExecuteTemplate(w, "adminNewEvent.layout", EventNewForm))
+
+	}
+	fmt.Println("NOT EXECUTE")
+}
+
+func (m *AdminHandler) AdminEventList(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminEventList.layout", nil))
+}
 func (m *AdminHandler) AdminHallsNew(w http.ResponseWriter, r *http.Request) {
 	var CID uint
 	p := strings.Split(r.URL.Path, "/")
@@ -207,7 +268,7 @@ func (m *AdminHandler) AdminHallsNew(w http.ResponseWriter, r *http.Request) {
 	}
 	if m.isParsableFormPost(w, r) {
 		///Validate the form data
-		HallNewForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}, CSRF: r.FormValue(csrfKey), Cid: CID}
+		HallNewForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}, CSRF: r.FormValue(csrfHKey), Cid: CID}
 		fmt.Println(r.FormValue("name"))
 		fmt.Println(r.FormValue("cap"))
 		fmt.Println(r.FormValue("price"))
@@ -495,9 +556,10 @@ func (m *AdminHandler) isParsableFormPost(w http.ResponseWriter, r *http.Request
 	fmt.Println("parse")
 	fmt.Println(r.Method == http.MethodPost)
 	fmt.Println(hash.ParseForm(w, r))
-	fmt.Println(rtoken.IsCSRFValid(r.FormValue(csrfKey), m.csrfSignKey))
+	fmt.Println(r.FormValue(csrfHKey))
+	fmt.Println(rtoken.IsCSRFValid(r.FormValue(csrfHKey), m.csrfSignKey))
 
 	return r.Method == http.MethodPost &&
 		hash.ParseForm(w, r) &&
-		rtoken.IsCSRFValid(r.FormValue(csrfKey), m.csrfSignKey)
+		rtoken.IsCSRFValid(r.FormValue(csrfHKey), m.csrfSignKey)
 }

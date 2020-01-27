@@ -1,0 +1,157 @@
+{{define "adminEventList.layout"}}
+{{template "admin_header"}}
+{{template "adminEventList.content" .}}
+{{template "admin_footer"}}
+{{end}}
+
+
+{{define "adminEventList.content"}}
+<main class="col">
+    <h4>Edit Cinema</h4>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Cinema</a></li>
+            <li class="breadcrumb-item active" aria-current="page">CinemaName</li>
+        </ol>
+    </nav>
+    <div class="container-fluid">
+        <div class="container" style="z-index: -1;">
+
+
+            <div class="card mb-2">
+                <div class="container">
+                    <div class="card-body">
+                        <!-- <h5 class="card-title">Hall 1</h5> -->
+                        <form>
+                            <div class="form-group">
+
+                                <input type="Text" class="form-control card-title" id="HallName" value="EventName">
+                            </div>
+
+
+
+                            <hr>
+                            <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
+                           <div class="row">
+                            <div class="col mycol more">
+
+
+
+                                
+                                <!--   first column -->
+                                <div class="file-field">
+                                    <div class="z-depth-1-half mb-4">
+                                        <img src="/assets/images/lunch.png" id="img" class="img-fluid" alt="example placeholder">
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="btn btn-mdb-color btn-rounded float-left">
+                                        
+                                            <input type="file" id="imgfile" >
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+                            <div class="col more">
+
+                                <!--   inside second column first column -->
+                                <div>
+                                    <label for="orangeForm-description">Description</label>
+                                    <textarea name="description" id="orangeForm-description"
+                                        class="md-textarea form-control" rows="3"></textarea>
+                                </div>
+                                <br>
+                                <div>
+                                    <label data-error="wrong" data-success="right"
+                                        for="orangeForm-location">Location</label>
+                                    <input type="text" name="location" id="orangeForm-location"
+                                        class="form-control validate">
+                                </div>
+                                <br>
+                                <div>
+                                    <label data-error="wrong" data-success="right" for="orangeForm-time">Time</label>
+                                    <input type="text" name="time" id="orangeForm-time" class="form-control validate">
+                                  
+                                </div>
+
+                            </div>
+                    </div>
+
+
+
+
+
+                </div>
+
+
+
+
+
+                <div >
+                    <!--   seconnd column -->
+
+                    <div class="row ">
+                        <div class="col-lg-12 col-md-6 col-sm-6">
+                            <input type="submit" class="btn btn-sm blue-grey  mdb-color white-text darken-1 hall"
+                                value="save">
+                        </div>
+                        <div class="col-lg-12  col-md-6 col-sm-6">
+                            <a href="/admin/cinemas/halls/delete/{{.CinemaID}}/{{.ID}}"
+                                class="btn mdb-color white-text btn-sm grey darken-3 hall">Delete</a>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+            </form>
+        </div>
+    </div>
+    </div>
+
+
+
+
+    </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="adminhalls">
+
+
+        <div class="btn-group-fab " role="group" aria-label="FAB Menu">
+            <div>
+                <a href="#" type="button" class="btn btn-main btn-primary has-tooltip" data-placement="left"
+                    title="Add new" style="padding:0">
+                    <i class="fas pt-3 fa-plus"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</main>
+{{end}}
