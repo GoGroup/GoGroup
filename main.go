@@ -80,7 +80,7 @@ func main() {
 	uh := handler.NewUserHandler(tmpl, userService, sessionService, roleService, csrfSignKey)
 
 	mh := handler.NewMenuHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr, CommentSer, EventSer)
-	ah := handler.NewAdminHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr, csrfSignKey)
+	ah := handler.NewAdminHandler(tmpl, Cinemasr, Hallsr, scheduleService, Moviesr, EventSer, csrfSignKey)
 
 	fs := http.FileServer(http.Dir("view/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
@@ -91,8 +91,11 @@ func main() {
 	http.Handle("/admin/cinemas/schedule/delete/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminScheduleDelete))))
 	http.Handle("/admin/cinemas/halls/edit/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminHalls))))
 	http.Handle("/admin/cinemas/halls/new/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminHallsNew))))
+
 	http.Handle("/admin/cinemas/halls/delete/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminDeleteHalls))))
 	http.Handle("/admin/cinemas/schedule/new/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.NewAdminScheduleHandler))))
+	http.Handle("/admin/cinemas/events/new/", http.HandlerFunc(ah.AdminEventsNew))
+	http.Handle("/admin/cinemas/events/", http.HandlerFunc(ah.AdminEventList))
 	//http.HandleFunc("/adminCinemas/adminSchedule/{hId}/new/", ah.NewAdminSchedule)
 	//http.HandleFunc("/adminCinemas/adminSchedule/{hId}/new/", ah.NewAdminSchedulePost)
 	http.Handle("/home", uh.Authenticated(http.HandlerFunc(mh.Index)))
@@ -102,6 +105,7 @@ func main() {
 	http.HandleFunc("/movie/nowshowing/", mh.EachNowShowing)
 	http.HandleFunc("/theaters", mh.Theaters)
 	http.HandleFunc("/events", mh.EventList)
+
 	//http.HandleFunc("/theater/schedule/{cName}/{cId}", mh.TheaterSchedule)
 	// http.HandleFunc("/theater/schedule/", mh.TheaterSchedule)
 

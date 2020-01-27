@@ -112,6 +112,9 @@ var MockMovieDetails = MovieDetails{
 	PosterPath: "path/thor",
 	Trailer:    "yes",
 }
+var MockGenre = Genre{
+	Name: "Mock Genre 01",
+}
 
 // type Genre struct {
 // 	Name :"Mock Genre 01",
