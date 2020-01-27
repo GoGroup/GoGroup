@@ -74,18 +74,18 @@ func (inVal *Input) ValidateFieldsRange(fields ...string) {
 }
 
 //////discount range0 to 100
-func (inVal *Input) ValidatediscountRange(field string) {
+// func (inVal *Input) ValidatediscountRange(field string) {
 
-	value := inVal.Values.Get(field)
-	fmt.Println("not")
-	val, err := strconv.Atoi(value)
-	if err == nil && val > 100 {
+// 	value := inVal.Values.Get(field)
+// 	fmt.Println("not")
+// 	val, err := strconv.Atoi(value)
+// 	if err == nil && val > 100 {
 
-		fmt.Println("empty")
-		inVal.VErrors.Add(field, "This field must be less than 100")
+// 		fmt.Println("empty")
+// 		inVal.VErrors.Add(field, "This field must be less than 100")
 
-	}
-}
+// 	}
+// }
 
 // MatchesPattern checks if a given input form field matchs a given pattern
 func (inVal *Input) MatchesPattern(field string, pattern *regexp.Regexp) {
