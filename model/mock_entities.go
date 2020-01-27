@@ -92,26 +92,26 @@ var MockHallSchedule = HallSchedule{
 	CinemaName: "Mock Cinema 1",
 	All:        []BindedSchedule{},
 }
-var  MockUpcomingMovies = UpcomingMovies{
-	MovieList :[]Movie{},
+var MockUpcomingMovies = UpcomingMovies{
+	MovieList: []Movie{},
 }
-var MockMovie1= Movie {
-	Title       :"Thor",
-	PosterPath  :"path/thor",
-	Overview    :"this is an overview",
-	Id          :1,
-	ReleaseDate :"01/01/2020",
-	Trailer     "yes",
+var MockMovie1 = Movie{
+	Title:       "Thor",
+	PosterPath:  "path/thor",
+	Overview:    "this is an overview",
+	Id:          1,
+	ReleaseDate: "01/01/2020",
+	Trailer:     "yes",
 }
-var  MockMovieDetails =MovieDetails {
-	GenreList  :[]Genre{},
-	Overview   :"this is an overview",
-	Id         :1,
-	Title      :"thor",
-	RunTime    :"120",
-	PosterPath :"path/thor",
-	Trailer    :"yes",
+var MockMovieDetails = MovieDetails{
+	GenreList:  []Genre{},
+	Overview:   "this is an overview",
+	Id:         1,
+	Title:      "thor",
+	RunTime:    120,
+	PosterPath: "path/thor",
+	Trailer:    "yes",
 }
-type Genre struct {
-	Name :"Mock Genre 01"
+var MockGenre = Genre{
+	Name: "Mock Genre 01",
 }
