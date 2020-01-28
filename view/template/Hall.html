@@ -9,6 +9,12 @@
   </nav>
   <div class="container-fluid">
     <div class="container" style="z-index: -1;">
+      {{$temp:=.From.CSRF}}
+      {{$capacity:=.From.VErrors.Get "capacity"}}
+      {{$price:=.From.VErrors.Get "price"}}
+      {{$vipcap:=.From.VErrors.Get "vipcap"}}
+      {{$vip:=.From.VErrors.Get "vip"}}
+      {{ $name:=.From.VErrors.Get "name" }}
       {{with .Halls}}
       {{range .}}
 
@@ -17,11 +23,12 @@
           <div class="card-body">
             <!-- <h5 class="card-title">Hall 1</h5> -->
             <form>
-              <div class="form-group">
-      
-                <input type="Text" class="form-control card-title" id="HallName" value="{{.HallName}}">
+              <div class="form-group"  method="POST" action="/admin/halls/update/{{.ID}}">
+                <input type="text" name="_csrf" value="{{ $temp }}" />
+                <input type="Text" class="form-control card-title" name="name" id="HallName" value="{{ .HallName }}">
+                <label class="text-danger">{{ $name  }}</label>
               </div>
-
+         
 
 
               <hr>
@@ -38,9 +45,11 @@
                   <div class="row ">
                     <div class="col-6 ">
                       <label for="Capacity">Capacity</label> <!-- for capacity -->
+                    
                     </div>
                     <div class="col-6 ">
-                      <input type="Text" class="form-control" id="Capacity" value="{{.Capacity}}">
+                      <input type="Text" class="form-control" name="capacity" id="Capacity" value="{{.Capacity}}">
+                      <label class="text-danger">{{ $capacity  }}</label>
                     </div>
                   </div>
 
@@ -50,7 +59,8 @@
                       <label for="Price">Price</label> <!-- for capacity -->
                     </div>
                     <div class="col-6 ">
-                      <input type="Text" class="form-control" id="Price" value="{{.Price}}">
+                      <input type="Text" class="form-control" name="price" id="Price" value="{{.Price}}">
+                      <label class="text-danger">{{ $price  }}</label>
                     </div>
                   </div>
 
@@ -67,7 +77,8 @@
                       <label for="VIP">VIP price</label> <!-- for capacity -->
                     </div>
                     <div class="col-6 ">
-                      <input type="Text" class="form-control" id="VIP" value="{{.VIPPrice}}">
+                      <input type="Text" class="form-control" name ="vip" id="VIP" value="{{.VIPPrice}}">
+                      <label class="text-danger">{{ $vip  }}</label>
                     </div>
                   </div>
 
@@ -77,7 +88,8 @@
                       <label for="vipcap">VIP capacity</label> <!-- for capacity -->
                     </div>
                     <div class="col-6">
-                      <input type="Text" class="form-control" id="vipcap" value="{{.VIPCapacity}}">
+                      <input type="Text" class="form-control" name="vipcap" id="vipcap" value="{{.VIPCapacity}}">
+                      <label class="text-danger">{{ $vipcap  }}</label>
                     </div>
                   </div>
 
@@ -168,7 +180,7 @@
             <div class="md-form mb-5">
               <i class="fas fa-user prefix grey-text"></i>
               <input name="discount" type="text" id="orangeForm-discount" class="form-control validate">
-              <label data-error="wrong" data-success="right" for="orangeForm-vIP-price">Weekend discount</label>
+              <label data-error="wrong" data-success="right" for="orangeForm-vIP-price">VIP capacity</label>
             </div>
 
 

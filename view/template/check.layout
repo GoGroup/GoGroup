@@ -1,5 +1,0 @@
-{{define "check.layout"}}
-{{template "admin_header"}}
-{{template "check.content"}}
-{{template "admin_footer"}}
-{{end}}

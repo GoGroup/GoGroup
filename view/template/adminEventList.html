@@ -7,116 +7,155 @@
 
 {{define "adminEventList.content"}}
 <main class="col">
-    <h4>Edit Cinema</h4>
+    <h4>Edit Event</h4>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Cinema</a></li>
-            <li class="breadcrumb-item active" aria-current="page">CinemaName</li>
+            <li class="breadcrumb-item"><a href="#">Event</a></li>
+
         </ol>
     </nav>
     <div class="container-fluid">
         <div class="container" style="z-index: -1;">
+            {{$temp:=.From.CSRF}}
+            {{$file:=.From.VErrors.Get "file"}}
+            {{$location:=.From.VErrors.Get "location"}}
+            {{$description:=.From.VErrors.Get "description"}}
+            {{$datetime:=.From.VErrors.Get "datetime"}}
+            {{ $name:=.From.VErrors.Get "name" }}
 
-
+            {{with .Events}}
+            {{range .}}
             <div class="card mb-2">
                 <div class="container">
                     <div class="card-body">
                         <!-- <h5 class="card-title">Hall 1</h5> -->
-                        <form>
-                            <div class="form-group">
+                        <form id="myForm2" method="POST" action="/admin/events/update/{{.ID}}"
+                            enctype="multipart/form-data">
 
-                                <input type="Text" class="form-control card-title" id="HallName" value="EventName">
-                            </div>
+                            <input type="Text" name="name" class="form-control card-title" id="HallName"
+                                value="{{.Name}}">
+                            <label class="text-danger">{{ $name  }}</label>
+
 
 
 
                             <hr>
+                            <input type="text" name="_csrf" value="{{ $temp }}" />
                             <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
-                           <div class="row">
-                            <div class="col mycol more">
+
+                            <div class="row">
+                                <div class="col mycol more">
 
 
 
-                                
-                                <!--   first column -->
-                                <div class="file-field">
-                                    <div class="z-depth-1-half mb-4">
-                                        <img src="/assets/images/lunch.png" id="img" class="img-fluid" alt="example placeholder">
-                                    </div>
-                                    <div class="d-flex justify-content-center">
-                                        <div class="btn btn-mdb-color btn-rounded float-left">
-                                        
-                                            <input type="file" id="imgfile" >
+
+                                    <!--   first column -->
+                                    <div class="file-field">
+                                        <div class="z-depth-1-half mb-4">
+                                            <img src="/assets/images/{{.Image}}" id="img" class="img-fluid"
+                                                alt="example placeholder">
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="btn btn-mdb-color btn-rounded float-left">
+
+                                                <input type="file" name="file" id="imgfile">
+                                            </div>
+
+                                            <label class="text-danger">{{ $file  }}</label>
+
                                         </div>
                                     </div>
+
                                 </div>
 
+
+
+
+                                <div class="col more">
+
+                                    <!--   inside second column first column -->
+                                    <div>
+                                        <label for="orangeForm-description">Description</label>
+                                        <textarea name="description" id="orangeForm-description"
+                                            class="md-textarea form-control" rows="3">{{.Description}}</textarea>
+                                        <label class="text-danger">{{ $description  }}</label>
+                                    </div>
+                                    <br>
+                                    <div>
+                                        <label data-error="wrong" data-success="right"
+                                            for="orangeForm-location">Location</label>
+                                        <input type="text" name="location" id="orangeForm-location"
+                                            class="form-control validate" value="{{.Name}}">
+
+                                        <label class="text-danger">{{ $location  }}</label>
+
+                                    </div>
+                                    <br>
+                                    <div>
+                                        <div class="form-group">
+                                            <div class="input-group date" id="datetimepicker1"
+                                                data-target-input="nearest">
+                                                <input type="text" name="datetime" value='{{ .Time }}'
+                                                    class="form-control datetimepicker-input"
+                                                    data-target="#datetimepicker1" />
+                                                <div class="input-group-append" data-target="#datetimepicker1"
+                                                    data-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                </div>
+
+                                            </div>
+                                            <label class="text-danger">{{ $datetime  }}</label>
+                                        </div>
+                                    </div>
+
+                           
+
+
+
+
+
+                    <div>
+                        <!--   seconnd column -->
+
+                        <div class="row ">
+                            <div class="col-lg-12 col-md-6 col-sm-6">
+                                <input type="hidden" value="{{.ID}}" name="id">
+                                <input type="submit" class="btn btn-sm blue-grey  mdb-color white-text darken-1 hall"
+                                    value="save">
                             </div>
-
-
-
-
-                            <div class="col more">
-
-                                <!--   inside second column first column -->
-                                <div>
-                                    <label for="orangeForm-description">Description</label>
-                                    <textarea name="description" id="orangeForm-description"
-                                        class="md-textarea form-control" rows="3"></textarea>
-                                </div>
-                                <br>
-                                <div>
-                                    <label data-error="wrong" data-success="right"
-                                        for="orangeForm-location">Location</label>
-                                    <input type="text" name="location" id="orangeForm-location"
-                                        class="form-control validate">
-                                </div>
-                                <br>
-                                <div>
-                                    <label data-error="wrong" data-success="right" for="orangeForm-time">Time</label>
-                                    <input type="text" name="time" id="orangeForm-time" class="form-control validate">
-                                  
-                                </div>
-
+                            <div class="col-lg-12  col-md-6 col-sm-6">
+                                <a href="/admin/events/delete/{{.ID}}"
+                                    class="btn mdb-color white-text btn-sm grey darken-3 hall">Delete</a>
                             </div>
+                        </div>
+
+
                     </div>
 
-
-
-
-
                 </div>
-
-
-
-
-
-                <div >
-                    <!--   seconnd column -->
-
-                    <div class="row ">
-                        <div class="col-lg-12 col-md-6 col-sm-6">
-                            <input type="submit" class="btn btn-sm blue-grey  mdb-color white-text darken-1 hall"
-                                value="save">
-                        </div>
-                        <div class="col-lg-12  col-md-6 col-sm-6">
-                            <a href="/admin/cinemas/halls/delete/{{.CinemaID}}/{{.ID}}"
-                                class="btn mdb-color white-text btn-sm grey darken-3 hall">Delete</a>
-                        </div>
-                    </div>
-
-
-                </div>
+                </form>
 
             </div>
-            </form>
+        </div>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+            </div>
         </div>
     </div>
-    </div>
 
+    {{end}}
 
-
-
+    {{end}}
     </div>
     </div>
 
@@ -141,8 +180,8 @@
 
         <div class="btn-group-fab " role="group" aria-label="FAB Menu">
             <div>
-                <a href="/admin/cinemas/events/new/" type="button" class="btn btn-main btn-primary has-tooltip" data-placement="left"
-                    title="Add new" style="padding:0">
+                <a href="/admin/cinemas/events/new/" type="button" class="btn btn-main btn-primary has-tooltip"
+                    data-placement="left" title="Add new" style="padding:0">
                     <i class="fas pt-3 fa-plus"></i>
                 </a>
             </div>

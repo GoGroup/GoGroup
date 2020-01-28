@@ -155,7 +155,42 @@ func (m *AdminHandler) AdminScheduleDelete(w http.ResponseWriter, r *http.Reques
 
 	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminScheduleList.layout", tempo))
 }
+func (m *AdminHandler) AdminDeleteEvents(w http.ResponseWriter, r *http.Request) {
 
+	var EID uint
+	p := strings.Split(r.URL.Path, "/")
+	if len(p) == 1 {
+		fmt.Println("in first if")
+		//return defaultCode, p[0]
+	} else if len(p) > 1 {
+		fmt.Println("..in first if")
+		code2, err2 := strconv.Atoi(p[4])
+
+		fmt.Println(err2)
+		fmt.Println(p)
+
+		if err2 == nil {
+			fmt.Println(".....in first if")
+			EID = uint(code2)
+		}
+	}
+	h, e := m.evrv.DeleteEvent(EID)
+	if len(e) > 0 {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
+	}
+	fmt.Println("delteed", h)
+
+	fmt.Println("%%%%%%%%%%%%%%%%%")
+	events, errr := m.evrv.Events()
+	if len(errr) > 0 {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
+	}
+
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminEventList.layout", events))
+
+}
 func (m *AdminHandler) AdminDeleteHalls(w http.ResponseWriter, r *http.Request) {
 	var CID uint
 	var HID uint
@@ -286,9 +321,207 @@ func (m *AdminHandler) AdminEventsNew(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+func (m *AdminHandler) AdminHallUpdateList(w http.ResponseWriter, r *http.Request) {
+fmt.Println("check")
+	halls1, _ := m.hsrv.Halls()
+	if m.isParsableFormPost(w, r) {
+		var EID uint
+		p := strings.Split(r.URL.Path, "/")
+		if len(p) == 1 {
+			fmt.Println("in first if")
+			fmt.Println("in go if")
+			//return defaultCode, p[0]
+		} else if len(p) > 1 {
+			fmt.Println("..in first if")
+			fmt.Println("please")
+			code2, err2 := strconv.Atoi(p[4])
+
+			fmt.Println(err2)
+			fmt.Println(p)
+
+			if err2 == nil {
+				fmt.Println(".....in first if")
+				EID = uint(code2)
+			}
+		}
+		myhall, errr := m.hsrv.Hall(EID)
+		if errr != nil {
+			fmt.Println("this part")
+		}
+		HallNewForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}, CSRF: r.FormValue(csrfHKey)}
+		fmt.Println("name")
+		fmt.Println(r.FormValue(nameKey))
+		fmt.Println("name")
+		HallNewForm.ValidateRequiredFields(nameKey, capKey, priceKey, vipcapkey, vipKey)
+		HallNewForm.ValidateFieldsInteger(capKey, priceKey, vipcapkey, vipKey)
+		HallNewForm.ValidateFieldsRange(capKey, priceKey, vipcapkey, vipKey)
+
+		tempo1 := struct {
+			Halls []model.Hall
+			From  form.Input
+			ID    uint
+		}{Halls: halls1, From: HallNewForm, ID: EID}
+		if !HallNewForm.IsValid() {
+			fmt.Println("last")
+			err := m.tmpl.ExecuteTemplate(w, "halls.layout", tempo1)
+			if err != nil {
+				fmt.Println("hiiii")
+				fmt.Println(err)
+			}
+			return
+		}
+		if m.hsrv.HallExists(r.FormValue(nameKey)) {
+
+			HallNewForm.VErrors.Add(nameKey, "This Event exists!")
+			tempo2 := struct {
+				Halls []model.Hall
+				From  form.Input
+				ID    uint
+			}{Halls: halls1, From: HallNewForm, ID: EID}
+
+			err := m.tmpl.ExecuteTemplate(w, "halls.layout", tempo2)
+			if err != nil {
+				fmt.Println("hiiii")
+				fmt.Println(err)
+			}
+			return
+		}
+		hall, errrr := m.hsrv.UpdateHall(myhall)
+		fmt.Println("In ^^^^^^^^^^^^^^^^^^^")
+		fmt.Println(hall)
+		if len(errrr) > 0 {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
+		}
+		halls, _ := m.hsrv.Halls()
+		tempo := struct {
+			Halls []model.Hall
+			From  form.Input
+			ID    uint
+		}{Halls: halls, From: HallNewForm, ID: EID}
+
+		fmt.Println(m.tmpl.ExecuteTemplate(w, "halls.layout", tempo))
+	}
+}
+func (m *AdminHandler) AdminEventUpdateList(w http.ResponseWriter, r *http.Request) {
+	events1, _ := m.evrv.Events()
+	r.ParseMultipartForm(0)
+	if m.isParsableFormPost(w, r) {
+		var EID uint
+		p := strings.Split(r.URL.Path, "/")
+		if len(p) == 1 {
+			fmt.Println("in first if")
+			//return defaultCode, p[0]
+		} else if len(p) > 1 {
+			fmt.Println("..in first if")
+			code2, err2 := strconv.Atoi(p[4])
+
+			fmt.Println(err2)
+			fmt.Println(p)
+
+			if err2 == nil {
+				fmt.Println(".....in first if")
+				EID = uint(code2)
+			}
+		}
+		Myevent, errr := m.evrv.Event(EID)
+		if errr != nil {
+			fmt.Println("this part")
+		}
+		EventNewForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}, CSRF: r.FormValue(csrfHKey)}
+		fmt.Println("name")
+		fmt.Println(r.FormValue(nameKey))
+		fmt.Println("name")
+		// _, s, _ := r.FormFile(fileKey)
+		// fmt.Println("FILE")
+		// fmt.Println(s.Filename)
+		// fmt.Println("FILE")
+		EventNewForm.ValidateRequiredFields(nameKey, locationKey, descriptionKey, datetimekey)
+		EventNewForm.MinLength(descriptionKey, 20)
+		EventNewForm.Date(datetimekey)
+
+		tempo1 := struct {
+			Events []model.Event
+			From   form.Input
+			ID     uint
+		}{Events: events1, From: EventNewForm, ID: EID}
+
+		if !EventNewForm.IsValid() {
+			fmt.Println("last")
+			err := m.tmpl.ExecuteTemplate(w, "adminEventList.layout", tempo1)
+			if err != nil {
+				fmt.Println("hiiii")
+				fmt.Println(err)
+			}
+			return
+		}
+		if m.evrv.EventExists(r.FormValue(nameKey)) && r.FormValue(nameKey) != Myevent.Name {
+
+			EventNewForm.VErrors.Add(nameKey, "This Event exists!")
+			tempo2 := struct {
+				Events []model.Event
+				From   form.Input
+				ID     uint
+			}{Events: events1, From: EventNewForm, ID: EID}
+
+			err := m.tmpl.ExecuteTemplate(w, "adminEventList.layout", tempo2)
+			if err != nil {
+				fmt.Println("hiiii")
+				fmt.Println(err)
+			}
+			return
+		}
+
+		mf, fh, _ := r.FormFile(fileKey)
+		defer mf.Close()
+		fname := fh.Filename
+		if fname != Myevent.Image {
+			wd, err := os.Getwd()
+			path := filepath.Join(wd, "view", "assets", "images", fname)
+			image, err := os.Create(path)
+			fmt.Println(path)
+			if err != nil {
+				fmt.Println("error")
+			}
+
+			defer image.Close()
+			io.Copy(image, mf)
+		}
+
+		event, errrr := m.evrv.UpdateEvent(Myevent)
+		fmt.Println("In ^^^^^^^^^^^^^^^^^^^")
+		fmt.Println(event)
+		if len(errrr) > 0 {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
+		}
+		events, _ := m.evrv.Events()
+		tempo := struct {
+			Events []model.Event
+			From   form.Input
+			ID     uint
+		}{Events: events, From: EventNewForm, ID: EID}
+
+		fmt.Println(m.tmpl.ExecuteTemplate(w, "adminEventList.layout", tempo))
+
+	}
+
+}
 
 func (m *AdminHandler) AdminEventList(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminEventList.layout", nil))
+	events, errr := m.evrv.Events()
+	CSFRToken, _ := rtoken.GenerateCSRFToken(m.csrfSignKey)
+	tempo := struct {
+		Events []model.Event
+		From   form.Input
+	}{Events: events, From: form.Input{CSRF: CSFRToken}}
+
+	if len(errr) > 0 {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
+	}
+
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminEventList.layout", tempo))
 }
 func (m *AdminHandler) AdminHallsNew(w http.ResponseWriter, r *http.Request) {
 	var CID uint
@@ -376,6 +609,7 @@ func (m *AdminHandler) AdminHallsNew(w http.ResponseWriter, r *http.Request) {
 }
 func (m *AdminHandler) AdminHalls(w http.ResponseWriter, r *http.Request) {
 	var CID uint
+	CSFRToken, _ := rtoken.GenerateCSRFToken(m.csrfSignKey)
 	p := strings.Split(r.URL.Path, "/")
 	if len(p) == 1 {
 		fmt.Println("in first if")
@@ -401,7 +635,8 @@ func (m *AdminHandler) AdminHalls(w http.ResponseWriter, r *http.Request) {
 	tempo := struct {
 		Halls []model.Hall
 		Cid   uint
-	}{Halls: halls, Cid: CID}
+		From  form.Input
+	}{Halls: halls, Cid: CID, From: form.Input{CSRF: CSFRToken}}
 
 	fmt.Println(m.tmpl.ExecuteTemplate(w, "halls.layout", tempo))
 

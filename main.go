@@ -35,7 +35,7 @@ import (
 )
 
 func main() {
-	db, err := gorm.Open("postgres", "postgres://postgres:admin@localhost/MovieEvent?sslmode=disable")
+	db, err := gorm.Open("postgres", "postgres://postgres:Bangtan123@localhost/MovieEvent?sslmode=disable")
 	if err != nil {
 		panic(err)
 	}
@@ -100,13 +100,16 @@ func main() {
 	http.Handle("/admin/cinemas/schedule/delete/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminScheduleDelete))))
 	http.Handle("/admin/cinemas/halls/edit/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminHalls))))
 	http.Handle("/admin/cinemas/halls/new/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminHallsNew))))
-
+	http.Handle("/admin/halls/update/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminHallUpdateList))))
 	http.Handle("/admin/cinemas/halls/delete/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminDeleteHalls))))
 	http.Handle("/admin/cinemas/schedule/new/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.NewAdminScheduleHandler))))
 	http.Handle("/admin/cinemas/events/new/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminEventsNew))))
-	http.Handle("/admin/cinemas/events/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminEventList))))
+	http.Handle("/admin/events/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminEventList))))
+	http.Handle("/admin/events/delete/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminDeleteEvents))))
+	http.Handle("/admin/events/update/", uh.Authenticated(uh.Authorized(http.HandlerFunc(ah.AdminEventUpdateList))))
 	//http.HandleFunc("/adminCinemas/adminSchedule/{hId}/new/", ah.NewAdminSchedule)
 	//http.HandleFunc("/adminCinemas/adminSchedule/{hId}/new/", ah.NewAdminSchedulePost)
+
 	http.Handle("/home", uh.Authenticated(http.HandlerFunc(mh.Index)))
 	http.Handle("/movies", uh.Authenticated(http.HandlerFunc(mh.Movies)))
 	//http.HandleFunc("/movie/{mId}", mh.EachMovieHandler)
