@@ -1,7 +1,7 @@
 {{define "theatersList.content"}}
 
 
-<div class="margin-for-all md-4 ml-3 mr-3 list-group">
+<div class="margin-for-all mt-3 md-4 list-group">
     {{range .}}
     <a href="/theater/schedule/{{.CinemaName}}/{{.ID}}" class="list-group-item list-group-item-action"><h2>{{.CinemaName}}</h2> </a>
     {{end}}

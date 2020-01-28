@@ -1,0 +1,5 @@
+{{define "bookings.layout"}}
+{{template "header"}}
+{{template "bookings.content" .}}
+{{template "footer"}}
+{{end}}

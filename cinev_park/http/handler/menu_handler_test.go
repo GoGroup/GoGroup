@@ -1,53 +1,51 @@
 package handler
 
-import (
-	"bytes"
-	"html/template"
-	"io/ioutil"
-	"net/http"
-	"net/http/httptest"
-	"testing"
+// func TestBook(t *testing.T) {
 
-	schrep "github.com/GoGroup/Movie-and-events/schedule/repository"
-	schser "github.com/GoGroup/Movie-and-events/schedule/service"
-)
+// 	tmpl := template.Must(template.ParseGlob("../../../view/template/*"))
 
-func TestAdminSchedule(t *testing.T) {
+// 	schdlRepo := schrep.NewMockScheduleRepo(nil)
+// 	schdlServ := schser.NewScheduleService(schdlRepo)
 
-	tmpl := template.Must(template.ParseGlob("../../../view/template/*"))
+// 	bookRepo := brep.NewMockBookingepo(nil)
+// 	bookSer := bser.NewBookingService(bookRepo)
 
-	schdlRepo := schrep.NewMockScheduleRepo(nil)
-	schdlServ := schser.NewScheduleService(schdlRepo)
+// 	hrep := hallrepo.NewMockHallRepo(nil)
+// 	hser := hallser.NewHallService(hrep)
 
-	adminEvHandler := NewAdminHandler(tmpl, nil, nil, schdlServ, nil, nil, nil)
+// 	cinr := cinrep.NewMockCinemaRepo(nil)
+// 	cins := cinser.NewCinemaService(cinr)
 
-	mux := http.NewServeMux()
-	mux.HandleFunc("/admin/cinemas/schedule/1", adminEvHandler.AdminSchedule)
-	ts := httptest.NewTLSServer(mux)
-	defer ts.Close()
+// 	userRepo := urep.NewMockUserRepo(nil)
+// 	userServ := user.NewUserService(userRepo)
 
-	tc := ts.Client()
-	URL := ts.URL
+// 	menuBookHandler := MenuHandler(tmpl, cins, hser, schdlServ, nil, userServ, nil)
 
-	resp, err := tc.Get(URL + "/admin/cinemas/schedule/")
-	if err != nil {
-		t.Fatal(err)
-	}
+// 	mux := http.NewServeMux()
+// 	mux.HandleFunc("/theater/schedule/book/", menuBookHandler.TheaterScheduleBook)
+// 	ts := httptest.NewTLSServer(mux)
+// 	defer ts.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		t.Errorf("want %d, got %d", http.StatusOK, resp.StatusCode)
-	}
+// 	tc := ts.Client()
+// 	URL := ts.URL
+// 	form := url.Values{}
+// 	form.Add("seat", string(model.HallMock.Price))
 
-	defer resp.Body.Close()
+// 	resp, err := tc.PostForm(sURL+"/theater/schedule/book/Mock Cinema1/1/1", form)
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+// 	if resp.StatusCode != http.StatusOK {
+// 		t.Errorf("want %d, got %d", http.StatusOK, resp.StatusCode)
+// 	}
 
-	if err != nil {
-		t.Fatal(err)
-	}
+// 	defer resp.Body.Close()
 
-	if !bytes.Contains(body, []byte("Monday")) {
-		t.Errorf("want body to contain %q", body)
-	}
+// 	body, err := ioutil.ReadAll(resp.Body)
 
-}
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
+
+//}

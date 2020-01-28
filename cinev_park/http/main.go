@@ -3,8 +3,6 @@ package main
 import (
 	"net/http"
 
-	
-
 	"github.com/GoGroup/Movie-and-events/cinema/repository"
 	"github.com/GoGroup/Movie-and-events/cinema/service"
 	"github.com/GoGroup/Movie-and-events/cinev_park/http/handler"
@@ -29,7 +27,7 @@ import (
 )
 
 func main() {
-	db, err := gorm.Open("postgres", util.DBConnectString)
+	db, err := gorm.Open("postgres", "postgres://postgres:admin@localhost/MovieEvent?sslmode=disable")
 	if err != nil {
 		panic(err)
 	}

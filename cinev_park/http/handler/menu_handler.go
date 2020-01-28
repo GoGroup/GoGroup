@@ -46,6 +46,32 @@ func (m *MenuHandler) Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(m.tmpl.ExecuteTemplate(w, "index.layout", nil))
 
 }
+
+func (m *MenuHandler) Bookings(w http.ResponseWriter, r *http.Request) {
+	var sm []model.ScheduleWithMovie
+
+	activeSession := r.Context().Value(ctxUserSessionKey).(*model.Session)
+	user, errs := m.usrv.User(activeSession.UUID)
+	if len(errs) > 0 {
+
+	}
+	b, _ := m.bsrv.Bookings(user.ID)
+	fmt.Println(b)
+
+	for _, element := range b {
+		fmt.Println("in loop")
+		s, _ := m.ssrv.Schedule(element.ScheduleID)
+		fmt.Println(s, "here is s")
+		m, _, _ := controller.GetMovieDetails(s.MoviemID)
+		fmt.Println("::::::::::::::::::::::")
+		scheduleMovie := model.ScheduleWithMovie{*s, m.Title}
+		fmt.Println("<<<<<<<<<")
+		sm = append(sm, scheduleMovie)
+	}
+
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "bookings.layout", sm))
+
+}
 func (m *MenuHandler) Search(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodPost {

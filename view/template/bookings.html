@@ -1,0 +1,27 @@
+
+{{define "bookings.content"}}
+<div class="margin-for-all md-4 ml-3 mr-3 list-group">
+    {{range .}}
+ 
+
+
+
+    <div class="card">
+        <div class="card-header">
+            {{.MovieName}}
+
+        </div>
+        {{with .Sch}}
+        <div class="card-body">
+          <h5 class="card-title">Schedule :{{.Day}}</h5>
+          <p class="card-text">{{.StartingTime}}</p>
+         
+        </div>
+      </div>
+      {{end}}
+
+    {{end}}
+ 
+    
+  </div>
+  {{end}}
