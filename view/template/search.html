@@ -1,0 +1,36 @@
+{{define "search.content"}}
+
+<div style="margin-bottom:200px" class="container">
+   
+    {{with .MovieList}}
+
+      {{range .}}
+     
+
+
+      <div class="card mb-3" style="max-width: 1240px;">
+        <div class="row no-gutters">
+          <div class="col-md-2">
+            <img src="http://image.tmdb.org/t/p/w500{{.PosterPath}}" class="card-img" alt="...">
+          </div>
+          <div class="col-md-10">
+            <div class="card-body">
+              <h5 class="card-title">{{.Title}}</h5> 
+              <p class="card-text font-weight-light">{{.Overview}}</p>
+    
+              <p class="card-text font-weight-light">ReleaseDate: <span>{{.ReleaseDate}}</span> </p>
+            
+            
+            </div>
+          </div>
+        </div>
+      </div>
+      {{end}}
+    
+      {{end}}
+
+    
+
+</div>
+
+{{end}}

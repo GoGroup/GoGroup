@@ -117,7 +117,7 @@ func main() {
 	http.Handle("/movie/nowshowing/", uh.Authenticated(http.HandlerFunc(mh.EachNowShowing)))
 	http.Handle("/theaters", uh.Authenticated(http.HandlerFunc(mh.Theaters)))
 	http.Handle("/events", uh.Authenticated(http.HandlerFunc(mh.EventList)))
-
+	http.Handle("/search", uh.Authenticated(http.HandlerFunc(mh.Search)))
 	//http.HandleFunc("/theater/schedule/{cName}/{cId}", mh.TheaterSchedule)
 	http.Handle("/theater/schedule/", uh.Authenticated(http.HandlerFunc(mh.TheaterSchedule)))
 	//	http.HandleFunc("/", uh.Login)

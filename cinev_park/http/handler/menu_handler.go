@@ -46,6 +46,25 @@ func (m *MenuHandler) Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(m.tmpl.ExecuteTemplate(w, "index.layout", nil))
 
 }
+func (m *MenuHandler) Search(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method == http.MethodPost {
+		if r.FormValue("movie") != "" {
+
+			srch, err, err2 := controller.SearchMovie(r.FormValue("movie"))
+
+			if err != nil || err2 != nil {
+				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
+			} else {
+				fmt.Println(m.tmpl.ExecuteTemplate(w, "search.layout", srch))
+
+			}
+		}
+
+	}
+
+}
 
 func (m *MenuHandler) EventList(w http.ResponseWriter, r *http.Request) {
 	events, errs := m.evsrv.Events()

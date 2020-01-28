@@ -1,0 +1,5 @@
+{{define "search.layout"}}
+{{template "header"}}
+{{template "search.content" .}}
+{{template "footer"}}
+{{end}}
