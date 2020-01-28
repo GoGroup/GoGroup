@@ -5,28 +5,48 @@
 .nav-link {
   color: #fcf6f5;
 }
+.fa-location-arrow{
+  color: #6d6d6d;
+
+}
+
+.margin-for-all{
+  margin-bottom: 150px !important;
+}
 .gradient{
   width: 100%;
   height: 220px;
 
   background: linear-gradient(90deg, rgba(99,110,153,1) 0%, rgba(248,205,218,1) 100%);
 }
+html {
+  position: relative;
+  min-height: 100%;
+}
+
 .three-icons {
   font-size: 25px;
   margin-right: 15px;
   margin-bottom: 15px;
 }
+
 .fa-bars {
   color: white;
   margin-right: 20px;
 }
+
 #footer {
   clear: both;
   height: 155px;
   padding-top: 25px;
   background: #cccccc;
   text-align: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
+
 #footer div {
   width: fit-content;
   margin: 0 auto;

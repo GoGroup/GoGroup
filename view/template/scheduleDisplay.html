@@ -58,10 +58,17 @@
     </ul>
     <div class="tab-content pt-4" id="myTabContent">
         <div class="tab-pane fade show active" id="monday" role="tabpanel" aria-labelledby="monday-tab">
-            <div class="container">
+            <div class="container margin-for-all">
               {{with .All}}
+           
+
                 {{range .}}
                 {{if eq .Day "Monday"}}
+
+              
+
+          
+              
               
              
 
@@ -149,11 +156,19 @@
         <div class="tab-pane fade" id="tuesday" role="tabpanel" aria-labelledby="tuesday-tab">
     
     
-            <div class="container">
+            <div class="container margin-for-all">
 
               {{with .All}}
               {{range .}}
               {{if eq .Day "Tuesday"}}
+
+              
+              {{if not .}} <h1>Nothing to show</h1> {{end}}
+
+
+              
+             
+             
               <div class="card mb-3" style="max-width: 1240px;">
                 <div class="row no-gutters">
                   <div class="col-md-2">
@@ -216,9 +231,11 @@
                   </div>
                 </div>
               </div>
+           
               {{end}}
               {{end}}
               {{end}}
+             
   
          
       
@@ -229,7 +246,7 @@
             <div class="tab-pane fade" id="wednsday" role="tabpanel" aria-labelledby="wednsday-tab">
     
     
-              <div class="container">
+              <div class="container margin-for-all">
 
                 {{with .All}}
                 {{range .}}
@@ -315,7 +332,7 @@
               <div class="tab-pane fade" id="thursday" role="tabpanel" aria-labelledby="thursday-tab">
     
     
-                <div class="container">
+                <div class="container margin-for-all">
 
                   {{with .All}}
                   {{range .}}
@@ -401,7 +418,7 @@
                 <div class="tab-pane fade" id="friday" role="tabpanel" aria-labelledby="friday-tab">
     
     
-                  <div class="container">
+                  <div class="container margin-for-all">
                     {{with .All}}
                     {{range .}}
                     {{if eq .Day "Friday"}}
@@ -486,7 +503,7 @@
                   <div class="tab-pane fade" id="saturday" role="tabpanel" aria-labelledby="saturday-tab">
     
     
-                    <div class="container">
+                    <div class="container margin-for-all">
                       {{with .All}}
                       {{range .}}
                       {{if eq .Day "Saturday"}}
@@ -571,7 +588,7 @@
                     <div class="tab-pane fade" id="sunday" role="tabpanel" aria-labelledby="sunday-tab">
     
     
-                      <div class="container">
+                      <div class="container margin-for-all">
                         {{with .All}}
                         {{range .}}
                         {{if eq .Day "Sunday"}}

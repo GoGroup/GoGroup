@@ -97,11 +97,7 @@ body {
   display: block;
   text-decoration: none;
 }
-.col{
-  padding:0px;
-  min-height: 730px;
-  margin:0px;
-}
+
 .col h4{
   background-color: rgb(236, 232, 232);
   height:60px;

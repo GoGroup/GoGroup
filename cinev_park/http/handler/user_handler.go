@@ -103,6 +103,8 @@ func (userHandler *UserHandler) Authorized(handle http.Handler) http.Handler {
 		activeSession := r.Context().Value(ctxUserSessionKey).(*model.Session)
 		user, errs := userHandler.userService.User(activeSession.UUID)
 		if len(errs) > 0 {
+			fmt.Println("+++++++++++++++++++++++++++++++++++++++")
+			
 			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
 		}
@@ -111,8 +113,9 @@ func (userHandler *UserHandler) Authorized(handle http.Handler) http.Handler {
 		fmt.Println(role)
 		fmt.Println(permission.HasPermission(r.URL.Path, role.Name, r.Method))
 		//Check if the user role is authorized to access the specific path and method requested
-		if len(errs) > 0 || !permission.HasPermission(r.URL.Path,role.Name,r.Method) {
-			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		if len(errs) > 0 || !permission.HasPermission(r.URL.Path, role.Name, r.Method) {
+			fmt.Println(userHandler.tmpl.ExecuteTemplate(w, "unauthorized.html", nil))
+			//http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
 		}
 
@@ -247,7 +250,7 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		//Create a user role for the User
-		role, errs := userHandler.roleService.RoleByName("ADMIN")
+		role, errs := userHandler.roleService.RoleByName("USER")
 		fmt.Println("role")
 		if len(errs) > 0 {
 			fmt.Println("second role")
