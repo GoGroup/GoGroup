@@ -12,6 +12,12 @@ import (
 	"github.com/GoGroup/Movie-and-events/event/service"
 	schrep "github.com/GoGroup/Movie-and-events/schedule/repository"
 	schser "github.com/GoGroup/Movie-and-events/schedule/service"
+
+	hallrep "github.com/GoGroup/Movie-and-events/hall/repository"
+	hallser "github.com/GoGroup/Movie-and-events/hall/service"
+
+	cinrep "github.com/GoGroup/Movie-and-events/cinema/repository"
+	cinser "github.com/GoGroup/Movie-and-events/cinema/service"
 )
 
 // func TestAdminEventNew(t *testing.T) {
@@ -60,6 +66,48 @@ import (
 
 // }
 
+func TestAdminScheduleDelete(t *testing.T) {
+
+	tmpl := template.Must(template.ParseGlob("../../../view/template/*"))
+
+	schrepo := schrep.NewMockScheduleRepo(nil)
+	schserv := schser.NewScheduleService(schrepo)
+
+	hrep := hallrep.NewMockHallRepo(nil)
+	hser := hallser.NewHallService(hrep)
+
+	cinr := cinrep.NewMockCinemaRepo(nil)
+	cins := cinser.NewCinemaService(cinr)
+
+	adminSchHandler := NewAdminHandler(tmpl, cins, hser, schserv, nil, nil, nil)
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/admin/cinemas/schedule/delete/", adminSchHandler.AdminScheduleDelete)
+	ts := httptest.NewTLSServer(mux)
+	defer ts.Close()
+
+	tc := ts.Client()
+	URL := ts.URL
+
+	resp, err := tc.Get(URL + "/admin/cinemas/schedule/delete/1/1")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("want %d, got %d", http.StatusOK, resp.StatusCode)
+	}
+
+	defer resp.Body.Close()
+
+	//body, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+}
+
 func TestAdminEvent(t *testing.T) {
 
 	tmpl := template.Must(template.ParseGlob("../../../view/template/*"))
@@ -99,6 +147,7 @@ func TestAdminEvent(t *testing.T) {
 	}
 
 }
+
 func TestAdminSchedule(t *testing.T) {
 
 	tmpl := template.Must(template.ParseGlob("../../../view/template/*"))

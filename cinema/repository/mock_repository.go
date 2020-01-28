@@ -15,7 +15,7 @@ type MockCinemaRepo struct {
 
 // NewHALLGormRepo returns new object of CommentGormRepo
 func NewMockCinemaRepo(db *gorm.DB) cinema.CinemaRepository {
-	return &CinemaGormRepo{conn: db}
+	return &MockCinemaRepo{conn: db}
 }
 func (cllRepo *MockCinemaRepo) Cinemas() ([]model.Cinema, []error) {
 	cll := []model.Cinema{model.CinemaMock}

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/GoGroup/Movie-and-events/event"
 
@@ -21,6 +22,8 @@ func NewMockEventRepo(db *gorm.DB) event.EventRepository {
 
 // Events returns all events stored in the database
 func (cRepo *MockEventRepo) Events() ([]model.Event, []error) {
+	fmt.Println("(((((((((((in mock))))))))))")
+
 	ctgs := []model.Event{model.EvenMock}
 	return ctgs, nil
 }
