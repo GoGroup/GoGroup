@@ -32,9 +32,10 @@
         <h2 class="text-black-50">{{$commentlength}} Comments</h2>
         <hr>
     </div>
+   
  
 
-    <div class=" my row ">
+    <div style="margin:0px;" class=" my row ">
         <div class="col-md-6 col-md-offset-2 col-sm-12">
             <div class="comment-wrapper">
                 <div class="panel panel-info">
@@ -66,7 +67,7 @@
             </a>
             <div class="media-body">
                 <span class="text-muted pull-right">
-                    <small class="text-muted">30 min ago</small>
+                    <small class="text-muted">{{.CreatedAt}}</small>
                 </span>
                 <strong class="text-success">@{{.UserName}}</strong>
                 <p>
@@ -101,6 +102,7 @@
 
     </ul>
 </div>
+
 </body>
     {{end}}
 

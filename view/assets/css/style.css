@@ -7,6 +7,12 @@
   margin-top: 10px;
 }
 
+.light-gray-text{
+  color:#858585 !important;
+}
+
+
+
 .pb-cmnt-textarea {
   resize: none;
   padding: 20px;

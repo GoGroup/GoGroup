@@ -21,6 +21,7 @@
       href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"
       rel="stylesheet"
     />
+    
 
     <link
       rel="stylesheet"
@@ -50,22 +51,23 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <i class="fa fa-user fa-2x"></i> <a class="nav-link " href="#">User</a>
-        <form class="form-inline my-2 my-lg-0">
+        <i class="fa fa-user"></i> <a class="nav-link " href="/logout">Log Out</a>
+        <form method="post" action="/search" class="form-inline my-2 my-lg-0">
           <input
+          name="movie"
             class="form-control mr-sm-2"
             type="search"
             placeholder="Movie"
             aria-label="Movie"
           />
-          <button class="btn" type="submit">
-            Search
-          </button>
+          <input value="Search" class="btn" type="submit">
+            
+          
         </form>
 
         <ul class="navbar-nav ml-auto ">
           <li class="nav-item">
-            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/home">Home</a>
           </li>
           <li class="nav-item nav-text-color">
             <a class="nav-link " href="/movies">Movies</a>
