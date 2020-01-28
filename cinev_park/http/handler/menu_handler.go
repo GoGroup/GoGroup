@@ -101,6 +101,12 @@ func (m *MenuHandler) EachMovieHandler(w http.ResponseWriter, r *http.Request) {
 
 func (m *MenuHandler) EachNowShowing(w http.ResponseWriter, r *http.Request) {
 	var id int
+	activeSession := r.Context().Value(ctxUserSessionKey).(*model.Session)
+	user, errs := m.usrv.User(activeSession.UUID)
+	if len(errs) > 0 {
+
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	}
 
 	p := strings.Split(r.URL.Path, "/")
 	if len(p) == 1 {
@@ -117,7 +123,7 @@ func (m *MenuHandler) EachNowShowing(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.FormValue("comment") != "" {
-		c := model.Comment{UserID: 2, UserName: "Hanna", MovieID: uint(id), Message: r.FormValue("comment")}
+		c := model.Comment{UserID: user.ID, UserName: user.FullName, MovieID: uint(id), Message: r.FormValue("comment")}
 
 		m.comsrv.StoreComment(&c)
 	}
