@@ -133,7 +133,13 @@ func (m *AdminHandler) AdminScheduleDelete(w http.ResponseWriter, r *http.Reques
 	fmt.Println("trying to delete*****************")
 
 	uSchID := uint(SchedulelID)
-	m.ssrv.DeleteSchedules(uSchID)
+	fmt.Println("trying to delete2*****************")
+	fmt.Println(m)
+	fmt.Println(m.ssrv)
+	fmt.Println(uSchID)
+	d, errrr := m.ssrv.DeleteSchedules(uSchID)
+	fmt.Println(d, "***********deltegel***********")
+	fmt.Println(errrr, "***********errrr***********")
 
 	fmt.Println(r.FormValue("hId"))
 
@@ -158,7 +164,11 @@ func (m *AdminHandler) AdminScheduleDelete(w http.ResponseWriter, r *http.Reques
 
 	}
 	hall, _ := m.hsrv.Hall(uint(HallID))
+
+	fmt.Println(hall, "******my hall******")
 	cinema, _ := m.csrv.Cinema(uint(hall.CinemaID))
+
+	fmt.Println(cinema, "******my cinema******")
 	tempo := struct {
 		HallId int
 		List   [][]model.ScheduleWithMovie

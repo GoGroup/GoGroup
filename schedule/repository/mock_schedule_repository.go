@@ -14,7 +14,7 @@ type MockScheduleRepo struct {
 }
 
 func NewMockScheduleRepo(db *gorm.DB) schedule.ScheduleRepository {
-	return &ScheduleGormRepo{conn: db}
+	return &MockScheduleRepo{conn: db}
 }
 
 func (scheduleRepo *MockScheduleRepo) Schedules() ([]model.Schedule, []error) {
@@ -49,8 +49,10 @@ func (schRepo *MockScheduleRepo) UpdateSchedulesBooked(schedule *model.Schedule,
 
 // DeleteComment deletes a given customer comment from the database
 func (schRepo *MockScheduleRepo) DeleteSchedules(id uint) (*model.Schedule, []error) {
-	fmt.Println("work")
+	fmt.Println("(((((((((((((((((((((((((in delete mock))))))))))))))))))))))")
+
 	schdl := &model.ScheduleMock
+	fmt.Println("(((((((((((((((((((((((((in delete mock))))))))))))))))))))))")
 
 	if id != 1 {
 		return nil, []error{errors.New("Not found")}

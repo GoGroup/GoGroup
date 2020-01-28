@@ -21,6 +21,8 @@ func NewEventGormRepo(db *gorm.DB) event.EventRepository {
 
 // Events returns all events stored in the database
 func (cRepo *EventGormRepo) Events() ([]model.Event, []error) {
+	fmt.Println("(((((((((((in events))))))))))")
+
 	ctgs := []model.Event{}
 	errs := cRepo.conn.Find(&ctgs).GetErrors()
 	if len(errs) > 0 {
