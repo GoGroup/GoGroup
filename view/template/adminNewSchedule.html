@@ -59,7 +59,7 @@ margin:0px;">
 
 <form action="/admin/cinemas/schedule/new/{{$temp}}" method="post">    
   {{with .From }}
-  <input type="text" name="_csrf" value="{{ .CSRF }}"/>
+  <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
   {{end}}
           <input value="{{.MovieN}}"  name="chosen" type="text" id="chosen" class="form-control form-control-sm" disabled>
           <input value="{{.MovieID}}" style="visibility: hidden;" name="mid" type="text" id="mid" class="form-control form-control-sm" >

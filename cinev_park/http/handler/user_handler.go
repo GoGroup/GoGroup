@@ -104,7 +104,7 @@ func (userHandler *UserHandler) Authorized(handle http.Handler) http.Handler {
 		user, errs := userHandler.userService.User(activeSession.UUID)
 		if len(errs) > 0 {
 			fmt.Println("+++++++++++++++++++++++++++++++++++++++")
-			
+
 			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
 		}
@@ -132,15 +132,13 @@ func (userHandler *UserHandler) Authorized(handle http.Handler) http.Handler {
 
 func (userHandler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	//If it's requesting the login page return CSFR Signed token with the form
-	fmt.Println("here")
-	fmt.Println("dumb")
+
 	if r.Method == http.MethodGet {
 
 		CSFRToken, err := rtoken.GenerateCSRFToken(userHandler.csrfSignKey)
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		}
-		fmt.Println("first")
 		fmt.Println(userHandler.tmpl.ExecuteTemplate(w, "login.layout", form.Input{
 			CSRF: CSFRToken,
 		}))
@@ -151,13 +149,13 @@ func (userHandler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 		//Validate form data
 		loginForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}, CSRF: r.FormValue(csrfKey)}
-		fmt.Println("1")
+
 		loginForm.ValidateRequiredFields(emailKey, passwordKey)
-		fmt.Println("2")
+
 		email := r.FormValue(emailKey)
-		fmt.Println("3")
+
 		password := r.FormValue(passwordKey)
-		fmt.Println("4")
+
 		user, errs := userHandler.userService.UserByEmail(email)
 		fmt.Println("getting in")
 		///Check form validity and user password
@@ -182,7 +180,7 @@ func (userHandler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 		//Finally open the home page for the user
 		if userHandler.checkAdmin(user.RoleID) {
-			http.Redirect(w, r, "/home", http.StatusSeeOther)
+			http.Redirect(w, r, "/admin/cinemas", http.StatusSeeOther)
 			return
 		}
 		http.Redirect(w, r, "/home", http.StatusSeeOther)
