@@ -220,15 +220,15 @@ func (m *AdminHandler) AdminDeleteEvents(w http.ResponseWriter, r *http.Request)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 
 	}
-		CSFRToken, _ := rtoken.GenerateCSRFToken(m.csrfSignKey)
-		tempo := struct {
-			Events []model.Event
-			From   form.Input
-			ID     uint
-		}{Events: events, From: form.Input{CSRF: CSFRToken}, ID: EID}
+	CSFRToken, _ := rtoken.GenerateCSRFToken(m.csrfSignKey)
+	tempo := struct {
+		Events []model.Event
+		From   form.Input
+		ID     uint
+	}{Events: events, From: form.Input{CSRF: CSFRToken}, ID: EID}
 	fmt.Println("works")
-		fmt.Println(m.tmpl.ExecuteTemplate(w, "adminEventList.layout", tempo))
-		fmt.Println("where")
+	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminEventList.layout", tempo))
+	fmt.Println("where")
 
 }
 func (m *AdminHandler) AdminDeleteHalls(w http.ResponseWriter, r *http.Request) {
@@ -362,36 +362,34 @@ func (m *AdminHandler) AdminEventsNew(w http.ResponseWriter, r *http.Request) {
 
 }
 func (m *AdminHandler) AdminHallUpdateList(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("check")
+
 	halls1, _ := m.hsrv.Halls()
 	if m.isParsableFormPost(w, r) {
 		var EID uint
 		p := strings.Split(r.URL.Path, "/")
 		if len(p) == 1 {
-			fmt.Println("in first if")
-			fmt.Println("in go if")
+
 			//return defaultCode, p[0]
 		} else if len(p) > 1 {
-			fmt.Println("..in first if")
-			fmt.Println("please")
+
 			code2, err2 := strconv.Atoi(p[4])
 
 			fmt.Println(err2)
 			fmt.Println(p)
 
 			if err2 == nil {
-				fmt.Println(".....in first if")
+
 				EID = uint(code2)
 			}
 		}
 		myhall, errr := m.hsrv.Hall(EID)
 		if errr != nil {
-			fmt.Println("this part")
+
 		}
 		HallNewForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}, CSRF: r.FormValue(csrfHKey)}
-		fmt.Println("name")
+
 		fmt.Println(r.FormValue(nameKey))
-		fmt.Println("name")
+
 		HallNewForm.ValidateRequiredFields(nameKey, capKey, priceKey, vipcapkey, vipKey)
 		HallNewForm.ValidateFieldsInteger(capKey, priceKey, vipcapkey, vipKey)
 		HallNewForm.ValidateFieldsRange(capKey, priceKey, vipcapkey, vipKey)
@@ -403,16 +401,16 @@ func (m *AdminHandler) AdminHallUpdateList(w http.ResponseWriter, r *http.Reques
 			Cid   uint
 		}{Halls: halls1, From: HallNewForm, ID: EID, Cid: myhall.CinemaID}
 		if !HallNewForm.IsValid() {
-			fmt.Println("last")
+
 			err := m.tmpl.ExecuteTemplate(w, "halls.layout", tempo1)
 			if err != nil {
-				fmt.Println("hiiii")
+
 				fmt.Println(err)
 			}
 			return
 		}
 		if m.hsrv.HallExists(r.FormValue(nameKey)) && r.FormValue(nameKey) != myhall.HallName {
-			fmt.Println("adona")
+
 			HallNewForm.VErrors.Add(nameKey, "This Hall exists!")
 			tempo2 := struct {
 				Halls []model.Hall
@@ -423,7 +421,7 @@ func (m *AdminHandler) AdminHallUpdateList(w http.ResponseWriter, r *http.Reques
 
 			err := m.tmpl.ExecuteTemplate(w, "halls.layout", tempo2)
 			if err != nil {
-				fmt.Println("hiiii")
+
 				fmt.Println(err)
 			}
 			return
@@ -442,14 +440,14 @@ func (m *AdminHandler) AdminHallUpdateList(w http.ResponseWriter, r *http.Reques
 			VIPPrice:    uint(vp),
 			VIPCapacity: uint(wd),
 		}
-		fmt.Println("get")
+
 		hh, errrr := m.hsrv.UpdateHall(&h)
-		fmt.Println("get")
+
 		if errrr != nil {
-			fmt.Println("please work")
+
 			fmt.Println(errrr)
 		}
-		fmt.Println("In ^^^^^^^^^^^^^^^^^^^")
+
 		fmt.Println(hh)
 		if len(errrr) > 0 {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -473,28 +471,28 @@ func (m *AdminHandler) AdminEventUpdateList(w http.ResponseWriter, r *http.Reque
 		var EID uint
 		p := strings.Split(r.URL.Path, "/")
 		if len(p) == 1 {
-			fmt.Println("in first if")
+
 			//return defaultCode, p[0]
 		} else if len(p) > 1 {
-			fmt.Println("..in first if")
+
 			code2, err2 := strconv.Atoi(p[4])
 
 			fmt.Println(err2)
 			fmt.Println(p)
 
 			if err2 == nil {
-				fmt.Println(".....in first if")
+
 				EID = uint(code2)
 			}
 		}
 		Myevent, errr := m.evrv.Event(EID)
 		if errr != nil {
-			fmt.Println("this part")
+
 		}
 		EventNewForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}, CSRF: r.FormValue(csrfHKey)}
-		fmt.Println("name")
+
 		fmt.Println(r.FormValue(nameKey))
-		fmt.Println("name")
+
 		// _, s, _ := r.FormFile(fileKey)
 		// fmt.Println("FILE")
 		// fmt.Println(s.Filename)
@@ -510,10 +508,10 @@ func (m *AdminHandler) AdminEventUpdateList(w http.ResponseWriter, r *http.Reque
 		}{Events: events1, From: EventNewForm, ID: EID}
 
 		if !EventNewForm.IsValid() {
-			fmt.Println("last")
+
 			err := m.tmpl.ExecuteTemplate(w, "adminEventList.layout", tempo1)
 			if err != nil {
-				fmt.Println("hiiii")
+
 				fmt.Println(err)
 			}
 			return
@@ -529,7 +527,7 @@ func (m *AdminHandler) AdminEventUpdateList(w http.ResponseWriter, r *http.Reque
 
 			err := m.tmpl.ExecuteTemplate(w, "adminEventList.layout", tempo2)
 			if err != nil {
-				fmt.Println("hiiii")
+
 				fmt.Println(err)
 			}
 			return
