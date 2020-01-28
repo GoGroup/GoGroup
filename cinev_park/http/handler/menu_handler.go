@@ -209,6 +209,8 @@ func (m *MenuHandler) Theaters(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *MenuHandler) TheaterScheduleBook(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Int theradkafsldkfjas Error next to this")
+
 	var CName string
 	var CId string
 	var SId string
@@ -218,6 +220,8 @@ func (m *MenuHandler) TheaterScheduleBook(w http.ResponseWriter, r *http.Request
 	if len(p) == 1 {
 
 	} else if len(p) > 1 {
+
+		fmt.Println("Error next to this")
 
 		code, err := strconv.Atoi(p[5])
 		fmt.Println(err)
@@ -282,6 +286,7 @@ func (m *MenuHandler) TheaterScheduleBook(w http.ResponseWriter, r *http.Request
 func (m *MenuHandler) TheaterSchedule(w http.ResponseWriter, r *http.Request) {
 	var CName string
 	var CId string
+	fmt.Println("In >>>>>>>>>>>>>>>theater schedule")
 
 	c, er := flash.GetFlash(w, r, "error")
 	suc, er := flash.GetFlash(w, r, "success")
@@ -290,6 +295,7 @@ func (m *MenuHandler) TheaterSchedule(w http.ResponseWriter, r *http.Request) {
 	if len(p) == 1 {
 
 	} else if len(p) > 1 {
+		fmt.Println("In >>>>>>>>>>>>>>>theater schedule")
 
 		code, err := strconv.Atoi(p[4])
 		fmt.Println(err)
