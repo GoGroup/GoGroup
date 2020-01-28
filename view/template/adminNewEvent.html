@@ -11,7 +11,6 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="#">Event</a></li>
-      <li class="breadcrumb-item"><a href="#">CinemaName</a></li>
       <li class="breadcrumb-item active" aria-current="page">New</li>
     </ol>
   </nav>
@@ -21,8 +20,8 @@
         <form id="myForm2" method="POST"  action="/admin/cinemas/events/new/" enctype="multipart/form-data">
           <input type="hidden" name="_csrf" value="{{ .CSRF }}" />
           <div class="md-form mb-5">
-            <i class="fas fa-user prefix grey-text"></i>
-            <input type="text" name="name" id="orangeForm-capacity" class="form-control validate">
+            <i class="fas fa-calendar-alt prefix grey-text"></i>
+            <input type="text" name="name" id="orangeForm-capacity" class="form-control ">
             <label data-error="wrong" data-success="right" for="orangeForm-capacity"
               value='{{ .Values.Get "name" }}'>Event Name</label>
           </div>
@@ -30,7 +29,7 @@
       <label class="text-danger">{{ . }}</label>
       {{end}}
           <div class="md-form">
-            <i class="fas fa-pencil-alt prefix"></i>
+            <i class="fas fa-pencil-alt prefix grey-text"></i>
             <textarea name="description" id="orangeForm-description" class="md-textarea form-control" rows="3"
               value='{{ .Values.Get "description" }}'></textarea>
             <label for="orangeForm-description">Description</label>
@@ -40,8 +39,8 @@
     <label class="text-danger">{{ . }}</label>
     {{end}}
           <div class="md-form mb-5">
-            <i class="fas fa-user prefix grey-text"></i>
-            <input type="text" name="location" id="orangeForm-location" class="form-control validate"
+           
+           <i class="fas fa-location-arrow prefix grey-text"></i> <input type="text" name="location" id="orangeForm-location" class="form-control "
               value='{{ .Values.Get "location" }}'>
             <label data-error="wrong" data-success="right" for="orangeForm-location">Location</label>
 
@@ -51,7 +50,11 @@
     {{end}}
           <div class="col-sm-6">
             <div class="form-group">
+            
+           
               <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+     
+
                 <input type="text" name="datetime"  value='{{ .Values.Get "datetime" }}' class="form-control datetimepicker-input" data-target="#datetimepicker1"   />
                 <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                   <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -61,6 +64,7 @@
           </div>
 
           {{with .VErrors.Get "datetime" }}
+        
     <label class="text-danger">{{ . }}</label>
     {{end}}
           <div class="file-field">

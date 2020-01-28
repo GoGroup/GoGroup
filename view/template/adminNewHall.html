@@ -17,7 +17,8 @@
 <form id="myForm2" method="POST" action="/admin/cinemas/halls/new/{{.Cid}}">
   <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
     <div class="md-form mb-5">
-        <i class="fas fa-user prefix grey-text"></i>
+      
+        <i class="fas fa-torii-gate prefix grey-text"></i>
         <input type="text" name="name" id="orangeForm-capacity" class="form-control validate"  value='{{ .Values.Get "name" }}'>
         <label data-error="wrong" data-success="right" for="orangeForm-capacity">Hall Name</label>
       </div>
@@ -26,7 +27,7 @@
       {{end}}
    
     <div class="md-form mb-5">
-      <i class="fas fa-user prefix grey-text"></i>
+      <i class="fas fa-percentage  prefix grey-text"></i>
       <input type="text" name="cap" id="orangeForm-capacity"  class="form-control validate"  value='{{ .Values.Get "cap" }}'>
       <label data-error="wrong" data-success="right" for="orangeForm-capacity">capacity</label>
       
@@ -36,7 +37,8 @@
     <label class="text-danger">{{ . }}</label>
     {{end}}
     <div class="md-form mb-5">
-      <i class="fas fa-user prefix grey-text"></i>
+   
+      <i class="fas fa-dollar-sign prefix grey-text"></i>
       <input type="text" name="price" id="orangeForm-VIP-price" class="form-control validate"  value='{{ .Values.Get "price" }}'>
       <label data-error="wrong" data-success="right" for="orangeForm-price">price</label>
 
@@ -45,7 +47,7 @@
     <label class="text-danger">{{ . }}</label>
     {{end}}
     <div class="md-form mb-5">
-      <i class="fas fa-user prefix grey-text"></i>
+      <i class="fas fa-dollar-sign prefix grey-text"></i>
       <input type="text" name="vip" id="orangeForm-price" class="form-control validate"   value='{{ .Values.Get "vip" }}'>
       <label data-error="wrong" data-success="right" for="orangeForm-price">VIP price</label>
     </div>
@@ -53,7 +55,7 @@
     <label class="text-danger">{{ . }}</label>
     {{end}}
     <div class="md-form mb-5">
-      <i class="fas fa-user prefix grey-text"></i>
+      <i class="fas fa-percentage   prefix grey-text"></i>
       <input name="vipcap" type="text" id="orangeForm-vipcap"  class="form-control validate"  value='{{ .Values.Get "vipcap" }}'>
       <label data-error="wrong" data-success="right" for="orangeForm-vipcap">VIP capacity</label>
     </div>

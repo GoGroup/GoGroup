@@ -59,7 +59,6 @@ func (inVal *Input) Date(field string) {
 func (inVal *Input) ValidateRequiredFields(fields ...string) {
 	for _, f := range fields {
 		value := inVal.Values.Get(f)
-		fmt.Println("not")
 		fmt.Println(value)
 		if value == "" {
 			fmt.Println("empty")
@@ -73,10 +72,10 @@ func (inVal *Input) ValidateRequiredFields(fields ...string) {
 func (inVal *Input) ValidateFieldsInteger(fields ...string) {
 	for _, f := range fields {
 		value := inVal.Values.Get(f)
-		fmt.Println("not")
+
 		_, err := strconv.Atoi(value)
 		if err != nil {
-			fmt.Println("empty")
+			fmt.Println("alpabet")
 			inVal.VErrors.Add(f, "This field must be a number")
 		}
 	}
@@ -90,7 +89,7 @@ func (inVal *Input) ValidateFieldsRange(fields ...string) {
 		val, err := strconv.Atoi(value)
 		if err == nil && val < 0 {
 
-			fmt.Println("empty")
+			fmt.Println("negative")
 			inVal.VErrors.Add(f, "This field must be positive number")
 		}
 	}

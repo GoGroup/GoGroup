@@ -54,36 +54,58 @@ func NewAdminHandler(t *template.Template, cs cinema.CinemaService, hs hall.Hall
 
 func (m *AdminHandler) AdminCinema(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
-		fmt.Println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-		if r.FormValue("cinemaName") != "" {
+		if m.isParsableFormPost(w, r) {
 			fmt.Println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+			cinemaNewForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}, CSRF: r.FormValue(csrfHKey)}
+			cinemaNewForm.ValidateRequiredFields("cinemaName")
+			fmt.Println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+			var NewCinemaArray []model.Cinema
+
+			x, _ := m.csrv.Cinemas()
+			for _, element := range x {
+				element.Halls, _ = m.hsrv.CinemaHalls(element.ID)
+				NewCinemaArray = append(NewCinemaArray, element)
+			}
+			tempo1 := struct {
+				Cinemas []model.Cinema
+				From    form.Input
+			}{Cinemas: NewCinemaArray, From: cinemaNewForm}
+			if !cinemaNewForm.IsValid() {
+				fmt.Println(m.tmpl.ExecuteTemplate(w, "adminCinemaList.layout", tempo1))
+return
+			}
 			c := model.Cinema{
 				CinemaName: r.FormValue("cinemaName"),
 			}
 			cc, ee := m.csrv.StoreCinema(&c)
 			fmt.Println(cc)
 			fmt.Println(ee)
+
+			fmt.Println(m.tmpl.ExecuteTemplate(w, "adminCinemaList.layout", tempo1))
 		}
 
+	} else if r.Method == http.MethodGet {
+		var errr []error
+		var NewCinemaArray []model.Cinema
+
+		c, err := m.csrv.Cinemas()
+		for _, element := range c {
+			element.Halls, errr = m.hsrv.CinemaHalls(element.ID)
+			NewCinemaArray = append(NewCinemaArray, element)
+		}
+		fmt.Println(NewCinemaArray)
+
+		if len(err) > 0 || len(errr) > 0 {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		CSFRToken, _ := rtoken.GenerateCSRFToken(m.csrfSignKey)
+		tempo1 := struct {
+			Cinemas []model.Cinema
+			From    form.Input
+		}{Cinemas: NewCinemaArray, From: form.Input{CSRF: CSFRToken}}
+		fmt.Println(m.tmpl.ExecuteTemplate(w, "adminCinemaList.layout", tempo1))
 	}
-	var errr []error
-	var NewCinemaArray []model.Cinema
-
-	c, err := m.csrv.Cinemas()
-	for _, element := range c {
-		element.Halls, errr = m.hsrv.CinemaHalls(element.ID)
-		NewCinemaArray = append(NewCinemaArray, element)
-	}
-	fmt.Println(NewCinemaArray)
-
-	if len(err) > 0 || len(errr) > 0 {
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-	}
-
-	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminCinemaList.layout", NewCinemaArray))
-
 }
-
 func (m *AdminHandler) AdminScheduleDelete(w http.ResponseWriter, r *http.Request) {
 
 	var HallID int
@@ -322,7 +344,7 @@ func (m *AdminHandler) AdminEventsNew(w http.ResponseWriter, r *http.Request) {
 
 }
 func (m *AdminHandler) AdminHallUpdateList(w http.ResponseWriter, r *http.Request) {
-fmt.Println("check")
+	fmt.Println("check")
 	halls1, _ := m.hsrv.Halls()
 	if m.isParsableFormPost(w, r) {
 		var EID uint
@@ -360,7 +382,8 @@ fmt.Println("check")
 			Halls []model.Hall
 			From  form.Input
 			ID    uint
-		}{Halls: halls1, From: HallNewForm, ID: EID}
+			Cid   uint
+		}{Halls: halls1, From: HallNewForm, ID: EID, Cid: myhall.CinemaID}
 		if !HallNewForm.IsValid() {
 			fmt.Println("last")
 			err := m.tmpl.ExecuteTemplate(w, "halls.layout", tempo1)
@@ -370,14 +393,15 @@ fmt.Println("check")
 			}
 			return
 		}
-		if m.hsrv.HallExists(r.FormValue(nameKey)) {
-
-			HallNewForm.VErrors.Add(nameKey, "This Event exists!")
+		if m.hsrv.HallExists(r.FormValue(nameKey)) && r.FormValue(nameKey) != myhall.HallName {
+			fmt.Println("adona")
+			HallNewForm.VErrors.Add(nameKey, "This Hall exists!")
 			tempo2 := struct {
 				Halls []model.Hall
 				From  form.Input
 				ID    uint
-			}{Halls: halls1, From: HallNewForm, ID: EID}
+				Cid   uint
+			}{Halls: halls1, From: HallNewForm, ID: EID, Cid: myhall.CinemaID}
 
 			err := m.tmpl.ExecuteTemplate(w, "halls.layout", tempo2)
 			if err != nil {
@@ -386,19 +410,40 @@ fmt.Println("check")
 			}
 			return
 		}
-		hall, errrr := m.hsrv.UpdateHall(myhall)
+		hn := r.FormValue(nameKey)
+		c, _ := strconv.Atoi(r.FormValue(capKey))
+		pri, _ := strconv.Atoi(r.FormValue(priceKey))
+		vp, _ := strconv.Atoi(r.FormValue(vipKey))
+		wd, _ := strconv.Atoi(r.FormValue(vipcapkey))
+		h := model.Hall{
+			ID:          myhall.ID,
+			HallName:    hn,
+			Capacity:    uint(c),
+			CinemaID:    myhall.CinemaID,
+			Price:       uint(pri),
+			VIPPrice:    uint(vp),
+			VIPCapacity: uint(wd),
+		}
+		fmt.Println("get")
+		hh, errrr := m.hsrv.UpdateHall(&h)
+		fmt.Println("get")
+		if errrr != nil {
+			fmt.Println("please work")
+			fmt.Println(errrr)
+		}
 		fmt.Println("In ^^^^^^^^^^^^^^^^^^^")
-		fmt.Println(hall)
+		fmt.Println(hh)
 		if len(errrr) > 0 {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-
+			return
 		}
 		halls, _ := m.hsrv.Halls()
 		tempo := struct {
 			Halls []model.Hall
 			From  form.Input
 			ID    uint
-		}{Halls: halls, From: HallNewForm, ID: EID}
+			Cid   uint
+		}{Halls: halls, From: HallNewForm, ID: EID, Cid: myhall.CinemaID}
 
 		fmt.Println(m.tmpl.ExecuteTemplate(w, "halls.layout", tempo))
 	}
@@ -470,31 +515,48 @@ func (m *AdminHandler) AdminEventUpdateList(w http.ResponseWriter, r *http.Reque
 				fmt.Println(err)
 			}
 			return
-		}
 
-		mf, fh, _ := r.FormFile(fileKey)
-		defer mf.Close()
-		fname := fh.Filename
-		if fname != Myevent.Image {
-			wd, err := os.Getwd()
-			path := filepath.Join(wd, "view", "assets", "images", fname)
-			image, err := os.Create(path)
-			fmt.Println(path)
-			if err != nil {
-				fmt.Println("error")
+		}
+		en := r.FormValue(nameKey)
+		c := r.FormValue(descriptionKey)
+		pri := r.FormValue(datetimekey)
+		vp := r.FormValue(locationKey)
+		mf, fh, sh := r.FormFile(fileKey)
+		if sh != nil || mf == nil {
+			EventNewForm.VErrors.Add(fileKey, "File error")
+		} else {
+			defer mf.Close()
+			fname := fh.Filename
+			if fname != Myevent.Image {
+				wd, err := os.Getwd()
+				path := filepath.Join(wd, "view", "assets", "images", fname)
+				image, err := os.Create(path)
+				fmt.Println(path)
+				if err != nil {
+					fmt.Println("error")
+				}
+
+				defer image.Close()
+				io.Copy(image, mf)
+				h := model.Event{
+					ID:          Myevent.ID,
+					Name:        en,
+					Description: c,
+					Location:    vp,
+					Time:        pri,
+					Image:       fname,
+				}
+				jj, errrr := m.evrv.UpdateEvent(&h)
+
+				if len(errrr) > 0 {
+					http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
+				}
+				fmt.Println("In ^^^^^^^^^^^^^^^^^^^")
+				fmt.Println(jj)
 			}
-
-			defer image.Close()
-			io.Copy(image, mf)
 		}
 
-		event, errrr := m.evrv.UpdateEvent(Myevent)
-		fmt.Println("In ^^^^^^^^^^^^^^^^^^^")
-		fmt.Println(event)
-		if len(errrr) > 0 {
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-
-		}
 		events, _ := m.evrv.Events()
 		tempo := struct {
 			Events []model.Event

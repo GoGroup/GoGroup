@@ -16,6 +16,7 @@
     >
 
     <form method="post" action="/admin/cinemas" class="form-inline my-2 my-lg-0">
+      <input type="hidden" name="_csrf" value="{{ .From.CSRF }}" />
       <input
         class="form-control mr-sm-2"
         type="search"
@@ -23,12 +24,15 @@
         placeholder="Cinema Name"
         aria-label="Cinema Name"
       />
+      {{with .From.VErrors.Get "cinemaName" }}
+      <label class="text-danger">{{ . }}</label>
+      {{end}}
       <input class="btn btn-primary" value="Add New" type="submit"/>
       
     </form>
 
-
-
+{{with .Cinemas}}
+    
 
 
     {{range .}}
@@ -85,5 +89,6 @@
     </div>
   </main>
 
+  {{end}}
   {{end}}
 </body>

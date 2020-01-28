@@ -10,25 +10,26 @@
   <div class="container-fluid">
     <div class="container" style="z-index: -1;">
       {{$temp:=.From.CSRF}}
-      {{$capacity:=.From.VErrors.Get "capacity"}}
+      {{$cmm:=.Cid}}
+      {{$cap:=.From.VErrors.Get "cap"}}
       {{$price:=.From.VErrors.Get "price"}}
       {{$vipcap:=.From.VErrors.Get "vipcap"}}
       {{$vip:=.From.VErrors.Get "vip"}}
       {{ $name:=.From.VErrors.Get "name" }}
       {{with .Halls}}
       {{range .}}
-
-      <div class="card mb-2" >
+    
+      <div class="card mb-2">
         <div class="container">
           <div class="card-body">
             <!-- <h5 class="card-title">Hall 1</h5> -->
-            <form>
-              <div class="form-group"  method="POST" action="/admin/halls/update/{{.ID}}">
-                <input type="text" name="_csrf" value="{{ $temp }}" />
-                <input type="Text" class="form-control card-title" name="name" id="HallName" value="{{ .HallName }}">
-                <label class="text-danger">{{ $name  }}</label>
-              </div>
-         
+
+            <form id="myForm2" method="POST" action="/admin/halls/update/{{.ID}}">
+              <input type="hidden" name="_csrf" value="{{ $temp }}" />
+              <input type="Text" class="form-control card-title" name="name" id="HallName" value="{{ .HallName }}">
+              <label class="text-danger">{{ $name  }}</label>
+
+
 
 
               <hr>
@@ -45,11 +46,11 @@
                   <div class="row ">
                     <div class="col-6 ">
                       <label for="Capacity">Capacity</label> <!-- for capacity -->
-                    
+
                     </div>
                     <div class="col-6 ">
-                      <input type="Text" class="form-control" name="capacity" id="Capacity" value="{{.Capacity}}">
-                      <label class="text-danger">{{ $capacity  }}</label>
+                      <input type="Text" class="form-control" name="cap" id="Capacity" value="{{.Capacity}}">
+                      <label class="text-danger">{{ $cap  }}</label>
                     </div>
                   </div>
 
@@ -77,7 +78,7 @@
                       <label for="VIP">VIP price</label> <!-- for capacity -->
                     </div>
                     <div class="col-6 ">
-                      <input type="Text" class="form-control" name ="vip" id="VIP" value="{{.VIPPrice}}">
+                      <input type="Text" class="form-control" name="vip" id="VIP" value="{{.VIPPrice}}">
                       <label class="text-danger">{{ $vip  }}</label>
                     </div>
                   </div>
@@ -107,16 +108,21 @@
 
                   <div class="row ">
                     <div class="col-lg-12 col-md-6 col-sm-6">
-                      <input type="submit" class="btn btn-sm blue-grey  mdb-color white-text darken-1 hall" value="save">
+                      <input type="submit" class="btn btn-sm blue-grey  mdb-color white-text darken-1 hall"
+                        value="save">
                     </div>
                     <div class="col-lg-12  col-md-6 col-sm-6">
-                      <a href="/admin/cinemas/halls/delete/{{.CinemaID}}/{{.ID}}" class="btn mdb-color white-text btn-sm grey darken-3 hall">Delete</a>
+                      <a href="/admin/cinemas/halls/delete/{{.CinemaID}}/{{.ID}}"
+                        class="btn mdb-color white-text btn-sm grey darken-3 hall">Delete</a>
                     </div>
                   </div>
 
 
-                </div>
 
+
+
+
+                </div>
               </div>
             </form>
           </div>
@@ -127,8 +133,8 @@
 
 
 
+
     </div>
-  </div>
 
 
 
@@ -143,72 +149,72 @@
 
 
 
-  <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header text-center">
-          <h4 class="modal-title w-100 font-weight-bold">Add hall</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body mx-3">
-          <div class="md-form mb-5">
-            <i class="fas fa-user prefix grey-text"></i>
-            <input name="name" type="text" id="orangeForm-name" class="form-control validate">
-            <label data-error="wrong" data-success="right" for="orangeForm-name">Hall name</label>
+    <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold">Add hall</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-          <form id="myForm2" method="post" action="/hall">
+          <div class="modal-body mx-3">
             <div class="md-form mb-5">
               <i class="fas fa-user prefix grey-text"></i>
-              <input type="text" name="cap" id="orangeForm-capacity" class="form-control validate">
-              <label data-error="wrong" data-success="right" for="orangeForm-capacity">capacity</label>
+              <input name="name" type="text" id="orangeForm-name" class="form-control validate">
+              <label data-error="wrong" data-success="right" for="orangeForm-name">Hall name</label>
             </div>
+            <form id="myForm2" method="post" action="/hall">
+              <div class="md-form mb-5">
+                <i class="fas fa-user prefix grey-text"></i>
+                <input type="text" name="cap" id="orangeForm-capacity" class="form-control validate">
+                <label data-error="wrong" data-success="right" for="orangeForm-capacity">capacity</label>
+              </div>
 
-            <div class="md-form mb-5">
-              <i class="fas fa-user prefix grey-text"></i>
-              <input type="text" name="price" id="orangeForm-VIP-price" class="form-control validate">
-              <label data-error="wrong" data-success="right" for="orangeForm-price">price</label>
-            </div>
-            <div class="md-form mb-5">
-              <i class="fas fa-user prefix grey-text"></i>
-              <input type="text" name="vip" id="orangeForm-price" class="form-control validate">
-              <label data-error="wrong" data-success="right" for="orangeForm-vIP-price">VIP price</label>
-            </div>
+              <div class="md-form mb-5">
+                <i class="fas fa-user prefix grey-text"></i>
+                <input type="text" name="price" id="orangeForm-VIP-price" class="form-control validate">
+                <label data-error="wrong" data-success="right" for="orangeForm-price">price</label>
+              </div>
+              <div class="md-form mb-5">
+                <i class="fas fa-user prefix grey-text"></i>
+                <input type="text" name="vip" id="orangeForm-price" class="form-control validate">
+                <label data-error="wrong" data-success="right" for="orangeForm-vIP-price">VIP price</label>
+              </div>
 
-            <div class="md-form mb-5">
-              <i class="fas fa-user prefix grey-text"></i>
-              <input name="discount" type="text" id="orangeForm-discount" class="form-control validate">
-              <label data-error="wrong" data-success="right" for="orangeForm-vIP-price">VIP capacity</label>
-            </div>
-
-
+              <div class="md-form mb-5">
+                <i class="fas fa-user prefix grey-text"></i>
+                <input name="discount" type="text" id="orangeForm-discount" class="form-control validate">
+                <label data-error="wrong" data-success="right" for="orangeForm-vIP-price">VIP capacity</label>
+              </div>
 
 
+
+
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button type="submit" name="add" class="btn btn-deep-purple">Add</button>
+          </div>
+          </form>
         </div>
-        <div class="modal-footer d-flex justify-content-center">
-          <button type="submit" name="add" class="btn btn-deep-purple">Add</button>
-        </div>
-        </form>
       </div>
     </div>
-  </div>
 
 
 
-  <div id="adminhalls">
+    <div id="adminhalls">
 
-      
-    <div class="btn-group-fab " role="group" aria-label="FAB Menu">
-      <div>
-        <a href="/admin/cinemas/halls/new/{{.Cid}}" type="button" class="btn btn-main btn-primary has-tooltip" data-placement="left"
-           title="Add new" style="padding:0">
-          <i class="fas pt-3 fa-plus"></i>
-      </a>
+
+      <div class="btn-group-fab " role="group" aria-label="FAB Menu">
+        <div>
+          <a href="/admin/cinemas/halls/new/{{$cmm}}" type="button" class="btn btn-main btn-primary has-tooltip"
+            data-placement="left" title="Add new" style="padding:0">
+            <i class="fas pt-3 fa-plus"></i>
+          </a>
+        </div>
       </div>
     </div>
-  </div>
 
 
 
