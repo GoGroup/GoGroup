@@ -23,6 +23,56 @@ import (
 	hallser "github.com/GoGroup/Movie-and-events/hall/service"
 )
 
+func TestNewAdminSchedulePost(t *testing.T) {
+
+	tmpl := template.Must(template.ParseGlob("../../../view/template/*"))
+
+	schrepo := schrep.NewMockScheduleRepo(nil)
+	schserv := schser.NewScheduleService(schrepo)
+
+	hrep := hallrepo.NewMockHallRepo(nil)
+	hser := hallser.NewHallService(hrep)
+
+	cinr := cinrep.NewMockCinemaRepo(nil)
+	cins := cinser.NewCinemaService(cinr)
+
+	adminSchHandler := NewAdminHandler(tmpl, cins, hser, schserv, nil, nil, nil)
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/admin/cinemas/schedule/new/", adminSchHandler.NewAdminSchedule)
+	ts := httptest.NewTLSServer(mux)
+	defer ts.Close()
+
+	tc := ts.Client()
+	sURL := ts.URL
+
+	form := url.Values{}
+	csrfSignKey := []byte(rtoken.GenerateRandomID(32))
+	form.Add("mid", string(model.ScheduleMock.MoviemID))
+	form.Add("time", string(model.ScheduleMock.StartingTime))
+	form.Add("day", string(model.ScheduleMock.Day))
+	form.Add("3or2d", string(model.ScheduleMock.Dimension))
+
+	CSFRToken, _ := rtoken.GenerateCSRFToken(csrfSignKey)
+	form.Add(csrfHKey, CSFRToken)
+
+	resp, err := tc.PostForm(sURL+"/admin/cinemas/schedule/new/1", form)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("want %d, got %d", http.StatusOK, resp.StatusCode)
+	}
+
+	defer resp.Body.Close()
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+}
+
 func TestAdminEventNew(t *testing.T) {
 
 	tmpl := template.Must(template.ParseGlob("../../../view/template/*"))
