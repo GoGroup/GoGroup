@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/GoGroup/Movie-and-events/model"
 	"github.com/GoGroup/Movie-and-events/schedule"
@@ -48,6 +49,7 @@ func (schRepo *MockScheduleRepo) UpdateSchedulesBooked(schedule *model.Schedule,
 
 // DeleteComment deletes a given customer comment from the database
 func (schRepo *MockScheduleRepo) DeleteSchedules(id uint) (*model.Schedule, []error) {
+	fmt.Println("work")
 	schdl := &model.ScheduleMock
 
 	if id != 1 {

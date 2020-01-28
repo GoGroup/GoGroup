@@ -75,6 +75,7 @@ func (schRepo *ScheduleGormRepo) UpdateSchedulesBooked(schedule *model.Schedule,
 
 // DeleteComment deletes a given customer comment from the database
 func (schRepo *ScheduleGormRepo) DeleteSchedules(id uint) (*model.Schedule, []error) {
+fmt.Println("dumb")
 	schdl, errs := schRepo.Schedule(id)
 
 	if len(errs) > 0 {

@@ -72,7 +72,7 @@ func (m *AdminHandler) AdminCinema(w http.ResponseWriter, r *http.Request) {
 			}{Cinemas: NewCinemaArray, From: cinemaNewForm}
 			if !cinemaNewForm.IsValid() {
 				fmt.Println(m.tmpl.ExecuteTemplate(w, "adminCinemaList.layout", tempo1))
-return
+				return
 			}
 			c := model.Cinema{
 				CinemaName: r.FormValue("cinemaName"),
@@ -205,12 +205,20 @@ func (m *AdminHandler) AdminDeleteEvents(w http.ResponseWriter, r *http.Request)
 
 	fmt.Println("%%%%%%%%%%%%%%%%%")
 	events, errr := m.evrv.Events()
+	fmt.Println(errr)
 	if len(errr) > 0 {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 
 	}
-
-	fmt.Println(m.tmpl.ExecuteTemplate(w, "adminEventList.layout", events))
+		CSFRToken, _ := rtoken.GenerateCSRFToken(m.csrfSignKey)
+		tempo := struct {
+			Events []model.Event
+			From   form.Input
+			ID     uint
+		}{Events: events, From: form.Input{CSRF: CSFRToken}, ID: EID}
+	fmt.Println("works")
+		fmt.Println(m.tmpl.ExecuteTemplate(w, "adminEventList.layout", tempo))
+		fmt.Println("where")
 
 }
 func (m *AdminHandler) AdminDeleteHalls(w http.ResponseWriter, r *http.Request) {

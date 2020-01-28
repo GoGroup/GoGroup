@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+
 	"github.com/GoGroup/Movie-and-events/event"
 
 	"github.com/GoGroup/Movie-and-events/model"
@@ -49,6 +51,7 @@ func (cRepo *EventGormRepo) UpdateEvent(event *model.Event) (*model.Event, []err
 
 // DeleteEvent deletes a given event from the database
 func (cRepo *EventGormRepo) DeleteEvent(id uint) (*model.Event, []error) {
+	fmt.Println("kkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
 	eve, errs := cRepo.Event(id)
 	if len(errs) > 0 {
 		return nil, errs

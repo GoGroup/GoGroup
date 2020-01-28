@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/GoGroup/Movie-and-events/event"
 
@@ -22,7 +23,7 @@ func NewMockEventRepo(db *gorm.DB) event.EventRepository {
 // Events returns all events stored in the database
 func (cRepo *MockEventRepo) Events() ([]model.Event, []error) {
 	ctgs := []model.Event{model.EvenMock}
-	return ctgs, nil
+	return ctgs, []error{}
 }
 
 // Event retrieve a event from the database by its id
@@ -38,24 +39,25 @@ func (cRepo *MockEventRepo) Event(id uint) (*model.Event, []error) {
 func (cRepo *MockEventRepo) UpdateEvent(event *model.Event) (*model.Event, []error) {
 	eve := &model.EvenMock
 
-	return eve, nil
+	return eve,  []error{}
 }
 
 // DeleteEvent deletes a given event from the database
 func (cRepo *MockEventRepo) DeleteEvent(id uint) (*model.Event, []error) {
+	fmt.Println("shhhhhhhhhhhhhhhhhhhhhhhhhhhh")
 	ev := &model.EvenMock
 	if id != 1 {
 		return nil, []error{errors.New("Not found")}
 	}
 
-	return ev, nil
+	return ev, []error{}
 }
 
 // StoreEvent stores a given event in the database
 func (cRepo *MockEventRepo) StoreEvent(event *model.Event) (*model.Event, []error) {
 	eve := &model.EvenMock
 
-	return eve, nil
+	return eve,  []error{}
 }
 func (cRepo *MockEventRepo) EventExists(eventName string) bool {
 	return true
