@@ -1,123 +1,38 @@
-<div class="lightBlue">
-  <img style="float:left" src="assets/images/logo.jpg"/>
-  <div style="color:white; font-family:Tahoma; top:50px; margin-left:50px;
-      width:200px; font-weight:normal; font-size:16pt; display:inline; white-space:nowrap; 
-      position:relative">Score Report Workbench
-  </div>
-</div>
-<div class="border">
-  <ng-container *ngIf="isLoggedIn">
-    <p class="menu"><a routerLink="/home"><img style="float:left; margin-right:5px; margin-top:-3px" src="assets/images/home.gif"/>Home</a></p>
-    <img src="assets/images/divider.jpg" style="float:left; height:28px; width:2px"/>
-    <p class="menu"><a routerLink="/enter-reports"><img style="float:left; margin-right:5px" src="assets/images/leaf.gif"/>RoD</a></p>
-    <img src="assets/images/divider.jpg" style="float:left; height:28px; width:2px"/>
-    <p class="menu"><a routerLink="/setup"><img style="float:left; margin-right:5px; width:18px" src="assets/images/setup.gif"/>Report Setup</a></p>
-    <img src="assets/images/divider.jpg" style="float:left; height:28px; width:2px"/>
-    <p class="menu"><a routerLink="/trigger-reports"><img style="float:left; margin-right:5px;" src="assets/images/Run Icon.gif"/>Trigger Reports</a></p>
-    <img src="assets/images/divider.jpg" style="float:left; height:28px; width:2px"/>
-    <p class="menu"><a routerLink="/pdf-utility"><img style="float:left; margin-right:5px;" src="assets/images/pdf3.gif"/>PDF Utility</a></p>
-    <img src="assets/images/divider.jpg" style="float:left; height:28px; width:2px"/>
-    <p style="float:right;padding:0;display: inline; margin:0; padding-top:6px; padding-right:5px;">
-      <a routerLink="/logout">Logout</a>
-    </p>
-  </ng-container>
-  <div id="toolbar" style="display: inline;"></div>
-</div>
+/* Import the custom theme */
+@import 'custom-theme.scss';
 
-
-
-
-.title {
-  height: 5px;
-  background-color: #edf1f4;
-  border-bottom: solid 4px #aec1cf;
-}
-
-.lightBlue {
-  width: 100%;
-  background: #aec1cf url('assets/images/banner.jpg') no-repeat top right;
-  height: 90px;
-  border-bottom: solid 1px white;
-  margin-bottom: 0px;
-}
-
-.border {
-  width: 100%;
-  background: #aec1cf url('assets/images/bg-nav_1.gif') repeat-x scroll bottom center;
-  height: 30px;
-  color: black;
-  font: normal 12px verdana, tahoma, sans-serif, helvetica, arial;
-  margin-top: 0px;
-}
-
-a {
-  font-family: Tahoma;
-  font-size: 10pt;
-  padding-bottom: 10px;
-  padding-right: 5px;
-}
-
-.menu {
-  float: left;
-  padding: 0;
-  display: inline;
+/* Global styles */
+body {
   margin: 0;
-  padding-top: 6px;
-  padding-left: 6px;
-  font-size: 10pt;
-  font-weight: bold;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
 }
 
-.menu a {
-  color: black;
+h1, h2, h3, h4, h5, h6 {
+  color: #5c7e8d;
+}
+
+/* Global link styles */
+a {
+  color: #5c7e8d;
   text-decoration: none;
 }
 
-.menu a:hover {
+a:hover {
+  text-decoration: underline;
+}
+
+/* Ensure Angular Material components use the custom theme */
+.mat-toolbar {
+  background: #5c7e8d;
   color: white;
-  text-decoration: none;
 }
 
-
-
-
-import { Component, OnInit } from '@angular/core';
-
-@Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
-})
-export class HeaderComponent implements OnInit {
-  isLoggedIn = true; // Simulate the user login status. Replace with actual login logic.
-
-  constructor() { }
-
-  ngOnInit(): void { }
+.mat-table {
+  width: 100%;
 }
 
-
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { HeaderComponent } from './header/header.component';
-
-const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'enter-reports', component: HomeComponent },
-  { path: 'setup', component: HomeComponent },
-  { path: 'trigger-reports', component: HomeComponent },
-  { path: 'pdf-utility', component: HomeComponent },
-  { path: 'logout', component: HomeComponent },
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }
-
-
-
-
+.mat-elevation-z8 {
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
