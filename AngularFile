@@ -1,0 +1,79 @@
+@import '~@angular/material/theming';
+
+// Define your primary and accent colors
+$primary: mat-palette($mat-blue);
+$accent: mat-palette($mat-grey);
+
+// Define the theme using primary and accent colors
+$custom-theme: mat-light-theme((
+  color: (
+    primary: $primary,
+    accent: $accent,
+    warn: mat-palette($mat-red),
+  ),
+  typography: mat-typography-config(),
+));
+
+// Include the theme styles
+@include angular-material-theme($custom-theme);
+
+<p class="h1">Available Services</p>
+
+<table mat-table [dataSource]="services" class="mat-elevation-z8">
+
+  <!-- Icon Column -->
+  <ng-container matColumnDef="icon">
+    <th mat-header-cell *matHeaderCellDef> Icon </th>
+    <td mat-cell *matCellDef="let service">
+      <a [routerLink]="[service.route]">
+        <img [src]="service.icon" style="width: 50px; height: 50px;" />
+      </a>
+    </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let service">
+      <a [routerLink]="[service.route]">{{ service.name }}</a>
+    </td>
+  </ng-container>
+
+  <!-- Description Column -->
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef> Description </th>
+    <td mat-cell *matCellDef="let service"> {{ service.description }} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+import { Component, OnInit } from '@angular/core';
+
+interface Service {
+  icon: string;
+  name: string;
+  description: string;
+  route: string;
+}
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
+})
+export class HomeComponent implements OnInit {
+  displayedColumns: string[] = ['icon', 'name', 'description'];
+  services: Service[] = [
+    { icon: 'assets/images/leaf.gif', name: 'Reports on Demand (RoD)', description: 'Preview MSS Score Reports based on specified criteria.', route: '/enter-reports' },
+    { icon: 'assets/images/setup.gif', name: 'Report Setup', description: 'Turn the automated % correct report On/Off for a given exam instance.', route: '/setup' },
+    { icon: 'assets/images/Run Icon.gif', name: 'Trigger Automated Reports', description: 'Submit request to have MSS Score Reports (Re)Generated and Posted', route: '/trigger-reports' },
+    { icon: 'assets/images/pdf.gif', name: 'PDF Utility', description: 'Call PDF Utility for generating reports in PDF format.', route: '/pdf-utility' }
+  ];
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+}
