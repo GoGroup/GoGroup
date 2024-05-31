@@ -1,38 +1,34 @@
-/* Import the custom theme */
-@import 'custom-theme.scss';
+<app-header></app-header>
+<div class="content">
+  <div class="services-header">
+    <p class="h1">Available Services</p>
+  </div>
+  <table mat-table [dataSource]="services" class="mat-elevation-z8">
+    <!-- Icon Column -->
+    <ng-container matColumnDef="icon">
+      <th mat-header-cell *matHeaderCellDef> Icon </th>
+      <td mat-cell *matCellDef="let service">
+        <a [routerLink]="[service.route]">
+          <img [src]="service.icon" style="width: 50px; height: 50px;" />
+        </a>
+      </td>
+    </ng-container>
 
-/* Global styles */
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background-color: #f4f4f4;
-  color: #333;
-}
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let service">
+        <a [routerLink]="[service.route]">{{ service.name }}</a>
+      </td>
+    </ng-container>
 
-h1, h2, h3, h4, h5, h6 {
-  color: #5c7e8d;
-}
+    <!-- Description Column -->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef> Description </th>
+      <td mat-cell *matCellDef="let service"> {{ service.description }} </td>
+    </ng-container>
 
-/* Global link styles */
-a {
-  color: #5c7e8d;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-/* Ensure Angular Material components use the custom theme */
-.mat-toolbar {
-  background: #5c7e8d;
-  color: white;
-}
-
-.mat-table {
-  width: 100%;
-}
-
-.mat-elevation-z8 {
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
-}
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
