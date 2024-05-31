@@ -1,35 +1,34 @@
-.content {
-  padding: 20px;
+.service-icon {
+  width: 50px;
+  height: 50px;
 }
 
-.services-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 150px; /* Adjust this height as needed */
-  text-align: center;
-}
+@media (max-width: 768px) {
+  .h1 {
+    font-size: 1.5rem;
+  }
 
-.h1 {
-  font-size: 2rem;
-  color: #5c7e8d; /* Adjust this color if needed */
-  margin: 0;
-}
+  .services-header {
+    height: auto;
+    padding: 20px 0;
+  }
 
-/* Styles for the table */
-.mat-table {
-  width: 100%;
-  margin-top: 20px; /* Add some space between the header and the table */
-}
+  .table-container {
+    margin-top: 20px;
+  }
 
-.mat-header-row, .mat-row {
-  display: flex;
-  justify-content: space-between;
-}
+  .mat-table {
+    display: block; /* Make the table scrollable on small screens */
+  }
 
-.mat-cell, .mat-header-cell {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  .mat-header-cell, .mat-cell {
+    display: block; /* Ensure cells are block level */
+    width: 100%; /* Make cells take full width */
+    box-sizing: border-box;
+    padding: 10px; /* Add padding for readability */
+  }
+
+  .mat-header-row, .mat-row {
+    display: block; /* Make rows block level */
+  }
 }
