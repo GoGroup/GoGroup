@@ -8,40 +8,14 @@
     padding: 20px 0;
   }
 
-  .table-container {
-    margin-top: 20px;
-  }
-
   .mat-table {
-    display: block; /* Make the table scrollable on small screens */
-  }
-
-  .mat-header-row, .mat-row {
-    display: flex;
-    flex-direction: column; /* Make rows stack vertically */
-    align-items: flex-start;
-    border-bottom: 1px solid #e0e0e0; /* Optional: add a bottom border for clarity */
+    min-width: 600px; /* Ensure table has a minimum width */
   }
 
   .mat-header-cell, .mat-cell {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
     padding: 10px; /* Add padding for readability */
-    box-sizing: border-box;
   }
 
-  .mat-header-cell {
-    font-weight: bold;
-    background-color: #f5f5f5; /* Optional: add a background color for header cells */
+  .mat-header-row, .mat-row {
+    display: table-row; /* Ensure rows display as table rows */
   }
-
-  .mat-cell {
-    border-top: 1px solid #e0e0e0; /* Optional: add a top border for cells */
-  }
-
-  .mat-header-row {
-    display: none; /* Hide the header row on small screens */
-  }
-}
