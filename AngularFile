@@ -1,28 +1,27 @@
-<mat-card>
-  <mat-tab-group>
-    <mat-tab label="Form Options">
-      <div class="tab-content">
-        <mat-radio-group [(ngModel)]="selectedOption">
-          <mat-radio-button value="option1">Option 1</mat-radio-button>
-          <div *ngIf="selectedOption === 'option1'" class="input-field">
-            <mat-form-field appearance="fill">
-              <mat-label>Option 1 Text Field</mat-label>
-              <input matInput>
-            </mat-form-field>
-          </div>
+mat-card {
+  margin: 2em;
+  padding: 0;
+  overflow: hidden;
+}
 
-          <mat-radio-button value="option2">Option 2</mat-radio-button>
-          <div *ngIf="selectedOption === 'option2'" class="input-field">
-            <mat-form-field appearance="fill">
-              <mat-label>Option 2 Text Field</mat-label>
-              <input matInput>
-            </mat-form-field>
-          </div>
-        </mat-radio-group>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
-  <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="onSubmit()">Continue</button>
-  </mat-card-actions>
-</mat-card>
+mat-tab-group {
+  width: 100%;
+}
+
+.tab-content {
+  padding: 1em;
+}
+
+.input-field {
+  margin-top: 1em;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+  padding: 1em;
+}
