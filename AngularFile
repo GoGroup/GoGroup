@@ -25,3 +25,28 @@
   border-top: none; /* Remove top border to merge with active tab */
   padding: 1em; /* Padding for the tab content */
 }
+
+.tab-content {
+  background-color: black; /* Set background color to black */
+  color: white; /* Ensure text is visible against black background */
+  padding: 1em; /* Maintain padding */
+}
+
+.vertical-radio-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-field {
+  margin-top: 1em;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.action-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1em; /* Add space between the card and the button */
+}
