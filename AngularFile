@@ -1,36 +1,27 @@
-mat-card {
-  margin: 2em;
-  padding: 0;
-  overflow: hidden;
-}
-
-mat-tab-group {
+.custom-tab-group {
   width: 100%;
 }
 
-.tab-content {
-  padding: 1em;
+.custom-tab .mat-tab-label {
+  background-color: #5c7e8d; /* Your primary color */
+  color: white;
+  border: 1px solid #4a6a79; /* Slightly darker shade of your primary color */
+  border-radius: 4px 4px 0 0; /* Rounded top corners */
+  padding: 0.5em 1em; /* Padding for the tab labels */
+  margin-right: 2px; /* Space between tab labels */
 }
 
-.vertical-radio-group {
-  display: flex;
-  flex-direction: column;
+.custom-tab .mat-tab-label-active {
+  background-color: white; /* Active tab background color */
+  color: #5c7e8d; /* Active tab text color */
+  border-bottom: none; /* Remove bottom border to merge with tab content */
+  position: relative;
+  top: 1px; /* Slightly elevate the active tab */
 }
 
-mat-radio-button {
-  margin-bottom: 1em; /* Add some space between the radio buttons */
-}
-
-.input-field {
-  margin-top: 1em;
-}
-
-mat-form-field {
-  width: 100%;
-}
-
-mat-card-actions {
-  display: flex;
-  justify-content: center;
-  padding: 1em;
+/* Adjust tab content border and padding */
+.custom-tab-group .mat-tab-body-wrapper {
+  border: 1px solid #4a6a79;
+  border-top: none; /* Remove top border to merge with active tab */
+  padding: 1em; /* Padding for the tab content */
 }
