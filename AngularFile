@@ -1,28 +1,27 @@
-<mat-card>
-  <mat-tab-group class="custom-tab-group">
-    <mat-tab label="Form Options" class="custom-tab">
-      <div class="tab-content">
-        <mat-radio-group [(ngModel)]="selectedOption" class="vertical-radio-group">
-          <mat-radio-button value="option1">Option 1</mat-radio-button>
-          <div *ngIf="selectedOption === 'option1'" class="input-field">
-            <mat-form-field appearance="fill">
-              <mat-label>Option 1 Text Field</mat-label>
-              <input matInput>
-            </mat-form-field>
-          </div>
+.custom-tab-group {
+  width: 100%;
+}
 
-          <mat-radio-button value="option2">Option 2</mat-radio-button>
-          <div *ngIf="selectedOption === 'option2'" class="input-field">
-            <mat-form-field appearance="fill">
-              <mat-label>Option 2 Text Field</mat-label>
-              <input matInput>
-            </mat-form-field>
-          </div>
-        </mat-radio-group>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
-  <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="onSubmit()">Continue</button>
-  </mat-card-actions>
-</mat-card>
+.custom-tab .mat-tab-label {
+  background-color: #5c7e8d; /* Your primary color */
+  color: white;
+  border: 1px solid #4a6a79; /* Slightly darker shade of your primary color */
+  border-radius: 4px 4px 0 0; /* Rounded top corners */
+  padding: 0.5em 1em; /* Padding for the tab labels */
+  margin-right: 2px; /* Space between tab labels */
+}
+
+.custom-tab .mat-tab-label-active {
+  background-color: white; /* Active tab background color */
+  color: #5c7e8d; /* Active tab text color */
+  border-bottom: none; /* Remove bottom border to merge with tab content */
+  position: relative;
+  top: 1px; /* Slightly elevate the active tab */
+}
+
+/* Adjust tab content border and padding */
+.custom-tab-group .mat-tab-body-wrapper {
+  border: 1px solid #4a6a79;
+  border-top: none; /* Remove top border to merge with active tab */
+  padding: 1em; /* Padding for the tab content */
+}
