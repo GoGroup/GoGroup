@@ -1,21 +1,28 @@
-@media (max-width: 768px) {
-  .h1 {
-    font-size: 1.5rem;
-  }
+<mat-card>
+  <mat-tab-group>
+    <mat-tab label="Form Options">
+      <div class="tab-content">
+        <mat-radio-group [(ngModel)]="selectedOption">
+          <mat-radio-button value="option1">Option 1</mat-radio-button>
+          <div *ngIf="selectedOption === 'option1'" class="input-field">
+            <mat-form-field appearance="fill">
+              <mat-label>Option 1 Text Field</mat-label>
+              <input matInput>
+            </mat-form-field>
+          </div>
 
-  .services-header {
-    height: auto;
-    padding: 20px 0;
-  }
-
-  .mat-table {
-    min-width: 600px; /* Ensure table has a minimum width */
-  }
-
-  .mat-header-cell, .mat-cell {
-    padding: 10px; /* Add padding for readability */
-  }
-
-  .mat-header-row, .mat-row {
-    display: table-row; /* Ensure rows display as table rows */
-  }
+          <mat-radio-button value="option2">Option 2</mat-radio-button>
+          <div *ngIf="selectedOption === 'option2'" class="input-field">
+            <mat-form-field appearance="fill">
+              <mat-label>Option 2 Text Field</mat-label>
+              <input matInput>
+            </mat-form-field>
+          </div>
+        </mat-radio-group>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="onSubmit()">Continue</button>
+  </mat-card-actions>
+</mat-card>
