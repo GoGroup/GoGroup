@@ -12,6 +12,15 @@ mat-tab-group {
   padding: 1em;
 }
 
+.vertical-radio-group {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-radio-button {
+  margin-bottom: 1em; /* Add some space between the radio buttons */
+}
+
 .input-field {
   margin-top: 1em;
 }
