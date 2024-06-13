@@ -1,24 +1,17 @@
-.input-container {
-  display: flex;
-  align-items: center;
-  margin-top: 1em;
-}
-
-.horizontal-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.input-label {
-  margin-right: 1em;
-  white-space: nowrap;
-  color: white; /* Ensure the label is visible against the black background */
-}
-
-.dropdown-container,
-.date-range-container {
-  display: flex;
-  align-items: center;
-  margin-right: 1em; /* Add spacing between the dropdown and date range fields */
-}
+  radioOptions = [
+    { 
+      value: 'option1', 
+      label: 'Option 1', 
+      fields: [
+        { type: 'text', label: 'Option 1 Text Field', name: 'option1Text' }
+      ]
+    },
+    { 
+      value: 'option2', 
+      label: 'Option 2',
+      fields: [
+        { type: 'dropdown', label: 'Dropdown', options: ['Option A', 'Option B', 'Option C'], name: 'dropdown' },
+        { type: 'date', label: 'Date Range', fromDateLabel: 'From Date', toDateLabel: 'To Date' }
+      ]
+    }
+  ];
