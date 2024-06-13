@@ -1,22 +1,26 @@
-<div style="display: flex; flex-direction: column; gap: 20px; max-width: 300px;">
-  <mat-form-field appearance="fill">
+<div class="container">
+  <mat-form-field appearance="fill" class="date-picker">
     <mat-label>Start Date</mat-label>
     <input matInput [matDatepicker]="startDatePicker" [(ngModel)]="startDate">
     <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
     <mat-datepicker #startDatePicker></mat-datepicker>
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" class="date-picker">
     <mat-label>End Date</mat-label>
     <input matInput [matDatepicker]="endDatePicker" [(ngModel)]="endDate">
     <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
     <mat-datepicker #endDatePicker></mat-datepicker>
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" class="dropdown">
     <mat-label>Select Option</mat-label>
     <mat-select [(ngModel)]="selectedOption">
-      <mat-option *ngFor="let option of options" [value]="option">{{option}}</mat-option>
+      <mat-option value="Option 1">Option 1</mat-option>
+      <mat-option value="Option 2">Option 2</mat-option>
+      <mat-option value="Option 3">Option 3</mat-option>
+      <mat-option value="Option 4">Option 4</mat-option>
+      <mat-option value="Option 5">Option 5</mat-option>
     </mat-select>
   </mat-form-field>
 </div>
