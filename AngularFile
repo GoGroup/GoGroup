@@ -1,32 +1,24 @@
- <mat-radio-button value="option2">Option 2</mat-radio-button>
-          <div *ngIf="selectedOption === 'option2'" class="input-field">
-            <div class="input-container horizontal-container">
-              <div class="dropdown-container">
-                <span class="input-label">Label 2:</span>
-                <mat-form-field appearance="fill">
-                  <mat-label>Dropdown</mat-label>
-                  <select matNativeControl required>
-                    <option value="optionA">Option A</option>
-                    <option value="optionB">Option B</option>
-                    <option value="optionC">Option C</option>
-                  </select>
-                </mat-form-field>
-              </div>
-              <div class="date-range-container">
-                <span class="input-label">Date Range:</span>
-                <mat-form-field appearance="fill">
-                  <mat-label>From Date</mat-label>
-                  <input matInput [matDatepicker]="picker1">
-                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                  <mat-datepicker #picker1></mat-datepicker>
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                  <mat-label>To Date</mat-label>
-                  <input matInput [matDatepicker]="picker2">
-                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                  <mat-datepicker #picker2></mat-datepicker>
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-        </mat-radio-group>
+.input-container {
+  display: flex;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.horizontal-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.input-label {
+  margin-right: 1em;
+  white-space: nowrap;
+  color: white; /* Ensure the label is visible against the black background */
+}
+
+.dropdown-container,
+.date-range-container {
+  display: flex;
+  align-items: center;
+  margin-right: 1em; /* Add spacing between the dropdown and date range fields */
+}
