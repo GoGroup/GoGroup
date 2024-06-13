@@ -1,52 +1,53 @@
-.custom-tab-group {
-  width: 100%;
-}
+<mat-card>
+  <mat-tab-group class="custom-tab-group">
+    <mat-tab label="Form Options" class="custom-tab">
+      <div class="tab-content">
+        <mat-radio-group [(ngModel)]="selectedOption" class="vertical-radio-group">
+          <mat-radio-button value="option1">Option 1</mat-radio-button>
+          <div *ngIf="selectedOption === 'option1'" class="input-field">
+            <div class="input-container">
+              <span class="input-label">Label 1:</span>
+              <mat-form-field appearance="fill" class="small-input-field">
+                <mat-label>Option 1 Text Field</mat-label>
+                <input matInput size="13">
+              </mat-form-field>
+            </div>
+          </div>
 
-.custom-tab .mat-tab-label {
-  background-color: #5c7e8d; /* Your primary color */
-  color: white;
-  border: 1px solid #4a6a79; /* Slightly darker shade of your primary color */
-  border-radius: 4px 4px 0 0; /* Rounded top corners */
-  padding: 0.5em 1em; /* Padding for the tab labels */
-  margin-right: 2px; /* Space between tab labels */
-}
-
-.custom-tab .mat-tab-label-active {
-  background-color: white; /* Active tab background color */
-  color: #5c7e8d; /* Active tab text color */
-  border-bottom: none; /* Remove bottom border to merge with tab content */
-  position: relative;
-  top: 1px; /* Slightly elevate the active tab */
-}
-
-/* Adjust tab content border and padding */
-.custom-tab-group .mat-tab-body-wrapper {
-  border: 1px solid #4a6a79;
-  border-top: none; /* Remove top border to merge with active tab */
-  padding: 1em; /* Padding for the tab content */
-}
-
-.tab-content {
-  background-color: black; /* Set background color to black */
-  color: white; /* Ensure text is visible against black background */
-  padding: 1em; /* Maintain padding */
-}
-
-.vertical-radio-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-field {
-  margin-top: 1em;
-}
-
-mat-form-field {
-  width: 100%;
-}
-
-.action-button-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 1em; /* Add space between the card and the button */
-}
+          <mat-radio-button value="option2">Option 2</mat-radio-button>
+          <div *ngIf="selectedOption === 'option2'" class="input-field">
+            <div class="input-container">
+              <span class="input-label">Label 2:</span>
+              <mat-form-field appearance="fill">
+                <mat-label>Dropdown</mat-label>
+                <mat-select>
+                  <mat-option value="optionA">Option A</mat-option>
+                  <mat-option value="optionB">Option B</mat-option>
+                  <mat-option value="optionC">Option C</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="input-container">
+              <span class="input-label">Date Range:</span>
+              <mat-form-field appearance="fill">
+                <mat-label>From Date</mat-label>
+                <input matInput [matDatepicker]="picker1">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>To Date</mat-label>
+                <input matInput [matDatepicker]="picker2">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>
+<div class="action-button-container">
+  <button mat-raised-button color="primary" (click)="onSubmit()">Continue</button>
+</div>
