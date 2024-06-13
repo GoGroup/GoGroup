@@ -1,29 +1,27 @@
-  <mat-radio-button value="option2">Option 2</mat-radio-button>
-          <div *ngIf="selectedOption === 'option2'" class="input-field">
-            <div class="input-container">
-              <span class="input-label">Label 2:</span>
-              <mat-form-field appearance="fill">
-                <mat-label>Dropdown</mat-label>
-                <mat-select>
-                  <mat-option value="optionA">Option A</mat-option>
-                  <mat-option value="optionB">Option B</mat-option>
-                  <mat-option value="optionC">Option C</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="input-container">
-              <span class="input-label">Date Range:</span>
-              <mat-form-field appearance="fill">
-                <mat-label>From Date</mat-label>
-                <input matInput [matDatepicker]="picker1">
-                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                <mat-datepicker #picker1></mat-datepicker>
-              </mat-form-field>
-              <mat-form-field appearance="fill">
-                <mat-label>To Date</mat-label>
-                <input matInput [matDatepicker]="picker2">
-                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                <mat-datepicker #picker2></mat-datepicker>
-              </mat-form-field>
-            </div>
-          </div>
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-test',
+  template: `
+    <mat-form-field appearance="fill">
+      <mat-label>Dropdown</mat-label>
+      <mat-select>
+        <mat-option value="optionA">Option A</mat-option>
+        <mat-option value="optionB">Option B</mat-option>
+        <mat-option value="optionC">Option C</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Date Picker</mat-label>
+      <input matInput [matDatepicker]="picker">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  `,
+  styles: [`
+    mat-form-field {
+      margin: 1em;
+    }
+  `]
+})
+export class TestComponent {}
