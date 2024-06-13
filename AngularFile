@@ -1,27 +1,22 @@
-import { Component } from '@angular/core';
+<div style="display: flex; flex-direction: column; gap: 20px; max-width: 300px;">
+  <mat-form-field appearance="fill">
+    <mat-label>Start Date</mat-label>
+    <input matInput [matDatepicker]="startDatePicker" [(ngModel)]="startDate">
+    <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #startDatePicker></mat-datepicker>
+  </mat-form-field>
 
-@Component({
-  selector: 'app-test',
-  template: `
-    <mat-form-field appearance="fill">
-      <mat-label>Dropdown</mat-label>
-      <mat-select>
-        <mat-option value="optionA">Option A</mat-option>
-        <mat-option value="optionB">Option B</mat-option>
-        <mat-option value="optionC">Option C</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Date Picker</mat-label>
-      <input matInput [matDatepicker]="picker">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-  `,
-  styles: [`
-    mat-form-field {
-      margin: 1em;
-    }
-  `]
-})
-export class TestComponent {}
+  <mat-form-field appearance="fill">
+    <mat-label>End Date</mat-label>
+    <input matInput [matDatepicker]="endDatePicker" [(ngModel)]="endDate">
+    <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #endDatePicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Select Option</mat-label>
+    <mat-select [(ngModel)]="selectedOption">
+      <mat-option *ngFor="let option of options" [value]="option">{{option}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
