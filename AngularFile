@@ -1,56 +1,132 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  selectedOption: string;
+  orderId: string;
+  exam: string;
+  school: string;
+  modules: string;
+  orderIds: string;
+  examInstance: string;
+  fromDate: Date;
+  toDate: Date;
+
+  // Hardcoded values
+  exams = [
+    { value: 'optionA', viewValue: 'Option A' },
+    { value: 'optionB', viewValue: 'Option B' },
+    { value: 'optionC', viewValue: 'Option C' }
+  ];
+
+  examInstances = [
+    { value: 'optionA', viewValue: 'Option A' },
+    { value: 'optionB', viewValue: 'Option B' },
+    { value: 'optionC', viewValue: 'Option C' }
+  ];
+
+  onSubmit() {
+    // Handle form submission
+    console.log('Form submitted:', {
+      selectedOption: this.selectedOption,
+      orderId: this.orderId,
+      exam: this.exam,
+      school: this.school,
+      modules: this.modules,
+      orderIds: this.orderIds,
+      examInstance: this.examInstance,
+      fromDate: this.fromDate,
+      toDate: this.toDate
+    });
+  }
+}
+
+
 <mat-card>
-  <mat-tab-group class="custom-tab-group">
-    <mat-tab label="Form Options" class="custom-tab">
-      <div class="tab-content">
-        <mat-radio-group [(ngModel)]="selectedOption" class="vertical-radio-group">
-          <mat-radio-button *ngFor="let option of radioOptions" [value]="option.value">{{ option.label }}</mat-radio-button>
-        </mat-radio-group>
-
-        <div *ngIf="selectedOption" class="input-field">
-          <div class="input-container" *ngFor="let field of radioOptions.find(o => o.value === selectedOption)?.fields || []">
-            <ng-container [ngSwitch]="field.type">
-              <!-- Text Field -->
-              <div *ngSwitchCase="'text'" class="input-container">
-                <span class="input-label">{{ field.label }}:</span>
-                <mat-form-field appearance="fill" class="small-input-field">
-                  <input matInput size="13" [placeholder]="field.label">
-                </mat-form-field>
+  <div class="my-theme">
+    <mat-tab-group>
+      <mat-tab label="Reports By Parameters" class="tab-background">
+        <div class="tab-content">
+          <mat-radio-group [(ngModel)]="selectedOption" class="vertical-radio-group">
+            <div class="lightBluesection">
+              <mat-radio-button value="option1">Option 1</mat-radio-button>
+              <div *ngIf="selectedOption === 'option1'" class="input-field">
+                <div class="input-container">
+                  <span class="input-label">Order Id</span>
+                  <mat-form-field appearance="fill" class="input-field">
+                    <input matInput size="13" [(ngModel)]="orderId">
+                  </mat-form-field>
+                </div>
               </div>
-
-              <!-- Dropdown Field -->
-              <div *ngSwitchCase="'dropdown'" class="dropdown-container">
-                <span class="input-label">{{ field.label }}:</span>
-                <mat-form-field appearance="fill">
-                  <mat-label>{{ field.label }}</mat-label>
-                  <select matNativeControl required>
-                    <option *ngFor="let option of field.options" [value]="option">{{ option }}</option>
-                  </select>
-                </mat-form-field>
+            </div>
+            <div class="lightBluesection">
+              <mat-radio-button value="option2">Option 2</mat-radio-button>
+              <div *ngIf="selectedOption === 'option2'" class="input-field">
+                <div class="input-container">
+                  <span class="input-label">Exam</span>
+                  <mat-form-field appearance="fill">
+                    <mat-select [(ngModel)]="exam">
+                      <mat-option *ngFor="let exam of exams" [value]="exam.value">
+                        {{ exam.viewValue }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="input-container">
+                  <span class="input-label">School</span>
+                  <mat-form-field appearance="fill" class="input-field">
+                    <input matInput size="13" [(ngModel)]="school">
+                  </mat-form-field>
+                </div>
+                <div class="input-container">
+                  <span class="input-label">Modules</span>
+                  <mat-form-field appearance="fill" class="input-field">
+                    <input matInput size="13" [(ngModel)]="modules">
+                  </mat-form-field>
+                </div>
+                <div class="input-container">
+                  <span class="input-label">Order Id(s)</span>
+                  <mat-form-field appearance="fill" class="input-field">
+                    <input matInput size="13" [(ngModel)]="orderIds">
+                  </mat-form-field>
+                </div>
+                <div class="input-container">
+                  <span class="input-label">Exam Instance</span>
+                  <mat-form-field appearance="fill">
+                    <mat-select [(ngModel)]="examInstance">
+                      <mat-option *ngFor="let instance of examInstances" [value]="instance.value">
+                        {{ instance.viewValue }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="input-container">
+                  <span class="input-label">Reporting Period:</span>
+                  <mat-form-field>
+                    <mat-label>From Date</mat-label>
+                    <input matInput [matDatepicker]="picker1" [(ngModel)]="fromDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>To Date</mat-label>
+                    <input matInput [matDatepicker]="picker2" [(ngModel)]="toDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                  </mat-form-field>
+                </div>
               </div>
-
-              <!-- Date Range Fields -->
-              <div *ngSwitchCase="'date'" class="date-range-container">
-                <span class="input-label">{{ field.label }}:</span>
-                <mat-form-field appearance="fill">
-                  <mat-label>{{ field.fromDateLabel }}</mat-label>
-                  <input matInput [matDatepicker]="picker1">
-                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                  <mat-datepicker #picker1></mat-datepicker>
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                  <mat-label>{{ field.toDateLabel }}</mat-label>
-                  <input matInput [matDatepicker]="picker2">
-                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                  <mat-datepicker #picker2></mat-datepicker>
-                </mat-form-field>
-              </div>
-            </ng-container>
-          </div>
+            </div>
+          </mat-radio-group>
         </div>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
 </mat-card>
 <div class="action-button-container">
-  <button mat-raised-button color="primary" (click)="onSubmit()">{{ continueButtonLabel }}</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()">Continue</button>
 </div>
