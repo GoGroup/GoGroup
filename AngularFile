@@ -1,26 +1,54 @@
-<div class="container">
-  <mat-form-field appearance="fill" class="date-picker">
-    <mat-label>Start Date</mat-label>
-    <input matInput [matDatepicker]="startDatePicker" [(ngModel)]="startDate">
-    <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-    <mat-datepicker #startDatePicker></mat-datepicker>
-  </mat-form-field>
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
 
-  <mat-form-field appearance="fill" class="date-picker">
-    <mat-label>End Date</mat-label>
-    <input matInput [matDatepicker]="endDatePicker" [(ngModel)]="endDate">
-    <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-    <mat-datepicker #endDatePicker></mat-datepicker>
-  </mat-form-field>
+import { AppComponent } from './app.component';
+import { TestComponent } from './test/test.component';
 
-  <mat-form-field appearance="fill" class="dropdown">
-    <mat-label>Select Option</mat-label>
-    <mat-select [(ngModel)]="selectedOption">
-      <mat-option value="Option 1">Option 1</mat-option>
-      <mat-option value="Option 2">Option 2</mat-option>
-      <mat-option value="Option 3">Option 3</mat-option>
-      <mat-option value="Option 4">Option 4</mat-option>
-      <mat-option value="Option 5">Option 5</mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
+@NgModule({
+  declarations: [AppComponent, TestComponent],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatButtonModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}
+
+
+
+
+<mat-form-field appearance="fill">
+  <mat-label>Dropdown</mat-label>
+  <mat-select>
+    <mat-option value="optionA">Option A</mat-option>
+    <mat-option value="optionB">Option B</mat-option>
+    <mat-option value="optionC">Option C</mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field appearance="fill">
+  <mat-label>Date Picker</mat-label>
+  <input matInput [matDatepicker]="picker">
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
+
+
+mat-form-field {
+  margin: 1em;
+}
