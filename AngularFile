@@ -1,51 +1,3 @@
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
-})
-export class AppComponent {
-  selectedOption: string;
-  orderId: string;
-  exam: string;
-  school: string;
-  modules: string;
-  orderIds: string;
-  examInstance: string;
-  fromDate: Date;
-  toDate: Date;
-
-  // Hardcoded values
-  exams = [
-    { value: 'optionA', viewValue: 'Option A' },
-    { value: 'optionB', viewValue: 'Option B' },
-    { value: 'optionC', viewValue: 'Option C' }
-  ];
-
-  examInstances = [
-    { value: 'optionA', viewValue: 'Option A' },
-    { value: 'optionB', viewValue: 'Option B' },
-    { value: 'optionC', viewValue: 'Option C' }
-  ];
-
-  onSubmit() {
-    // Handle form submission
-    console.log('Form submitted:', {
-      selectedOption: this.selectedOption,
-      orderId: this.orderId,
-      exam: this.exam,
-      school: this.school,
-      modules: this.modules,
-      orderIds: this.orderIds,
-      examInstance: this.examInstance,
-      fromDate: this.fromDate,
-      toDate: this.toDate
-    });
-  }
-}
-
-
 <mat-card>
   <div class="my-theme">
     <mat-tab-group>
@@ -57,7 +9,7 @@ export class AppComponent {
               <div *ngIf="selectedOption === 'option1'" class="input-field">
                 <div class="input-container">
                   <span class="input-label">Order Id</span>
-                  <mat-form-field appearance="fill" class="input-field">
+                  <mat-form-field appearance="fill" class="compact-input">
                     <input matInput size="13" [(ngModel)]="orderId">
                   </mat-form-field>
                 </div>
@@ -68,7 +20,7 @@ export class AppComponent {
               <div *ngIf="selectedOption === 'option2'" class="input-field">
                 <div class="input-container">
                   <span class="input-label">Exam</span>
-                  <mat-form-field appearance="fill">
+                  <mat-form-field appearance="fill" class="compact-input">
                     <mat-select [(ngModel)]="exam">
                       <mat-option *ngFor="let exam of exams" [value]="exam.value">
                         {{ exam.viewValue }}
@@ -78,25 +30,25 @@ export class AppComponent {
                 </div>
                 <div class="input-container">
                   <span class="input-label">School</span>
-                  <mat-form-field appearance="fill" class="input-field">
+                  <mat-form-field appearance="fill" class="compact-input">
                     <input matInput size="13" [(ngModel)]="school">
                   </mat-form-field>
                 </div>
                 <div class="input-container">
                   <span class="input-label">Modules</span>
-                  <mat-form-field appearance="fill" class="input-field">
+                  <mat-form-field appearance="fill" class="compact-input">
                     <input matInput size="13" [(ngModel)]="modules">
                   </mat-form-field>
                 </div>
                 <div class="input-container">
                   <span class="input-label">Order Id(s)</span>
-                  <mat-form-field appearance="fill" class="input-field">
+                  <mat-form-field appearance="fill" class="compact-input">
                     <input matInput size="13" [(ngModel)]="orderIds">
                   </mat-form-field>
                 </div>
                 <div class="input-container">
                   <span class="input-label">Exam Instance</span>
-                  <mat-form-field appearance="fill">
+                  <mat-form-field appearance="fill" class="compact-input">
                     <mat-select [(ngModel)]="examInstance">
                       <mat-option *ngFor="let instance of examInstances" [value]="instance.value">
                         {{ instance.viewValue }}
@@ -106,13 +58,13 @@ export class AppComponent {
                 </div>
                 <div class="input-container">
                   <span class="input-label">Reporting Period:</span>
-                  <mat-form-field>
+                  <mat-form-field class="compact-input">
                     <mat-label>From Date</mat-label>
                     <input matInput [matDatepicker]="picker1" [(ngModel)]="fromDate">
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker>
                   </mat-form-field>
-                  <mat-form-field>
+                  <mat-form-field class="compact-input">
                     <mat-label>To Date</mat-label>
                     <input matInput [matDatepicker]="picker2" [(ngModel)]="toDate">
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
@@ -130,3 +82,13 @@ export class AppComponent {
 <div class="action-button-container">
   <button mat-raised-button color="primary" (click)="onSubmit()">Continue</button>
 </div>
+
+
+.mat-form-field-appearance-fill .mat-form-field-infix {
+  border-radius: 4px;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-outline-start, 
+.mat-form-field-appearance-fill .mat-form-field-outline-end {
+  border-radius: 4px;
+}
