@@ -1,54 +1,32 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatButtonModule } from '@angular/material/button';
-
-import { AppComponent } from './app.component';
-import { TestComponent } from './test/test.component';
-
-@NgModule({
-  declarations: [AppComponent, TestComponent],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatButtonModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
-export class AppModule {}
-
-
-
-
-<mat-form-field appearance="fill">
-  <mat-label>Dropdown</mat-label>
-  <mat-select>
-    <mat-option value="optionA">Option A</mat-option>
-    <mat-option value="optionB">Option B</mat-option>
-    <mat-option value="optionC">Option C</mat-option>
-  </mat-select>
-</mat-form-field>
-<mat-form-field appearance="fill">
-  <mat-label>Date Picker</mat-label>
-  <input matInput [matDatepicker]="picker">
-  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-  <mat-datepicker #picker></mat-datepicker>
-</mat-form-field>
-
-
-mat-form-field {
-  margin: 1em;
-}
+ <mat-radio-button value="option2">Option 2</mat-radio-button>
+          <div *ngIf="selectedOption === 'option2'" class="input-field">
+            <div class="input-container horizontal-container">
+              <div class="dropdown-container">
+                <span class="input-label">Label 2:</span>
+                <mat-form-field appearance="fill">
+                  <mat-label>Dropdown</mat-label>
+                  <select matNativeControl required>
+                    <option value="optionA">Option A</option>
+                    <option value="optionB">Option B</option>
+                    <option value="optionC">Option C</option>
+                  </select>
+                </mat-form-field>
+              </div>
+              <div class="date-range-container">
+                <span class="input-label">Date Range:</span>
+                <mat-form-field appearance="fill">
+                  <mat-label>From Date</mat-label>
+                  <input matInput [matDatepicker]="picker1">
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>To Date</mat-label>
+                  <input matInput [matDatepicker]="picker2">
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </mat-radio-group>
