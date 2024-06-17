@@ -1,15 +1,12 @@
-.mat-form-field-appearance-fill .mat-form-field-wrapper {
-  padding-bottom: 0; /* Remove padding */
-  height: 32px; /* Custom height */
-}
-
-.mat-form-field-appearance-fill .mat-form-field-flex {
-  height: 32px; /* Custom height */
-}
-
-.mat-form-field-appearance-fill .mat-form-field-infix {
-  padding: 0 8px;
-  height: 32px; /* Custom height */
-  display: flex;
-  align-items: center; /* Center align text vertically */
-}
+  animations: [
+    trigger('fadeInOut', [
+      state('void', style({
+        opacity: 0,
+        transform: 'translateY(-10px)'
+      })),
+      transition(':enter, :leave', [
+        animate('0.3s ease-in-out')
+      ])
+    ])
+  ]
+})
