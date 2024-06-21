@@ -1,86 +1,11 @@
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
-import java.util.Map;
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
 
-public class Company {
-    @JsonProperty("employees")
-    private Map<String, Employee> employees;
-
-    @JsonProperty("projects")
-    private List<Project> projects;
-
-    // Getters and Setters
-
-    public static class Employee {
-        @JsonProperty("personalInfo")
-        private PersonalInfo personalInfo;
-
-        @JsonProperty("jobTitle")
-        private String jobTitle;
-
-        @JsonProperty("salary")
-        private int salary;
-
-        // Getters and Setters
-
-        public static class PersonalInfo {
-            @JsonProperty("name")
-            private String name;
-
-            @JsonProperty("age")
-            private int age;
-
-            // Getters and Setters
-        }
-    }
-
-    public static class Project {
-        @JsonProperty("projectDetails")
-        private List<ProjectDetails> projectDetails;
-
-        @JsonProperty("projectTasks")
-        private List<ProjectTasks> projectTasks;
-
-        // Getters and Setters
-
-        public static class ProjectDetails {
-            @JsonProperty("projectName")
-            private String projectName;
-
-            @JsonProperty("status")
-            private String status;
-
-            // Getters and Setters
-        }
-
-        public static class ProjectTasks {
-            @JsonProperty("taskName")
-            private String taskName;
-
-            @JsonProperty("priority")
-            private String priority;
-
-            // Getters and Setters
-        }
-    }
-
-    // Method to parse JSON string to Company object
-    public static Company fromJson(String json) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(json, Company.class);
-    }
-
-    // Main method for testing
-    public static void main(String[] args) {
-        String json = "{ \"employees\": { \"employee1\": { \"personalInfo\": { \"name\": \"John Doe\", \"age\": 30 }, \"jobTitle\": \"Engineer\", \"salary\": 75000 }, \"employee2\": { \"personalInfo\": { \"name\": \"Jane Smith\", \"age\": 25 }, \"jobTitle\": \"Designer\", \"salary\": 65000 } }, \"projects\": [ { \"projectDetails\": [ { \"projectName\": \"Project A\", \"status\": \"Completed\" }, { \"projectName\": \"Project B\", \"status\": \"In Progress\" } ] }, { \"projectTasks\": [ { \"taskName\": \"Task 1\", \"priority\": \"High\" }, { \"taskName\": \"Task 2\", \"priority\": \"Low\" } ] } ] }";
-
-        try {
-            Company company = Company.fromJson(json);
-            // Print or process the company object
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-    }
-}
+    <root level="debug">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
