@@ -1,13 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- encoder configures how log messages are written to the output -->
-        <encoder>
-            <!-- Pattern to output the caller's file name and line number -->
-            <pattern>%date %level [%thread] %logger{10} [%file:%line] - %msg%n</pattern>
-        </encoder>
-    </appender>
-
-    <root level="DEBUG">
-        <appender-ref ref="STDOUT" />
-    </root>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <springProfile name="default">
+        <!-- Set the level for your application packages -->
+        <logger name="com.yourcompany" level="INFO" />
+        <!-- Set the level for Spring Boot internals (if needed) -->
+        <logger name="org.springframework.boot" level="WARN" />
+        <!-- Set the level for Hibernate (if used) -->
+        <logger name="org.hibernate" level="WARN" />
+        <!-- Set the root level to control all other logging -->
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
 </configuration>
