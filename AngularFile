@@ -1,16 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
-    <springProfile name="default">
-        <!-- Set the level for your application packages -->
-        <logger name="com.yourcompany" level="INFO" />
-        <!-- Set the level for Spring Boot internals (if needed) -->
-        <logger name="org.springframework.boot" level="WARN" />
-        <!-- Set the level for Hibernate (if used) -->
-        <logger name="org.hibernate" level="WARN" />
-        <!-- Set the root level to control all other logging -->
-        <root level="INFO">
-            <appender-ref ref="CONSOLE" />
-        </root>
-    </springProfile>
-</configuration>
+ public PubExamInstance getPubExamInstance(long publicationId) {
+        List<ExamInstance> examInstanceList = new ArrayList<>();
+        PubExamInstance pubExamInstance = new PubExamInstance();
+
+        List<PubExamInstance> results = jdbcTemplate.query(SQL_GET_PUB_EXAM_INSTANCE, new Object[]{publicationId}, new RowMapper<PubExamInstance>() {
+            @Override
+            public PubExamInstance mapRow(ResultSet rs, int rowNum) throws SQLException {
+                pubExamInstance.setPublicationId(rs.getLong("PUBLICATION_ID"));
+
+                do {
+                    ExamInstance examInstance = new ExamInstance();
+                    examInstance.setExamInstanceName(rs.getString("EXAM_INSTANCE"));
+                    examInstance.setModality(rs.getString("EXAM_MODALITY"));
+                    examInstance.setTargetExamAdmin(rs.getString("TARGET_EXAM_ADMIN"));
+                    examInstanceList.add(examInstance);
+                } while (rs.next());
+
+                pubExamInstance.setExamInstanceList(examInstanceList);
+                return pubExamInstance;
+            }
+        });
+
+        // Since the query will only return one PubExamInstance, we can return the first element of the results
+        return results.isEmpty() ? null : results.get(0);
+    }
