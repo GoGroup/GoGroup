@@ -1,25 +1,37 @@
- public PubExamInstance getPubExamInstance(long publicationId) {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Service;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+public class PubExamInstanceService {
+
+    private static final String SQL_GET_PUB_EXAM_INSTANCE = "SELECT PUBLICATION_ID, EXAM_INSTANCE, EXAM_MODALITY, TARGET_EXAM_ADMIN FROM your_table WHERE PUBLICATION_ID = ?";
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    public PubExamInstance getPubExamInstance(long publicationId) {
         List<ExamInstance> examInstanceList = new ArrayList<>();
         PubExamInstance pubExamInstance = new PubExamInstance();
 
-        List<PubExamInstance> results = jdbcTemplate.query(SQL_GET_PUB_EXAM_INSTANCE, new Object[]{publicationId}, new RowMapper<PubExamInstance>() {
-            @Override
-            public PubExamInstance mapRow(ResultSet rs, int rowNum) throws SQLException {
-                pubExamInstance.setPublicationId(rs.getLong("PUBLICATION_ID"));
-
-                do {
-                    ExamInstance examInstance = new ExamInstance();
-                    examInstance.setExamInstanceName(rs.getString("EXAM_INSTANCE"));
-                    examInstance.setModality(rs.getString("EXAM_MODALITY"));
-                    examInstance.setTargetExamAdmin(rs.getString("TARGET_EXAM_ADMIN"));
-                    examInstanceList.add(examInstance);
-                } while (rs.next());
-
-                pubExamInstance.setExamInstanceList(examInstanceList);
-                return pubExamInstance;
-            }
+        jdbcTemplate.query(SQL_GET_PUB_EXAM_INSTANCE, new Object[]{publicationId}, rs -> {
+            pubExamInstance.setPublicationId(rs.getLong("PUBLICATION_ID"));
+            do {
+                ExamInstance examInstance = new ExamInstance();
+                examInstance.setExamInstanceName(rs.getString("EXAM_INSTANCE"));
+                examInstance.setModality(rs.getString("EXAM_MODALITY"));
+                examInstance.setTargetExamAdmin(rs.getString("TARGET_EXAM_ADMIN"));
+                examInstanceList.add(examInstance);
+            } while (rs.next());
+            pubExamInstance.setExamInstanceList(examInstanceList);
         });
 
-        // Since the query will only return one PubExamInstance, we can return the first element of the results
-        return results.isEmpty() ? null : results.get(0);
+        return pubExamInstance;
     }
+}
