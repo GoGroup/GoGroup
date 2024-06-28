@@ -5,33 +5,39 @@ import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PubExamInstanceService {
+public class TapsTaskService {
 
-    private static final String SQL_GET_PUB_EXAM_INSTANCE = "SELECT PUBLICATION_ID, EXAM_INSTANCE, EXAM_MODALITY, TARGET_EXAM_ADMIN FROM your_table WHERE PUBLICATION_ID = ?";
+    private static final String SQL_GET_LIST_TAPS_TASK = "SELECT tap_Id, start_date, exam_admin, end_date FROM your_table WHERE exam_admin = ?";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public PubExamInstance getPubExamInstance(long publicationId) {
-        List<ExamInstance> examInstanceList = new ArrayList<>();
-        PubExamInstance pubExamInstance = new PubExamInstance();
-
-        jdbcTemplate.query(SQL_GET_PUB_EXAM_INSTANCE, new Object[]{publicationId}, rs -> {
-            pubExamInstance.setPublicationId(rs.getLong("PUBLICATION_ID"));
-            do {
-                ExamInstance examInstance = new ExamInstance();
-                examInstance.setExamInstanceName(rs.getString("EXAM_INSTANCE"));
-                examInstance.setModality(rs.getString("EXAM_MODALITY"));
-                examInstance.setTargetExamAdmin(rs.getString("TARGET_EXAM_ADMIN"));
-                examInstanceList.add(examInstance);
-            } while (rs.next());
-            pubExamInstance.setExamInstanceList(examInstanceList);
+    public List<TapsTask> getListTapsTask(String examAdmin) {
+        return jdbcTemplate.query(SQL_GET_LIST_TAPS_TASK, new Object[]{examAdmin}, new RowMapper<TapsTask>() {
+            @Override
+            public TapsTask mapRow(ResultSet rs, int rowNum) throws SQLException {
+                TapsTask tapsTask = new TapsTask();
+                tapsTask.setTap_Id(rs.getLong("tap_Id"));
+                tapsTask.setStart_date(rs.getString("start_date"));
+                tapsTask.setExam_admin(rs.getString("exam_admin"));
+                String endDate = rs.getString("end_date");
+                if (endDate != null) {
+                    tapsTask.setEnd_date(endDate);
+                } else {
+                    Logger.info("End Date is null for Taps Task id {}", tapsTask.getTap_Id());
+                    LocalDate currentDate = LocalDate.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    String formattedDate = currentDate.format(formatter);
+                    tapsTask.setEnd_date(formattedDate);
+                }
+                return tapsTask;
+            }
         });
-
-        return pubExamInstance;
     }
 }
