@@ -1,6 +1,13 @@
- DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-                .appendPattern("yyyy-MM-dd'T'HH:mm:ss")
-                .optionalStart()
-                .appendFraction(java.time.temporal.ChronoField.NANO_OF_SECOND, 1, 2, true)
-                .optionalEnd()
-                .toFormatter();
+  public static final String FIND_MATCHING_IDS = 
+        "SELECT ep.id " +
+        "FROM elephantTable ep, animal tp " +
+        "WHERE tp.id = ep.id " +
+        "AND tp.id IN ( " +
+        "    SELECT tp2.id " +
+        "    FROM animal2 tp2 " +
+        "    WHERE tp2.t_d_id IN (%s) " +
+        "    GROUP BY tp2.id " +
+        "    HAVING COUNT(tp2.id) = ? " +
+        ") " +
+        "GROUP BY ep.id " +
+        "HAVING COUNT(tp.id) = ?";
