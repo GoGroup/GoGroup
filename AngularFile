@@ -1,11 +1,13 @@
- private Map<String, Object> convertJsonObjectToMap(JSONObject jsonObject) {
-        Map<String, Object> map = new HashMap<>();
-        JSONArray names = jsonObject.names();
-        if (names != null) {
-            for (int i = 0; i < names.size(); i++) {
-                String key = names.getString(i);
-                map.put(key, jsonObject.get(key));
+  private Object convertObject(Object value) {
+        if (value instanceof JSONObject) {
+            return convertJsonObjectToMap((JSONObject) value);
+        } else if (value instanceof JSONArray) {
+            JSONArray jsonArray = (JSONArray) value;
+            List<Object> list = new ArrayList<>();
+            for (int i = 0; i < jsonArray.size(); i++) {
+                list.add(convertObject(jsonArray.get(i)));
             }
+            return list;
         }
-        return map;
+        return value;
     }
