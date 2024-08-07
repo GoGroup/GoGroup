@@ -1,25 +1,54 @@
-return jdbcTemplate.execute(sql, (CallableStatementCallback<Job>) cs -> {
+package com.example.repository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.CallableStatementCallback;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import java.sql.CallableStatement;
+import java.sql.SQLException;
+import java.sql.Types;
+
+@Repository
+public class MyRepository {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    public Job getJobData(Long jobId) {
+        String sql = "{call my_school_p_job_get.get_school(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+
+        return jdbcTemplate.execute(sql, (CallableStatementCallback<Job>) cs -> {
+            // Set the input parameter
             cs.setLong(1, jobId);
 
-            boolean hasResults = cs.execute();
+            // Register the output parameters
+            cs.registerOutParameter(2, Types.BIGINT);
+            cs.registerOutParameter(3, Types.BIGINT);
+            cs.registerOutParameter(4, Types.VARCHAR);
+            cs.registerOutParameter(5, Types.VARCHAR);
+            cs.registerOutParameter(6, Types.VARCHAR);
+            cs.registerOutParameter(7, Types.VARCHAR);
+            cs.registerOutParameter(8, Types.DATE);
+            cs.registerOutParameter(9, Types.DATE);
+            cs.registerOutParameter(10, Types.DATE);
 
+            // Execute the stored procedure
+            cs.execute();
+
+            // Retrieve the output parameters and set them in the Job object
             Job job = new Job();
-            while (hasResults) {
-                try (ResultSet rs = cs.getResultSet()) {
-                    if (rs.next()) {
-                        job.setJobId(rs.getLong("school_id"));
-                        job.setTapId(rs.getLong("tap_id"));
-                        job.setStatus(rs.getString("status"));
-                        job.setJobTypeName(rs.getString("school_type_name"));
-                        job.setDescription(rs.getString("description"));
-                        job.setEmployeeId(rs.getString("teacher_id"));
-                        job.setSubmitDate(rs.getDate("submit_date"));
-                        job.setStartTime(rs.getDate("start_time"));
-                        job.setEndTime(rs.getDate("end_time"));
-                    }
-                }
-                hasResults = cs.getMoreResults();
-            }
+            job.setJobId(cs.getLong(2));
+            job.setTapId(cs.getLong(3));
+            job.setStatus(cs.getString(4));
+            job.setJobTypeName(cs.getString(5));
+            job.setDescription(cs.getString(6));
+            job.setEmployeeId(cs.getString(7));
+            job.setSubmitDate(cs.getDate(8));
+            job.setStartTime(cs.getDate(9));
+            job.setEndTime(cs.getDate(10));
 
             return job;
         });
+    }
+}
