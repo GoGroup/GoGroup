@@ -1,13 +1,25 @@
-  private Object convertObject(Object value) {
-        if (value instanceof JSONObject) {
-            return convertJsonObjectToMap((JSONObject) value);
-        } else if (value instanceof JSONArray) {
-            JSONArray jsonArray = (JSONArray) value;
-            List<Object> list = new ArrayList<>();
-            for (int i = 0; i < jsonArray.size(); i++) {
-                list.add(convertObject(jsonArray.get(i)));
+return jdbcTemplate.execute(sql, (CallableStatementCallback<Job>) cs -> {
+            cs.setLong(1, jobId);
+
+            boolean hasResults = cs.execute();
+
+            Job job = new Job();
+            while (hasResults) {
+                try (ResultSet rs = cs.getResultSet()) {
+                    if (rs.next()) {
+                        job.setJobId(rs.getLong("school_id"));
+                        job.setTapId(rs.getLong("tap_id"));
+                        job.setStatus(rs.getString("status"));
+                        job.setJobTypeName(rs.getString("school_type_name"));
+                        job.setDescription(rs.getString("description"));
+                        job.setEmployeeId(rs.getString("teacher_id"));
+                        job.setSubmitDate(rs.getDate("submit_date"));
+                        job.setStartTime(rs.getDate("start_time"));
+                        job.setEndTime(rs.getDate("end_time"));
+                    }
+                }
+                hasResults = cs.getMoreResults();
             }
-            return list;
-        }
-        return value;
-    }
+
+            return job;
+        });
