@@ -1,54 +1,17 @@
-package com.example.repository;
+<configuration>
+    <property name="LOG_LEVEL_ORG_SPRINGFRAMEWORK" value="ERROR"/>
+    <property name="LOG_LEVEL_YOUR_CLASS" value="INFO"/>
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.CallableStatementCallback;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
+    <logger name="org.springframework" level="${LOG_LEVEL_ORG_SPRINGFRAMEWORK}"/>
+    <logger name="com.yourpackage.YourClass" level="${LOG_LEVEL_YOUR_CLASS}"/>
 
-import java.sql.CallableStatement;
-import java.sql.SQLException;
-import java.sql.Types;
+    <root level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+    </root>
 
-@Repository
-public class MyRepository {
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    public Job getJobData(Long jobId) {
-        String sql = "{call my_school_p_job_get.get_school(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
-
-        return jdbcTemplate.execute(sql, (CallableStatementCallback<Job>) cs -> {
-            // Set the input parameter
-            cs.setLong(1, jobId);
-
-            // Register the output parameters
-            cs.registerOutParameter(2, Types.BIGINT);
-            cs.registerOutParameter(3, Types.BIGINT);
-            cs.registerOutParameter(4, Types.VARCHAR);
-            cs.registerOutParameter(5, Types.VARCHAR);
-            cs.registerOutParameter(6, Types.VARCHAR);
-            cs.registerOutParameter(7, Types.VARCHAR);
-            cs.registerOutParameter(8, Types.DATE);
-            cs.registerOutParameter(9, Types.DATE);
-            cs.registerOutParameter(10, Types.DATE);
-
-            // Execute the stored procedure
-            cs.execute();
-
-            // Retrieve the output parameters and set them in the Job object
-            Job job = new Job();
-            job.setJobId(cs.getLong(2));
-            job.setTapId(cs.getLong(3));
-            job.setStatus(cs.getString(4));
-            job.setJobTypeName(cs.getString(5));
-            job.setDescription(cs.getString(6));
-            job.setEmployeeId(cs.getString(7));
-            job.setSubmitDate(cs.getDate(8));
-            job.setStartTime(cs.getDate(9));
-            job.setEndTime(cs.getDate(10));
-
-            return job;
-        });
-    }
-}
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+</configuration>
