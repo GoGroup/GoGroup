@@ -1,17 +1,10 @@
-<configuration>
-    <property name="LOG_LEVEL_ORG_SPRINGFRAMEWORK" value="ERROR"/>
-    <property name="LOG_LEVEL_YOUR_CLASS" value="INFO"/>
-
-    <logger name="org.springframework" level="${LOG_LEVEL_ORG_SPRINGFRAMEWORK}"/>
-    <logger name="com.yourpackage.YourClass" level="${LOG_LEVEL_YOUR_CLASS}"/>
-
-    <root level="ERROR">
-        <appender-ref ref="CONSOLE"/>
-    </root>
-
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
-        </encoder>
-    </appender>
-</configuration>
+<appender name="FILE_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>logs/fullstacktrace.log</file>
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level - %msg%n%throwable{full}</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>logs/fullstacktrace.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+  </appender>
