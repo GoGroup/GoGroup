@@ -1,15 +1,13 @@
-  <appender name="FILE_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>logs/fullstacktrace.log</file>
-    <encoder>
-      <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level - %msg%n%throwable{full}</pattern>
-    </encoder>
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>logs/fullstacktrace.%d{yyyy-MM-dd}.log</fileNamePattern>
-      <maxHistory>30</maxHistory>
-    </rollingPolicy>
-  </appender>
-
-  <!-- Logger for full stack trace -->
-  <logger name="com.yourapp" level="ERROR" additivity="false">
-    <appender-ref ref="FILE_LOG" />
-  </logger>
+    #set($input = $ctx.result)
+    {
+      "isets": [
+        #foreach($iset in $input)
+          {
+            "isetName": "$iset.isetName",
+            "isetId": $iset.isetId,
+            "isetDescription": "$iset.isetDescription",
+            "exam": "$iset.exam"
+          }#if($foreach.hasNext),#end
+        #end
+      ]
+    }
