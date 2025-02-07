@@ -1,13 +1,18 @@
-    #set($input = $ctx.result)
-    {
-      "isets": [
-        #foreach($iset in $input)
-          {
-            "isetName": "$iset.isetName",
-            "isetId": $iset.isetId,
-            "isetDescription": "$iset.isetDescription",
-            "exam": "$iset.exam"
-          }#if($foreach.hasNext),#end
-        #end
-      ]
-    }
+Subject: Clarification on Trace Propagation in Our Bringdown Service
+
+Hi,
+
+I reviewed the AWS X-Ray documentation regarding trace context propagation and wanted to discuss our current configuration for the Bringdown service.
+
+According to the AWS X-Ray documentation for S3, S3 supports trace context propagation when sending events to Lambda, SQS, or SNS. However, our Bringdown service currently listens for events from S3 via an EventBridge rule. As a result, the trace segment from S3 will not be propagated to downstream services through EventBridge.
+
+Additionally, the EventBridge documentation indicates that EventBridge only passes a trace header when an event is sent using the PutEvents API, which we are not using in our service.
+
+To address this, I see two potential solutions:
+
+Start Tracing Post-EventBridge: Begin tracing once the request passes through EventBridge and reaches the Step Function.
+Introduce an Intermediate Lambda: Insert a Lambda function between EventBridge and the downstream services to extract and propagate the trace segment.
+I’d appreciate your thoughts on these approaches or any alternative suggestions you might have.
+
+Best regards,
+
